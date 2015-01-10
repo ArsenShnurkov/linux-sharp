@@ -40,11 +40,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="111.14908"
-     inkscape:cy="102.19144"
+     inkscape:zoom="2"
+     inkscape:cx="200.9305"
+     inkscape:cy="161.03469"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -74,210 +74,196 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(632.62921,-79.324317)"
-     style="display:inline"
-     sodipodi:insensitive="true">
-    <rect
-       y="90.962563"
-       x="-620.99097"
-       height="54.517628"
-       width="133.00226"
-       id="rect4864"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.27649069;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline">
-      <a
-         xlink:href="mono_monodevelop_branches.htm"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;display:inline;stroke:#000000;stroke-opacity:1"
-         id="a3850"
-         transform="translate(632.49097,-79.462563)" />
-    </rect>
-    <rect
-       y="157.58292"
-       x="-580.85986"
-       height="36.881664"
-       width="141.68784"
-       id="rect3931"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
-      <a
-         transform="translate(632.49097,-79.462563)"
-         id="a3953"
-         xlink:href="https://github.com/mono/monodevelop/tree/monodevelop-5.7-branch"
-         style="fill:#ffffff;fill-opacity:1;display:inline;stroke:#000000;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none" />
-    </rect>
-    <rect
-       y="208.15009"
-       x="-499.46985"
-       height="21.957773"
-       width="90.957771"
-       id="rect3956"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
-      <a
-         id="a3974"
-         xlink:href="https://github.com/mono/monodevelop/releases"
-         transform="matrix(1.0979369,0,0,1.172911,674.45342,-118.6982)"
-         style="fill:#ffffff;fill-opacity:1;display:inline;stroke:#000000;stroke-opacity:1;stroke-width:2.64362612;stroke-miterlimit:4;stroke-dasharray:none" />
-    </rect>
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect3977"
-       width="72.660835"
-       height="17.660835"
-       x="-345.32138"
-       y="211.29855">
-      <a
-         style="display:inline;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
-         transform="translate(632.98194,-79.925126)"
-         id="a3999"
-         xlink:href="http://stackoverflow.com/questions/26575095/how-to-make-monodevelop-5-6-2-5-on-gentoo" />
-    </rect>
-    <rect
-       y="191.19846"
-       x="-207.43616"
-       height="59.430519"
-       width="148.04106"
-       id="rect2985"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.33607507;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
-      <a
-         transform="translate(632.49097,-79.462563)"
-         id="a4854"
-         xlink:href="http://origin-download.mono-project.com/sources/monodevelop/"
-         style="fill:#ffffff;fill-opacity:1;display:inline;stroke:#000000;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none" />
-    </rect>
+     style="display:inline">
+    <a
+       xlink:href="mono_monodevelop_branches.htm"
+       target="_parent"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       id="a3850"
+       transform="translate(3.49097,0.537437)">
+      <rect
+         y="90.962563"
+         x="-620.99097"
+         height="54.517628"
+         width="133.00226"
+         id="rect4864"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.27649069;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+      <text
+         transform="translate(-632.49097,79.462563)"
+         xml:space="preserve"
+         style="display:inline;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
+         x="58.862064"
+         y="27.130386"
+         id="text4113"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="98.940186"
+           y="42.130386"
+           id="tspan4115"><tspan
+             x="58.862064"
+             y="27.130386"
+             id="tspan4117">Проект </tspan><tspan
+             x="98.940186"
+             y="27.130386"
+             id="tspan4119">mono/</tspan></tspan><tspan
+           sodipodi:role="line"
+           x="124.03003"
+           y="0"
+           id="tspan4121"><tspan
+             x="54.209721"
+             y="42.130386"
+             id="tspan4123">monodevelop </tspan><tspan
+             x="122.53003"
+             y="42.130386"
+             id="tspan4125">на </tspan></tspan><tspan
+           sodipodi:role="line"
+           x="67.076904"
+           y="0"
+           id="tspan4127"><tspan
+             x="67.076904"
+             y="57.130394"
+             id="tspan4129">github.com</tspan></tspan></text>
+    </a>
+    <a
+       transform="translate(3.49097,0.537437)"
+       id="a3953"
+       xlink:href="https://github.com/mono/monodevelop/branches/all"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       target="_parent">
+      <rect
+         y="157.58292"
+         x="-580.85986"
+         height="36.881664"
+         width="141.68784"
+         id="rect3931"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         transform="translate(-632.49097,79.462563)"
+         xml:space="preserve"
+         style="display:inline;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
+         x="119.96753"
+         y="91.755394"
+         id="text4107"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="119.96753"
+           y="91.755394"
+           id="tspan4109"><tspan
+             x="119.96753"
+             y="91.755394"
+             id="tspan4111">monodevelop-5.7-branch</tspan></tspan></text>
+    </a>
+    <a
+       id="a3974"
+       xlink:href="https://github.com/mono/monodevelop/releases"
+       transform="matrix(1.0979369,0,0,1.172911,45.45342,-38.6982)"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.64362621;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       target="_parent">
+      <rect
+         y="208.15009"
+         x="-499.46985"
+         height="21.957773"
+         width="90.957771"
+         id="rect3956"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         transform="translate(-632.49097,79.462563)"
+         xml:space="preserve"
+         style="display:inline;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
+         x="177.99878"
+         y="142.31789"
+         id="text4101"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="177.99878"
+           y="142.31789"
+           id="tspan4103"><tspan
+             x="177.99878"
+             y="142.31789"
+             id="tspan4105">Релиз 5.7.0.661</tspan></tspan></text>
+    </a>
+    <a
+       style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;display:inline"
+       transform="translate(3.98194,0.074874)"
+       id="a3999"
+       xlink:href="http://stackoverflow.com/questions/26575095/how-to-make-monodevelop-5-6-2-5-on-gentoo"
+       target="_parent">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3977"
+         width="72.660835"
+         height="17.660835"
+         x="-345.32138"
+         y="211.29855" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
+         x="-309.64966"
+         y="223.47414"
+         id="text4095"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="-309.64966"
+           y="223.47414"
+           id="tspan4097"><tspan
+             x="-309.64966"
+             y="223.47414"
+             id="tspan4099">make dist</tspan></tspan></text>
+    </a>
+    <a
+       transform="translate(1.49097,-0.462563)"
+       id="a4854"
+       xlink:href="http://origin-download.mono-project.com/sources/monodevelop/"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       target="_parent">
+      <rect
+         y="191.19846"
+         x="-207.43616"
+         height="59.430519"
+         width="142.25084"
+         id="rect2985"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.27018356;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
+         x="-135.01141"
+         y="208.51277"
+         id="text4163"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4167"
+           x="-135.01141"
+           y="208.51277">Файл .tar полученный</tspan><tspan
+           sodipodi:role="line"
+           id="tspan4169"
+           x="-135.01141"
+           y="223.51277">из  исходников</tspan><tspan
+           sodipodi:role="line"
+           id="tspan4171"
+           x="-135.01141"
+           y="238.51277">после обработки</tspan></text>
+    </a>
     <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 359.83042,140.82879 65.22439,0.29152"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend);display:inline"
+       d="m 229.42391,139.49344 61.72762,0.78552"
+       id="path4670"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       transform="translate(-632.49097,79.462563)"
+       inkscape:connection-end="#a3999"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#a3974"
+       inkscape:connection-start-point="d4" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend);display:inline"
+       d="m 363.81236,140.79407 62.73342,0.0912"
        id="path4451"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0"
        transform="translate(-632.49097,79.462563)"
+       inkscape:connection-end="#a4854"
        inkscape:connection-end-point="d4"
-       inkscape:connection-end="#rect2985"
-       inkscape:connection-start-point="d4"
-       inkscape:connection-start="#rect3977" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 223.97889,139.98006 63.1907,0.43579"
-       id="path4670"
-       inkscape:connector-type="polyline"
-       inkscape:connector-curvature="0"
-       inkscape:connection-end="#rect3977"
-       inkscape:connection-end-point="d4"
-       transform="translate(-632.49097,79.462563)"
-       inkscape:connection-start="#rect3956"
+       inkscape:connection-start="#a3999"
        inkscape:connection-start-point="d4" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Текст"
-     transform="translate(0.13824214,0.13824578)">
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
-       x="58.862064"
-       y="27.130386"
-       id="text4113"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="98.940186"
-         y="42.130386"
-         id="tspan4115"><tspan
-           x="58.862064"
-           y="27.130386"
-           id="tspan4117">Проект </tspan><tspan
-           x="98.940186"
-           y="27.130386"
-           id="tspan4119">mono/</tspan></tspan><tspan
-         sodipodi:role="line"
-         x="124.03003"
-         y="0"
-         id="tspan4121"><tspan
-           x="54.209721"
-           y="42.130386"
-           id="tspan4123">monodevelop </tspan><tspan
-           x="122.53003"
-           y="42.130386"
-           id="tspan4125">на </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="67.076904"
-         y="0"
-         id="tspan4127"><tspan
-           x="67.076904"
-           y="57.130394"
-           id="tspan4129">github.com</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
-       x="119.96753"
-       y="91.755394"
-       id="text4107"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="119.96753"
-         y="91.755394"
-         id="tspan4109"><tspan
-           x="119.96753"
-           y="91.755394"
-           id="tspan4111">monodevelop-5.7-branch</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
-       x="177.99878"
-       y="142.31789"
-       id="text4101"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="177.99878"
-         y="142.31789"
-         id="tspan4103"><tspan
-           x="177.99878"
-           y="142.31789"
-           id="tspan4105">Релиз 5.7.0.661</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
-       x="324.35034"
-       y="143.47414"
-       id="text4095"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="324.35034"
-         y="143.47414"
-         id="tspan4097"><tspan
-           x="324.35034"
-           y="143.47414"
-           id="tspan4099">make dist</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Times New Roman;-inkscape-font-specification:'Times New Roman,'"
-       x="480.69019"
-       y="127.34914"
-       id="text4077"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="533.61206"
-         y="157.34914"
-         id="tspan4079"><tspan
-           x="480.69019"
-           y="127.34914"
-           id="tspan4081">Файл .</tspan><tspan
-           x="513.92456"
-           y="127.34914"
-           id="tspan4083">tar, </tspan><tspan
-           x="532.11206"
-           y="127.34914"
-           id="tspan4085">полученный </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="486.80737"
-         y="0"
-         id="tspan4087"><tspan
-           x="485.30737"
-           y="142.34914"
-           id="tspan4089">из исходников после </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="511.4519"
-         y="0"
-         id="tspan4091"><tspan
-           x="511.4519"
-           y="157.34914"
-           id="tspan4093">обработки</tspan></tspan></text>
   </g>
 </svg>
