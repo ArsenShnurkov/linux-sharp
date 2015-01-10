@@ -10,8 +10,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="550.27106"
-   height="178.66641"
+   width="552.27106"
+   height="179.66641"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
@@ -42,7 +42,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="296.01084"
-     inkscape:cy="98.023405"
+     inkscape:cy="99.023405"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -76,7 +76,7 @@
      transform="translate(632.49097,-79.462563)">
     <a
        xlink:href="mono_monodevelop_branches.htm"
-       style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
        id="a3850">
       <rect
          y="90.962563"
@@ -88,7 +88,8 @@
     </a>
     <a
        id="a4854"
-       xlink:href="http://origin-download.mono-project.com/sources/monodevelop/">
+       xlink:href="http://origin-download.mono-project.com/sources/monodevelop/"
+       style="fill:#ffffff;fill-opacity:1">
       <rect
          y="188.19846"
          x="-211.43616"
@@ -99,7 +100,8 @@
     </a>
     <a
        id="a3953"
-       xlink:href="https://github.com/mono/monodevelop/tree/monodevelop-5.7-branch">
+       xlink:href="https://github.com/mono/monodevelop/tree/monodevelop-5.7-branch"
+       style="fill:#ffffff;fill-opacity:1">
       <rect
          y="157.58292"
          x="-580.85986"
@@ -111,7 +113,8 @@
     <a
        id="a3974"
        xlink:href="https://github.com/mono/monodevelop/releases"
-       transform="matrix(1.0979369,0,0,1.172911,41.962452,-39.235638)">
+       transform="matrix(1.0979369,0,0,1.172911,41.962452,-39.235638)"
+       style="fill:#ffffff;fill-opacity:1">
       <rect
          y="210.15009"
          x="-499.46985"
