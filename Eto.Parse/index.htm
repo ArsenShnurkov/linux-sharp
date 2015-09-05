@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Eto.Parse и как его использовать</title>
+</head>
+<body>
+
+<table><tr><td valign="top">
+<h1>Eto.Parse и как его использовать</h1>
+</td><td valign="top">
+<a href="../recursive-descent.htm">Как написать рекурсивный парсер?</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+One note that could help debug is to turn on errors for all parsers.. you can do this on your grammar after defining it by calling:
+<br />
+myGrammar.SetError<Parser>(true);
+<br />
+This will give you more than just the named parsers as errors, and help show what exactly the parser is choking on.
+<br />
+<br />
+
+
+how to write a rule to match any symbol (except specific)?
+<br />
+in EBNF, ISO style
+<br />
+? Terminals.Symbol ? - '?'
+<br />
+anything except ?
+<br />
+any symbol except ? that is
+<br />
+you can use any of the terminals from the Terminals class using  ? Terminals.<name of terminal> ?
+<br />
+you can also register other extensions via the EbnfGrammar.SpecialParsers dictionary..
+<br />
+for example, if you want to use the StringParser, you can do:  myEbnfGrammar.SpecialParsers["StringParser"] = new StringParser();
+<br />
+then in the grammar:  My String Parser := ? StringParser ?
+
+
+<br />
+<br />
+You can do that using the DisplayParserWriter.. e.g. Console.WriteLine(new DisplayParserWriter().Write(myGrammarOrParser));
+<br />
+Eto.Parse.Writers.DisplayParserWriter
+
+</body>
+</html>

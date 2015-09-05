@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>грамматика для файла .gitmodules</title>
+</head>
+<body>
+
+<table><tr><td valign="top">
+<h1>грамматика для файла .gitmodules</h1>
+</td><td valign="top">
+<a href="recursive-descent.htm">Как написать рекурсивный парсер?</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="https://www.kernel.org/pub/software/scm/git/docs/git-config.html">https://www.kernel.org/pub/software/scm/git/docs/git-config.html</a> - определение формата
+</td></tr></table>
+
+<h3 id="_syntax">Syntax</h3><div style="clear:left"></div>
+<div class="paragraph"><p>The syntax is fairly flexible and permissive; whitespaces are mostly
+ignored.  The <em>#</em> and <em>;</em> characters begin comments to the end of line,
+blank lines are ignored.</p></div>
+<div class="paragraph"><p>The file consists of sections and variables.  A section begins with
+the name of the section in square brackets and continues until the next
+section begins.  Section names are case-insensitive.  Only alphanumeric
+characters, <tt>-</tt> and <tt>.</tt> are allowed in section names.  Each variable
+must belong to some section, which means that there must be a section
+header before the first setting of a variable.</p></div>
+<div class="paragraph"><p>Sections can be further divided into subsections.  To begin a subsection
+put its name in double quotes, separated by space from the section name,
+in the section header, like in the example below:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>        [section "subsection"]</tt></pre>
+</div></div>
+<div class="paragraph"><p>Subsection names are case sensitive and can contain any characters except
+newline (doublequote <tt>"</tt> and backslash can be included by escaping them
+as <tt>\"</tt> and <tt>\\</tt>, respectively).  Section headers cannot span multiple
+lines.  Variables may belong directly to a section or to a given subsection.
+You can have <tt>[section]</tt> if you have <tt>[section "subsection"]</tt>, but you
+don’t need to.</p></div>
+<div class="paragraph"><p>There is also a deprecated <tt>[section.subsection]</tt> syntax. With this
+syntax, the subsection name is converted to lower-case and is also
+compared case sensitively. These subsection names follow the same
+restrictions as section names.</p></div>
+<div class="paragraph"><p>All the other lines (and the remainder of the line after the section
+header) are recognized as setting variables, in the form
+<em>name = value</em> (or just <em>name</em>, which is a short-hand to say that
+the variable is the boolean "true").
+The variable names are case-insensitive, allow only alphanumeric characters
+and <tt>-</tt>, and must start with an alphabetic character.</p></div>
+<div class="paragraph"><p>A line that defines a value can be continued to the next line by
+ending it with a <tt>\</tt>; the backquote and the end-of-line are
+stripped.  Leading whitespaces after <em>name =</em>, the remainder of the
+line after the first comment character <em>#</em> or <em>;</em>, and trailing
+whitespaces of the line are discarded unless they are enclosed in
+double quotes.  Internal whitespaces within the value are retained
+verbatim.</p></div>
+<div class="paragraph"><p>Inside double quotes, double quote <tt>"</tt> and backslash <tt>\</tt> characters
+must be escaped: use <tt>\"</tt> for <tt>"</tt> and <tt>\\</tt> for <tt>\</tt>.</p></div>
+<div class="paragraph"><p>The following escape sequences (beside <tt>\"</tt> and <tt>\\</tt>) are recognized:
+<tt>\n</tt> for newline character (NL), <tt>\t</tt> for horizontal tabulation (HT, TAB)
+and <tt>\b</tt> for backspace (BS).  Other char escape sequences (including octal
+escape sequences) are invalid.</p></div>
+<h3 id="_includes">Includes</h3><div style="clear:left"></div>
+<div class="paragraph"><p>You can include one config file from another by setting the special
+<tt>include.path</tt> variable to the name of the file to be included. The
+included file is expanded immediately, as if its contents had been
+found at the location of the include directive. If the value of the
+<tt>include.path</tt> variable is a relative path, the path is considered to be
+relative to the configuration file in which the include directive was
+found. The value of <tt>include.path</tt> is subject to tilde expansion: <tt>~/</tt>
+is expanded to the value of <tt>$HOME</tt>, and <tt>~user/</tt> to the specified
+user’s home directory. See below for examples.</p>
+
+<h2>Моя попытка написать BNF</h2>
+
+<strong>разделитель-строк : '\n\r' | '\n' | '\r' ;</strong>
+<br />
+<br />
+Пробелов может быть несколько штук подряд
+<br />
+<strong>пробелы : ( ' ' | '\t' ) + ;</strong>
+<br />
+<br />
+<strong>обобщенный-разделитель-строк : ( пробелы ? разделитель-строк пробелы ? ) + ;</strong>
+<br />
+<br />
+здесь мы можем обнаружить недопустимые символы
+<br />
+<strong>символ : допустимый-символ | недопустимый-символ;</strong>
+<br />
+<br />
+<strong>допустимый-символ : буква-русская | буква-английская | цифра | знаки-пунктуации | пробелы ;</strong>
+
+<br />
+<br />
+<strong>знаки-пунктуации : '[' | ']' | '"' | '-' | '.' | ';' | '#';</strong>
+
+<br />
+<br />
+в строках могут располагаться опциональные комментарии,
+текст комментария - это вполне себе семантическая конструкция, которую тоже можно попарсить (например в C# комментариях)
+<br />
+<br />
+<strong>символ-комментария : '#' | ';' ;</strong>
+<br />
+<br />
+<strong>комментарий : символ-комментария текст-комментария *  ;</strong>
+<br />
+<br />
+Текст комментария - это любой символ кроме разделителя строк
+<br />
+<strong>текст-комментария : . ;</strong>
+<br />
+<br />
+<strong>разделитель : пробелы | обобщенный-разделитель-строк | комментарий  ;</strong>
+<br />
+<br />
+<strong>текстовая-строка : '"' ( допустимый-символ | пробелы | специальная-последовательность ) * '"' ;</strong>
+ <br />
+<br />
+<strong>специальная-последовательность :  '\"' | '\\' | '\n' | '\t' | '\b' ;</strong>
+<br />
+<br />
+хитрый-перенос : '\' разделитель строк ;
+ 
+<br />
+<br />
+Файл состоит из секций, секции состоят из переменных:
+<br />
+<strong>полезное-содержимое : (секция разделитель*) * ;</strong>
+<br />
+<br />
+У секций есть заголовки:
+<br />
+<strong>секция : заголовок-секции разделитель* тело-секции ;</strong>
+<br />
+<br />
+У секций могут быть подсекции 
+<br />
+<strong>тело-секции : (переменная разделитель*) * | (подсекция разделитель*) *;</strong>
+<br />
+<br />
+не если секция не содержит переменных, а содержит только подсекции, то заголовок ей не нужен:
+<br />
+<strong>секция :  (подсекция разделитель*) * ;</strong>
+<br />
+<br />
+Заголовки заключены в квадратные скобки:
+<br />
+<strong>заголовок-секции : '[' пробелы* название-секции пробелы* ']' ;</strong>
+<br />
+<br />
+Название секции состоит из букв, минусов и точек:
+<br />
+<strong>название-секции : (буква | '-' | '.' ) + ;</strong>
+<br />
+<br />
+Имена секций не зависят от регистра:
+<br />
+<strong>буква : буква-английская-большая | буква--английская-маленькая;</strong>
+<br />
+<br />
+<strong>буква-английская-большая : [A-Z] ;</strong>
+<br />
+<br />
+<strong>буква-английская-маленькая : [a-z] ;</strong>
+<br />
+<br />
+У подсекций не может быть своих подсекций:
+<br />
+<strong>подсекция : заголовок-подсекции разделитель* тело-подсекции ;</strong>
+<br />
+<br />
+<strong>заголовок-секции : '[' пробелы* название-секции пробелы* '"' заголовок-подсекции '"' пробелы*  ']' ;</strong>
+<br />
+<br />
+<strong>тело-подсекции : (переменная разделитель*) * ;</strong>
+<br />
+<br />
+<strong>переменная : имя-переменной ( разделитель* '=' разделитель* значение-переменной ) ? 
+<br />
+|| include.path разделитель* '=' разделитель* путь-до-файла
+<br />
+;</strong>
+<br />
+<br />
+<strong>заголовок-подсекции : ( '\"' | '\\' |  допустимый-символ | пробелы ) + ;</strong>
+<br />
+<br />
+<strong>имя-переменной :  буква-английская ( буква-английская | '-' ) * ;</strong>
+<br />
+<br />
+<strong>значение-переменной : строка-переносами-в-кавычках | строка-переносами-без-кавычек ;</strong>
+<br />
+<br />
+<strong>строка-с-переносами-в-кавычках :   '"' ( допустимый-символ | пробелы | специальная-последовательность | хитрый-перенос ) * '"' ;</strong>
+<br />
+<br />
+<strong>строка-переносами-без-кавычек : ( ( допустимый-символ | специальная-последовательность ) * пробелы | хитрый-перенос ) * ( допустимый-символ | специальная-последовательность ) разделитель ?</strong>
+
+</body>
+</html>

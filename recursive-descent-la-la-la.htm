@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Вода</title>
+</head>
+<body>
+
+<table><tr><td valign="top">
+<h1>Вода</h1>
+</td><td valign="top">
+<a href="recursive-descent.htm">Как написать рекурсивный парсер?</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<br />
+зачем вообще используют грамматики:
+<br />
+wide range of stuff in which parsers are useful. Web development. Programming Language Interpreters. <strong>Inhouse Tools.</strong> Gaming Engines. Map and Tile Editors etc.
+<br />
+<br />
+<br />
+There are so very different idiomatic approaches for different languages.
+<br />
+You can't write a parser the same way in Fortran and, say, Haskell. 
+<br />
+In C# you can use, say, <font style="color:red">combinators</font>, just like in the real programming languages, and it can be a sensible approach for some grammars.
+
+<br />
+<br />
+
+<a href="http://antlr.org/">http://antlr.org/</a>
+
+<h2>Combinators in C#</h2>
+<a href="http://blog.efvincent.com/combinators-in-c/">http://blog.efvincent.com/combinators-in-c/</a>
+
+<h2>Сплошной парсинг</h2>
+The parser’s job is to give semantic structure to the syntactic tokens
+<br />
+ну так вот есть идея, что токены - зло. Надо делать единый сквозной парсер до символов.
+
+<h2>BNF grammar</h2>
+<a href="https://ru.wikipedia.org/wiki/Форма_Бэкуса_—_Наура">https://ru.wikipedia.org/wiki/Форма_Бэкуса_—_Наура</a>
+<br />
+формальная система описания синтаксиса, в которой одни синтаксические категории последовательно определяются через другие категории. 
+<br />
+<br />
+БНФ-конструкция состоит из нескольких предложений вида
+<div class="mw-highlight mw-content-ltr" dir="ltr">
+<pre> <span class="err">&lt;определяемый</span> <span class="err">символ&gt;</span> <span class="err">::</span><span class="o">=</span> <span class="err">&lt;посл</span><span class="p">.</span><span class="err">1&gt;</span> <span class="err">|</span> <span class="err">&lt;посл.2&gt;</span> <span class="err">|</span> <span class="err">.</span> <span class="err">.</span> <span class="err">.</span> <span class="err">|</span> <span class="err">&lt;посл.</span><span class="k">n</span><span class="err">&gt;</span>
+</pre></div>
+<p>, описывающих правила. Такое правило означает, что символ <code>&lt;определяемый символ&gt;</code> может заменяться на одну из последовательностей &lt;посл.i&gt;. Знак определения обычно выглядит как <code>::=</code> или <code>→</code>,
+ 
+ 
+<h2>Как обрабатывать концы строк</h2>
+Файл состоит из строк (это сложно отрицать)
+<br />
+<strong>файл : ( строка разделитель-строк ) * строка ? разделитель-строк ? ;</strong></strong>
+<br />
+<br />
+но это правило не потребуется, мы просто будем с этого этапа выдавать символы
+<br />
+<strong>строка : символ * ;</strong>
+<br />
+<br />
+обобщенный-разделитель-строк прийдётся тоже выдавать и использовать в правилах высшего порядка,
+за исключением правила про имена секции, где надо будет использовать &lt;пробелы&gt;
+
+<h2>Инкрементальная компиляция</h2>
+
+Для обеспечения диагностики
+<br />
+каждый объект будет содержать массив интервалов (начало, длина) - где этот объект располагается в исходном тексте
+<br />
+<br />
+не будем выкидывать обобщенный-разделитель-строк и пробелы, потом что надо выполнить требование "Section headers cannot span multiple lines"
+<br />
+<br />
+
+</body>
+</html>
