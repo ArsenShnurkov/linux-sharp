@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>XPath - подходит ли для адресации в любых деревьях?</title>
+</head>
+<body>
+
+<table><tr><td valign="top">
+<h1>XPath - подходит ли для адресации в любых деревьях?</h1>
+</td><td valign="top">
+<a href="recursive-descent.htm">Как написать рекурсивный парсер?</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="http://www.w3schools.com/xsl/xpath_syntax.asp">http://www.w3schools.com/xsl/xpath_syntax.asp</a>
+<br />
+XPath uses path expressions to select nodes or node-sets in an XML document.
+<br />
+<font style="color:red">(означает ли это, что учитывается какая-то специфика именно XML, или можно использовать для AST ?)</font>
+<br />
+<br />
+The node is selected by following a path or steps.
+<br />
+<br />
+The most useful path expressions are listed below:
+<br />
+<table class="reference notranslate">
+  <tbody><tr>
+	<th style="width:25%">Expression</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><i>nodename</i></td>
+    <td>Selects all nodes with the name "<i>nodename</i>"</td>
+    </tr>
+  <tr>
+    <td>/</td>
+    <td>Selects from the root node</td>
+    </tr>
+  <tr>
+    <td>//</td>
+    <td>Selects nodes in the document from the current node that 
+	match the selection no matter where they are </td>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>Selects the current node</td>
+  </tr>
+  <tr>
+    <td>..</td>
+    <td>Selects the parent of the current node</td>
+  </tr>
+  <tr>
+    <td>@</td>
+    <td>Selects attributes</td>
+  </tr>
+</tbody></table>
+<br />
+<br />
+//book 	Selects all book elements no matter where they are in the document
+<br />
+bookstore//book 	Selects all book elements that are descendant of the bookstore element, no matter where they are under the bookstore element
+<br />
+//@lang 	Selects all attributes that are named lang
+
+<h2>EBNF для XPath</h2>
+<a href="http://www.w3.org/TR/xquery-xpath-parsing/#id-grammar">http://www.w3.org/TR/xquery-xpath-parsing/#id-grammar</a>
+
+<h2>XPath в .Net framework</h2>
+Для того, чтобы сымитировать этот интерфейс, нужно представлять из чего он состоит.
+<br />
+System.Xml.XPath, IXPathNavigable
+<br />
+Для чего  имитировать? Для того, чтобы навыки людей использовались повторно (то есть, чтобы выучив одно, было сразу понятно как использовать другое)
+<br />
+Predicates are used to find a specific node or a node that contains a specific value.
+<br />
+Predicates are always embedded in square brackets.
+<br />
+<br />
+By using the | operator in an XPath expression you can select several paths.
+<br />
+<br />
+
+</body>
+</html>

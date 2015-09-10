@@ -48,5 +48,94 @@ You can do that using the DisplayParserWriter.. e.g. Console.WriteLine(new Displ
 <br />
 Eto.Parse.Writers.DisplayParserWriter
 
+<h2>"=" и ":="</h2>
+
+В README.md написано, что при использовани и второго отключается автоматическое удаление пробелных символов (то, что мне надо)
+
+<h2>Порядок правил важен</h2>
+
+Если правило может быть пустым, оно срабатывает и последующие не проверяются>
+
+
+<h2>До некоего терминатор</h2>
+
+I want to define strings which ends by specific sequence of characters
+<br />
+myEbnfGrammar.SpecialParsers["UntilEOF"] = (+Terminals.AnyChar).Until("MYSEQUENCE"); (;
+<br />
+no way to do that using ebnf I'm afraid.. at least with Eto.Parse.
+
+<h2>Как записывать спецсимволы</h2>
+
+Я не понимаю, как записать '\n' в EBNF:
+
+<pre><xmp>
+    malformed_line := { malformed_line_unit } ; 
+    malformed_line_unit := ? Terminals.AnyChar ? - '\n';
+    
+    > ast.Matches ["malformed_line", true].Matches[33]
+    {
+    }
+    	Empty: false
+    	HasMatches: false
+    	Index: 33
+    	Length: 1
+    	Matches: Count = 0
+    	Name: "malformed_line_unit"
+    	Parser: {Eto.Parse.UnaryParser}
+    	Scanner: {Eto.Parse.Scanners.StringScanner}
+    	StringValue: "\n"
+    	Success: true
+    	Tag: (null)
+    	Text: "\n"
+    	Value: "\n"
+    	Static members: 
+    	Non-public members:
+    > 
+</xmp></pre>
+
+Можно создать терминал из одного символа программно:
+<br />
+<a href="https://github.com/picoe/Eto.Parse/blob/master/Eto.Parse/Terminals.cs#L48">https://github.com/picoe/Eto.Parse/blob/master/Eto.Parse/Terminals.cs#L48</a>
+<br />
+var cr = Terminals.Set("\n"); // Set - статическая функция, строку приобразовывает в массив символов
+<br />
+<br />
+Дальше надо из терминала создать правило (то есть дать терминалу имя в грамматике), и добавить правило в грамматику (возможно создание и добавление - это одно действие?)
+<br />
+<br />
+<pre><xmp>
+				case "hex character":
+					return new SingleCharTerminal((char)int.Parse(child.Text.Substring(2), NumberStyles.HexNumber));
+</xmp></pre>
+Substring(2) - пропускает 0x ?
+<br />
+NumberStyles.HexNumber - это из System.Globalization (<a href="https://msdn.microsoft.com/en-us/library/system.globalization.numberstyles%28v=vs.110%29.aspx">.Net framwork</a>)
+<br />
+Indicates that the AllowLeadingWhite, AllowTrailingWhite, and AllowHexSpecifier styles are used. This is a composite number style.
+<br />
+AllowHexSpecifier flag indicates that the string to be parsed is always interpreted as a hexadecimal value. The only individual field flags that can be used with AllowHexSpecifier are AllowLeadingWhite and AllowTrailingWhite.
+<br />
+<br />
+<font style="color:red"><strong>hex character</strong> - а где описано это правило EBNF ?</font>
+<br />
+<br />
+
+<h2>IDE нет</h2>
+well depends on what you mean by "ide".. a simple editor/debugger wouldn't take much to put together initially..
+<br />
+but maybe it wouldn't meet expectations
+<br />
+the main difficulty of Eto.Parse is because it's a recursive descent parser instead of a state parser.. order of rules counts
+
+
+<h2>GrammarCompiler</h2>
+Есть проект
+<br />
+<a href="https://github.com/furesoft/GrammarCompiler">https://github.com/furesoft/GrammarCompiler</a>
+<br />
+он позволяет из файла-грамматики создать .cs-файл, который всё равно будет зависить от библиотеки с классами,
+зато не потребует отдельного файла .ebnf (пф, как будто это проблема файл в ресурсы или в код запихнуть)
+
 </body>
 </html>

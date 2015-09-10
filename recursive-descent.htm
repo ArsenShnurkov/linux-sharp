@@ -16,6 +16,8 @@
 <a href="gitmodules-grammar.htm">грамматика для файла .gitmodules</a>
 <br />
 <a href="Eto.Parse/index.htm">Eto.Parse и как его использовать</a>
+<br />
+<a href="xpath.htm">XPath - подходит ли для адресации в любых деревьях?</a>
 </td></tr></table>
 
 1) Сначала надо написать грамматику
@@ -24,10 +26,190 @@
 
 <h2>Грамматика</h2>
 Что это такое, как её записывают, какие цели ставят при создании грамматики, если её можно создать несколькими способами?
+<br />
+<a href="http://www.csci.csusb.edu/dick/samples/comp.text.Meta.html">http://www.csci.csusb.edu/dick/samples/comp.text.Meta.html</a>
+
+<h3 id="EBNF"><a name="BNF -- Backus Naur Form">EBNF -- Extended Backus Normal Form</a></h3>
+
+где скачать описание EBNF:
+<br />
+<a href="http://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf">ISO/IEC 14977 : 1996(E)</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf">http://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf</a>
+<br />
+<br />
+что почитать про EBNF:
+<br />
+<a href="http://www.cl.cam.ac.uk/~mgk25/iso-14977-paper.pdf">"Extended BNF — A generic base standard", R. S. Scowen</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;( <a href="http://www.cl.cam.ac.uk/~mgk25/iso-14977-paper.pdf">http://www.cl.cam.ac.uk/~mgk25/iso-14977-paper.pdf</a> )
+
+<h3 id="BNF">BNF -- Backus Normal Form</h3>
+BNF was introduced by <a href="https://en.wikipedia.org/wiki/John_W._Backus">John Backus</a> to the Algol 60 committee and <a href="https://en.wikipedia.org/wiki/Peter_Naur">Pete Naur</a> worked with him to define a tool for defining
+Algol 60:
+[<a href="http://csci.csusb.edu/dick/samples/algol60.syntax.html"> algol60.syntax.html </a>]
+<br />
+Since then various extensions to BNF have appeared in every programming
+languages reference manual.
+<br />
+<br />
+Pāṇini, a grammarian from India who lived sometime between 4th and 7th century BCE, presented a notation which is equivalent in its power to that of Backus and has many similar properties.
+
+<h3>ABNF</h3>
+описана в RFC
+
+<h3>XBNF</h3>
+???
+
+<h3 id="BS6154">BS6154</h3>
+BSI (British Standards Institution). BS 6154:1981 Method of defining — syntactic metalanguage. 1981. ISBN 0-580-12530-0
+
+<h3>Другое разное про стандарты</h3>
+ISO/IEC Directives — Part 3. Drafting and presentation of International Standards. International Organization for Standardization, Geneva,1989.
+<br />
+<br />
+ISO/IEC TR 12382:1992. Permuted index of the vocabulary of information processing. ISO/IEC Copyright Office, Geneva. 1992.
+
+<h2>Как писать грамматику</h2>
+Был такой парень, описал грамматику Санскрита (то ли в седьмом, то ли в четвёртом веке до новой эры):
+<br />
+<a href="https://en.wikipedia.org/wiki/P%C4%81%E1%B9%87ini">https://en.wikipedia.org/wiki/Pāṇini</a>
+<br />
+Pāṇini's work became known in 19th-century Europe, where it influenced modern linguistics initially through Franz Bopp, who mainly looked at Pāṇini.
+<br />
+Staal notes that the idea of formal rules in language – proposed by Ferdinand de Saussure in 1894 
+and developed by Noam Chomsky in 1957 – has origins in the European exposure to the formal rules of Pāṇinian grammar
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/7510641/tips-for-writing-good-ebnf-grammars">http://stackoverflow.com/questions/7510641/tips-for-writing-good-ebnf-grammars</a>
+
+
+<h2>Набор символов ISO Latin-1</h2>
+ISO 8859-1:1987, Information Processing — 8-bit single-byte coded graphic character sets — Part 1: ISO Latin Alphabet No. 1 (ISO Latin-1). ISO/IEC Copyright Office, Geneva. 1987.
+<br />
+<br />
+Зачем он нам, если у нас есть Unicode ?
+
+<h2>Пробелы</h2>
+<a href="http://stackoverflow.com/questions/12712446/ebnf-grammar-for-list-of-words-separated-by-a-space">http://stackoverflow.com/questions/12712446/ebnf-grammar-for-list-of-words-separated-by-a-space</a>
+
+<h2>Приоритеты</h2>
+<a href="http://stackoverflow.com/questions/9934553/extended-backus-naur-form-order-of-operations">http://stackoverflow.com/questions/9934553/extended-backus-naur-form-order-of-operations</a>
+
+<h2>Какие нужны утилиты</h2>
+1. Компилятор из .ebnf в .cs
+<br />
+2. Компилятор из ANTRL в EBNF (и из других грамматик)
+<br />
+<a href="http://stackoverflow.com/questions/15148369/ebnf-grammar-to-antlr3">http://stackoverflow.com/questions/15148369/ebnf-grammar-to-antlr3</a>
+<br />
+3. IDE для отладки EBNF
 
 
 
-<h2>Как писать парсер</h2>
+
+
+
+
+<h2>Какой парсер выбрать</h2>
+<h3>Рекурсивный спуск</h3>
+
+Автор Eto.Parser-а рекомендует писать кодом, а не ebnf-грамматикой.
+<br />
+и приводит примеры того, что в коде можно сделать, а грамматикой - нет.
+<br />
+<br />
+Это проистекает из следующих причин:
+<br />
+1) стандарты на синтаксис для описания грамматики написаны неконкретно (ISO/IEC 14977);
+<br />
+2) ABNF (из RFC) не поддерживается в Eto.Parse по состоянию на 2015-09-07;
+<br />
+3) рекурсивному парсеру важно в каком порядке применяются части правил (а не должно быть важно, это недосток подхода);
+
+
+
+<h3>Есть ли альтернативы?</h3>
+<a href="https://github.com/ruffin--/SqlDbSharp/issues/3">https://github.com/ruffin--/SqlDbSharp/issues/3</a>
+<br />
+<br />
+<a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators">https://en.wikipedia.org/wiki/Comparison_of_parser_generators</a>
+<br />
+<a href="http://softwarerecs.stackexchange.com/questions/24630/which-parser-generator-to-use-on-mono">http://softwarerecs.stackexchange.com/questions/24630/which-parser-generator-to-use-on-mono</a>
+<br />
+<a href="http://www.dmoz.org/Computers/Programming/Compilers/Lexer_and_Parser_Generators/">http://www.dmoz.org/Computers/Programming/Compilers/Lexer_and_Parser_Generators/</a>
+<br />
+<br />
+
+
+рекурсивному спуску вообще и Eto.Parse в частности?
+<br />
+и хочешь ли ты их изучать или для текущего момента попробовать дописать грамматику, пока автор помогает?
+<br />
+а потом оставить эту грамматику в отдельно-взятой утилите.
+<br />
+<br />
+ну это только временный выход, ведь такую утилиту в дальнейшем прийдётся переписывать при унификации подходов.
+
+<h2>YaccConstructor</h2>
+<a href="https://github.com/YaccConstructor/YaccConstructor">https://github.com/YaccConstructor/YaccConstructor</a>
+<br />
+<br />
+RNGLR parser generator.
+<br />
+GLL parser generator (in active development). 
+
+<br />
+<br />
+Gold Parser (closed source)
+<br />
+Eto.Parser
+<br />
+Irony - <a href="https://irony.codeplex.com/">https://irony.codeplex.com/</a>
+<br />
+Coco/R , GPL, <a href="https://en.wikipedia.org/wiki/Coco/R">https://en.wikipedia.org/wiki/Coco/R</a>
+<br />
+C#, LL(k), BSD, http://github.com/deveel/csharpcc
+<br />
+Grammatica, LL(k), Java, LGPL <a href="https://en.wikipedia.org/wiki/Grammatica">https://en.wikipedia.org/wiki/Grammatica</a>
+<br />
+LLLPG, LL(k), LGPL, C#
+<br />
+Hime Parser Generator, LR(1), LALR(1), LGPL
+<br />
+jay, LALR(1), Java, BSD
+<br />
+Lapg, LALR(1), Java, GPL
+<br />
+SableCC, LALR(1), ???, LGPL
+<br />
+GPPG, LALR(1), C#, BSD, https://gppg.codeplex.com ( with GPLEX, C#, BSD, https://gplex.codeplex.com )
+<br />
+Antlr, Java, BSD, <a href="https://github.com/antlr/antlr4-csharp">https://github.com/antlr/antlr4-csharp</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(requires Java for generating C# code (but the applications compiled from this C# code will not require Java to be installed))
+<br />
+GLRSharp, GLR, C# v4, MIT, <a href="https://github.com/jcoder58/GLRSharp">https://github.com/jcoder58/GLRSharp</a>
+<br />
+<a href="NaiveLanguageTools/index.htm">NLT</a>, GLR, C#, MIT, <a href="http://sourceforge.net/projects/naivelangtools/">http://sourceforge.net/projects/naivelangtools/</a>
+<br />
+YaccConstructor, C#, GLL, Apache 2.0, <a href="http://yaccconstructor.github.io/YaccConstructor/gll.html">http://yaccconstructor.github.io/YaccConstructor/gll.html</a>
+
+<br />
+<br />
+В общем, хотелось бы почитать опыт использования вот этих трёх (от самого обещающего до менее привлекательных):
+<br />
+<br />
+YaccConstructor, C#, GLL, Apache 2.0, http://yaccconstructor.github.io/YaccConstructor/gll.html
+<br />
+GLRSharp, GLR, C# v4, MIT, https://github.com/jcoder58/GLRSharp
+<br />
+NLT, GLR, C#, MIT, <a href="http://sourceforge.net/projects/naivelangtools/">http://sourceforge.net/projects/naivelangtools/</a>
+<br />
+<br />
+LLLPG, <a href="http://www.codeproject.com/Articles/664785/A-New-Parser-Generator-for-Csharp">http://www.codeproject.com/Articles/664785/A-New-Parser-Generator-for-Csharp</a>
+<br />
+<a href="https://github.com/sprache/sprache">https://github.com/sprache/sprache</a>
 
 </body>
 </html>
