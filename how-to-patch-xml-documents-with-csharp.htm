@@ -14,79 +14,101 @@
 &nbsp;
 </td></tr></table>
 
-
-i found an RFC:
-<br />
+<h2>RFC5261 и зачем он</h2>
 <a href="http://tools.ietf.org/search/rfc5261">http://tools.ietf.org/search/rfc5261</a>
 <br />
-and some lib:
+<a href="http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt">http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt</a>
+
+<h3>Как применить патч</h3>
+<a href="http://softwarerecs.stackexchange.com/questions/22840/cli-tool-for-xml-patching-on-c">http://softwarerecs.stackexchange.com/questions/22840/cli-tool-for-xml-patching-on-c</a>
+<br />
 <br />
 <a href="https://github.com/Bonuspunkt/XmlPatch">https://github.com/Bonuspunkt/XmlPatch</a>
 <br />
 License: unlicense
 <br />
-<br />
-<a href="http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt">http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt</a>
-<br />
-<a href="http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй">http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй</a>
-<br />
-<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
-<br />
-<a href="https://github.com/Bonuspunkt/XmlPatch/issues/2">https://github.com/Bonuspunkt/XmlPatch/issues/2</a>
+эта либа берет патч и накатывает его.
 
-<h2>MSXmlDiffPatch (EULA)</h2>
-XmlDiff.Exe and XmlDiffPatch.dll
+<h3>Как создать патч</h3>
+Создавать патчи можно при помощи программы xmlpatch - <a href="http://sourceforge.net/projects/xmlpatch">http://sourceforge.net/projects/xmlpatch</a>
 <br />
-Xml Diff Language Diffgram (XDL diffgram or just diffgram)
+но есть варианты:
 <br />
-Source code:
+на C# (инфа с <a href="http://letmeask.co/foxfeedspro/details/item_68014/">http://letmeask.co/foxfeedspro/details/item_68014/</a>):
 <br />
-<a href="https://github.com/idanmnr/XmlCompare/tree/master/MSXmlDiffPatch">https://github.com/idanmnr/XmlCompare/tree/master/MSXmlDiffPatch</a>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlunit.net
 <br />
-.nupkg-package (unofficial):
+&nbsp;&nbsp;&nbsp;&nbsp;Diffplex
 <br />
-<a href="https://www.nuget.org/packages/XMLDiffPatch/">https://www.nuget.org/packages/XMLDiffPatch/</a>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlspecificationcompare 
+<br />
+на Java <a href="http://www.roseindia.net/opensource/xmldiff.php">http://www.roseindia.net/opensource/xmldiff.php</a>
 
-<h2>xmlunit.net</h2>
+<h3>xmlunit.net</h3>
 <a href="https://github.com/xmlunit/xmlunit.net">https://github.com/xmlunit/xmlunit.net</a>
 <br />
 focused on unit-testing, there is no examples of patching in the internet
 
-<h2>Diffplex</h2>
+<h3>Diffplex</h3>
 <a href="https://github.com/mmanela/diffplex">https://github.com/mmanela/diffplex</a>
 <br />
 There is no examples of patching in the internet
 
-<h2>Xml Specification Compare and XPath discovery</h2>
+<h3>Xml Specification Compare and XPath discovery</h3>
 <a href="http://xmlspecificationcompare.codeplex.com/">http://xmlspecificationcompare.codeplex.com/</a>
 
 
 
 
 <h2>Использование XSLT</h2>
-<a href="http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487">http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487</a>
-<br />
-<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
-<br />
-<br />
-"I'm sure with exslt:dynamic you could write an interpreter for RFC5261 patches" (o11c)
-<br />
-<br />
-<a href="https://www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp">www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp</a>
 
-<h2>Алгоритм</h2>
+<h3>Зачем</h3>
+<a href="https://github.com/Bonuspunkt/XmlPatch/issues/2">https://github.com/Bonuspunkt/XmlPatch/issues/2</a>
+
+<h3>Как накатить xslt</h3>
+Есть множество xslt-процессоров:
+<br />
+<a href="http://stackoverflow.com/tags/xslt/info">http://stackoverflow.com/tags/xslt/info</a>
+<br />
+Процессор надо запустить в командной строке и передать ему входные файлы
+
+<h3>как создать xslt</h3>
+<br />
+<a href="http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй">http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй</a>
+<br />
+В русском вопросе есть ссылка на английский, в английском есть список литературы и ссылка на алгоритм 2007, Tekli
+<br />
+"Algorithms that allow insertion and deletion of single nodes anywhere in the tree - RTED, Demain, Zhang-Shasha."
+<br />
+"Algorithms that allow insertion and deletion of single nodes only at leaves of the trees - Selkow, Chawathe"
+<br />
+"Algorithms that allow insertion and deletion of whole sub-trees - Nierman, Tekli."
+<br />
+"algorithms in the third group, were mainly developed to use in practice with XML documents"
+<br />
+"inserting multiple identical(Nierman) or similar(Tekli) sub-trees, would result in less operations, provide more suitable edit script and edit distance"
+<br />
+"Tekli algorithm provides more accurate result than Nierman’s approach"
+<br />
+<a href="http://le2i.cnrs.fr/IMG/publications/Efficient%20XML%20Structural%20Similarity%20Detection%20using%20Sub-tree%20Commonalities.pdf">http://le2i.cnrs.fr/IMG/publications/Efficient XML Structural Similarity Detection using Sub-tree Commonalities.pdf</a>
+<br />
+2007, Joe Tekli; Richard Chbeir; Kokou Yetongnon, Efficient XML Structural Similarity Detection using Sub-tree Commonalities
+
+<h3>Алгоритм</h3>
 Ооо, да тут на докторскую распиcать можно:
 <br />
 2008, <a href="http://www.zora.uzh.ch/16421/1/fluri_dissertation_2008.pdf">http://www.zora.uzh.ch/16421/1/fluri_dissertation_2008.pdf</a>
+
 <br />
 <br />
 <a href="http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf">X-Diff: An Effective Change Detection Algorithm for XML Documents , Yuan Wang, David J. DeWitt, Jin-Yi Cai</a>
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp;(<a href="http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf">http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf</a>)
 <br />
+<br />
+<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
 
 <br />
-
 <a href="http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf">http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf</a>
 <br />
 <a href="http://research.cs.queensu.ca/TechReports/Reports/1995-372.pdf">http://research.cs.queensu.ca/TechReports/Reports/1995-372.pdf</a>
@@ -103,6 +125,32 @@ There is no examples of patching in the internet
 2) как не делать собственный парсер XPath, а заиспользовать готовый
 <br />
 3) ещё есть пяток .pdf-ов, которые можно прочитать (но не очень хочется)
+
+
+<h3>MSXmlDiffPatch (EULA)</h3>
+XmlDiff.Exe and XmlDiffPatch.dll
+<br />
+Xml Diff Language Diffgram (XDL diffgram or just diffgram)
+<br />
+Source code:
+<br />
+<a href="https://github.com/idanmnr/XmlCompare/tree/master/MSXmlDiffPatch">https://github.com/idanmnr/XmlCompare/tree/master/MSXmlDiffPatch</a>
+<br />
+.nupkg-package (unofficial):
+<br />
+<a href="https://www.nuget.org/packages/XMLDiffPatch/">https://www.nuget.org/packages/XMLDiffPatch/</a>
+
+
+<h3>ещё ссылки</h3>
+<a href="http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487">http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487</a>
+<br />
+<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
+<br />
+<br />
+"I'm sure with exslt:dynamic you could write an interpreter for RFC5261 patches" (o11c)
+<br />
+<br />
+<a href="https://www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp">www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp</a>
 
 </body>
 </html>

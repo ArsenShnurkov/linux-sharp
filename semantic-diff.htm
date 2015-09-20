@@ -64,7 +64,7 @@
 
 
 <dt>semantic diff</dt>
-<dd>A semantic diff would understand the purpose of the change, rather than just the effect.
+<dd>A semantic diff would <strong>understand</strong> the purpose of the change, rather than just the effect.
 <br />
 Extract Method refactoring in a tool
 <br />
@@ -75,6 +75,9 @@ in such a way that highlights the refactoring.
 <br />
 This also can make merges more awkward than it might if it actually knew what I was doing.
 </dd>
+
+<dt>understanding</dt>
+<dd>Это когда выдвигают гипотезы и ищут им подтверждения (а в идеале - аксиомы (факты) и доказательства (выводы)</dd>
 
 </dl>
 
@@ -121,6 +124,7 @@ The author's opinion is that there is no "correct" formulation of the problem, j
 The second disadvantage of the LCS method concerns the computational problems associated with it [1, 6, 7]. In the worst case, it can take time 
 O(mn)-that is, time proportional to the product of the lengths of the two strings. 
 
+
 <h3>1978, Heckel (где могут быть использованы дифы)</h2>
 <a href="http://documents.scribd.com/docs/10ro9oowpo1h81pgh1as.pdf">http://documents.scribd.com/docs/10ro9oowpo1h81pgh1as.pdf</a>
 <br />
@@ -165,6 +169,106 @@ Unfortunately, the definition of an LCS is such that the n cannot be included in
 <h2>Иерахчиность в данных</h2>
 "finding the optimal matching for unordered trees is known to be NP-hard"
 
+<h2>1977, Stanley Selkow</h2>
+1977, Stanley M. Selkow, The tree-to-tree editing problem
+<br />
+<br />
+2013, Байцерова Юлия Сергеевна, под руководством Вояковская Н.Н., Проверка избыточности и минимизация множества тестов 
+<br />
+<a href="http://se.math.spbu.ru/SE/YearlyProjects/2013/YearlyProjects/2013/445/445-Baytserova-report.pdf">http://se.math.spbu.ru/SE/YearlyProjects/2013/YearlyProjects/2013/445/445-Baytserova-report.pdf</a>
+<pre>
+Метрика Стэнли Селкова введена им для вычисления расстояния между
+помеченными упорядоченными деревьями. Помеченным упорядоченным деревом он
+называет непустое конечное множество T с функцией маркировки λ, такое что:
+1) Т имеет особую вершину, называемую корнем дерева
+2) Остальные вершины (исключая корень) разделены на m≥0 непересекающихся
+множеств Т1, … , Тm, и каждое из этих множеств является деревом. Эти
+множества называются поддеревьями дерева Т
+3) С каждой из вершин v ϵ Т связана метка λ(v). Метка для корня дерева Т
+обозначается как λ(Т). Пусть даны два дерева: А и В с поддеревьями А1, … , Аm
+и В1, … , Вn соответственно, тогда А и В равны, если λ(А) = λ(В), m = n и Аi
+ = Вi
+
+для 1 ≤ i ≤ m
+Далее вводятся так называемые операции редактирования:
+1) Операция замены метки L(si
+, sk), примененная к дереву Т, дает дерево T* с λ(Т*)
+= sk и поддеревьями Т1, … , Тm
+2) Операция вставки I(A) для 0 ≤ i ≤ m и дерева А, примененная к дереву Т в i-ой
+позиции, дает дерево Т* с λ(Т*) = sj
+ и поддеревья Т1, … , Тi
+, А, Тi+1, … , Тm
+3) Операция удаления D(Ti) для 1 ≤ i ≤ m, примененная к Т в i-ой позиции, дает
+дерево Т* с λ(Т*) = sj
+ и поддеревьями Т1, … , Тi-1, Тi+1, … , Тm
+С каждой операцией редактирования связывается неотрицательная стоимость
+следующим образом. С каждой парой меток (si
+, sj) связывается стоимость СL(si
+, sj)
+применения операции L(si
+, sj). Для каждой метки si
+ выражениями СI(si) и СD(si)
+обозначаются стоимости применения операций I(T) и D(T) соответственно, где Т – дерево
+с одной вершиной и λ(Т) = si
+. Для произвольного дерева Т:
+СI(Т) = ΣvϵT CI(λ(v)) и СD(Т) = ΣvϵT CD(λ(v)) 
+
+Пусть есть деревья А и В и множество последовательностей операций
+редактирования, которые, будучи примененными к дереву А, дают дерево, равное В.
+Тогда вычисление расстояния между деревьями сводится к вычислению функции δ(А, В),
+обозначающую минимальную сумму стоимостей для каждой последовательности.
+Сложность алгоритма: O(|TA|×|TB|), где |TA|, |TB| - число листьев деревьев ТА и ТВ
+соответственно. 
+</pre>
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://web.cs.wpi.edu/~sms/cs3133/index.html">http://web.cs.wpi.edu/~sms/cs3133/index.html</a>
+
+
+
+
+<h2>1989, Zhang, Shasha</h2>
+1989, Kaizhong Zhang and Dennis Shasha, Simple fast algorithms for the editing distance between trees and related problems
+<br />
+<a href="http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf">http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf</a>
+<br />
+<br />
+<a href="http://cs.nyu.edu/cs/faculty/shasha/papers/">http://cs.nyu.edu/cs/faculty/shasha/papers/</a>
+<br />
+Этот Shasha ещё вполне живой и в сознании, у него есть email и можно ему написать (только писать надо так, чтобы ему захотелось ответить)
+<br />
+<br />
+<a href="http://www.youtube.com/watch?v=hwiks-n7vso">http://www.youtube.com/watch?v=hwiks-n7vso</a>
+
+<h2>1996, Chawathe</h2>
+Our emerged change distilling algorithm is based on the tree differencing algorithm of Chawathe et al. (1996).
+<br />
+<a href="http://ilpubs.stanford.edu:8090/115/1/1995-46.pdf">http://ilpubs.stanford.edu:8090/115/1/1995-46.pdf</a>
+<br />
+<br />
+delta tree
+
+
+
+<h2>Gabriel Valiente</h2>
+<a href="http://www.cs.upc.edu/~valiente/publications.html">http://www.cs.upc.edu/~valiente/publications.html</a>
+<br />
+<br />
+2001, Gabriel Valiente. An Efficient Bottom-Up Distance between Trees.
+<br />
+<a href="http://www.lsi.upc.es/~valiente/abs-spire-2001.pdf">http://www.lsi.upc.es/~valiente/abs-spire-2001.pdf</a>
+
+
+<h2>Что особенного в XML</h2>
+There are some specific aspects of XML which deserve mention:
+<br />
+1) attributes, which are guaranteed to have unique names within a node; 
+<br />
+2) IDs, which are guaranteed to be unique within a document.
+<br />
+<br />
+но атрибуты могут быть необязательными (а обязательными могут?), или может поменяться схема, и тогда атрибут добавится или пропадёт.
+
 
 <h2>Иерархичность в операциях</h2>
 У утилиты редактирования (редактирования чего? артефакта, например текстового файла) есть некая объектная модель (например абстрактное синтаксическое дерево (abstract-syntax-tree, AST) текста).
@@ -190,7 +294,8 @@ Unfortunately, the definition of an LCS is such that the n cannot be included in
 Здесь не очень ясно, как вписывается утилита редактирования с её операциями,
 ведь именно операции этой утилиты приводят к изменениям нижнего уровня (например увеличение отступа блока текста)
 <br />
-в то же время, модель утилиты редактирования не включена в стек моделей (прикладная-xml-байты). <font style="color:gray">Ну дополни, в чем проблема-то, сделай (прикладная-xml-редактор-байты)</font>
+в то же время, модель утилиты редактирования не включена в стек моделей (прикладная-xml-байты). <font style="color:gray">Ну дополни, в чем проблема-то, сделай "прикладная-xml-редактор-байты"
+(надо бы сравнить с OSI, потому что у меня нет уровней "символов" и "концов строк" между байтами и редактором)</font>
 <br />
 
 
@@ -220,33 +325,17 @@ Unfortunately, the definition of an LCS is such that the n cannot be included in
 <br />
 Есть что-то общее с экспертными систмами (там построение и проверка гипотез)
 
-<h2>1989, Zhang, Shasha</h2>
-1989, Kaizhong Zhang and Dennis Shasha, Simple fast algorithms for the editing distance between trees and related problems
-<br />
-<a href="http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf">http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf</a>
-<br />
-<br />
-<a href="http://cs.nyu.edu/cs/faculty/shasha/papers/">http://cs.nyu.edu/cs/faculty/shasha/papers/</a>
-<br />
-Этот Sasha ещё вполне живой и в сознании, у него есть email и можно ему написать (только писать надо так, чтобы ему захотелось ответить)
 
-<h2>1996, Chawathe</h2>
-Our emerged change distilling algorithm is based on the tree differencing algorithm of Chawathe et al. (1996).
-<br />
-<a href="http://ilpubs.stanford.edu:8090/115/1/1995-46.pdf">http://ilpubs.stanford.edu:8090/115/1/1995-46.pdf</a>
-<br />
-<br />
-delta tree
 
-<h2>Что особенного в XML</h2>
-There are some specific aspects of XML which deserve mention:
+<h2>Нужен ли ручной парсинг XML?</h2>
+It's too late to analyse two XMLs by their DOM models. Information about linking of XML nodes to original character positions is already lost
 <br />
-1) attributes, which are guaranteed to have unique names within a node; 
-<br />
-2) IDs, which are guaranteed to be unique within a document.
+so with no information about linking, it's impossible to convert editing changes in XML text into editing changes in XML nodes
 <br />
 <br />
-но атрибуты могут быть необязательными (а обязательными могут?), или может поменяться схема, и тогда атрибут добавится или пропадёт.
+Ну распарси вручную, будет у тебя информация о том, какие редактирующие изменения текста повлияли на какие элементы XML-модели.
+<br />
+(только где гарантия, что редактирующие измнения текста ты правильно выделил? Кругом гипотезы)
 
 <h2>Графы в общем виде</h2>
 
@@ -275,5 +364,11 @@ There are some specific aspects of XML which deserve mention:
 (<font style="color:gray">ну а если такой секции нет, то что?</font>)
 <br />
 Вот, есть же простые adhoc-решения. Нет надо выдумать несуществующий университет Subsurface Habbitation University, к нему несуществующую кафедру Nascent Intelligence Department и от его имени опубликовать докторскую на отвлечённую тему. Ну не смешно?
+
+<br />
+<br />
+<a href="http://le2i.cnrs.fr/IMG/publications/Efficient%20XML%20Structural%20Similarity%20Detection%20using%20Sub-tree%20Commonalities.pdf">http://le2i.cnrs.fr/IMG/publications/Efficient XML Structural Similarity Detection using Sub-tree Commonalities.pdf</a>
+<br />
+2007, Joe Tekli; Richard Chbeir; Kokou Yetongnon, Efficient XML Structural Similarity Detection using Sub-tree Commonalities
 </body>
 </html>
