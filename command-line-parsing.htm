@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Парсинг командной строки</title>
+</head>
+<body>
+
+<table><tr><td valign="top">
+<h1>Парсинг командной строки</h1>
+</td><td valign="top">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+Mono.Options -&gt; NDesk.Options -&gt; ManyConsole
+<br />
+<a href="https://github.com/fschwiet/ManyConsole">https://github.com/fschwiet/ManyConsole</a>
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/491595/best-way-to-parse-command-line-arguments-in-c">http://stackoverflow.com/questions/491595/best-way-to-parse-command-line-arguments-in-c</a>
+<br />
+<br />
+<a href="http://dgondotnet.blogspot.dk/2013/08/my-last-console-application-manyconsole.html">http://dgondotnet.blogspot.dk/2013/08/my-last-console-application-manyconsole.html</a>
+
+<h2>Desk.Options</h2>
+If you are not familiar with NDesk.Options, you should start by using that: http://www.ndesk.org/Options
+<br />
+the main downside in Mono.Options (the lack of the concept of ǌommand”) has been addressed.
+<br />
+<br />
+Our commands must override .Run() and declare their arguments/delegates-to-execute pairs in their constructors in a pretty sensible way. 
+<br />
+<br />
+provide me a collection of commands (that can be auto-magically discovered 
+<br />
+ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(Program))) 
+<br />
+<br />
+provide the command-line arguments 
+<br />
+<br />
+tell where to write messages 
+
+<h2>ManyConsole</h2>
+Have Program.Main call ConsoleCommandDispatcher (see <a href="https://github.com/fschwiet/ManyConsole/blob/master/SampleConsole/Program.cs">https://github.com/fschwiet/ManyConsole/blob/master/SampleConsole/Program.cs</a>) 
+<br />
+<br />
+<ul>
+<li>To add a command to your console application, inherit from ConsoleCommand.
+
+<ul>
+<li>See the sample comands at <a href="https://github.com/fschwiet/ManyConsole/tree/master/SampleConsole">https://github.com/fschwiet/ManyConsole/tree/master/SampleConsole</a></li>
+<li>Commands can be forced to show the user the help text by throwing an exception of type: ConsoleHelpAsException</li>
+<li>There are a handful of methods you can call from the derived class's constructor to add metadata to the command.  Use autocompete to find them.</li>
+</ul></li>
+</ul>
+
+<br />
+<br />
+<h2>Multi-Arguments</h2>
+Inheriting the delegate philosophy, defining multi-arguments is nothing special,
+but the delegate will be executed multiple times, so adding the values to a list is easy enough.
+
+<h2>Interactivity</h2>
+ability to interpret interactive commands ļonsole-mode commands
+
+</body>
+</html>

@@ -24,6 +24,15 @@ and some lib:
 <a href="https://github.com/Bonuspunkt/XmlPatch">https://github.com/Bonuspunkt/XmlPatch</a>
 <br />
 License: unlicense
+<br />
+<br />
+<a href="http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt">http://ru.stackoverflow.com/questions/451926/Зачем-придумали-rfc5261-если-существует-xslt</a>
+<br />
+<a href="http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй">http://ru.stackoverflow.com/questions/451932/Как-имея-два-xml-файла-получить-xslt-файл-преобразующий-первый-xml-во-второй</a>
+<br />
+<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
+<br />
+<a href="https://github.com/Bonuspunkt/XmlPatch/issues/2">https://github.com/Bonuspunkt/XmlPatch/issues/2</a>
 
 <h2>MSXmlDiffPatch (EULA)</h2>
 XmlDiff.Exe and XmlDiffPatch.dll
@@ -52,6 +61,48 @@ There is no examples of patching in the internet
 <a href="http://xmlspecificationcompare.codeplex.com/">http://xmlspecificationcompare.codeplex.com/</a>
 
 
+
+
+<h2>Использование XSLT</h2>
+<a href="http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487">http://msgroups.net/microsoft.public.dotnet.xml/xslt-s-for-ms-xml-diff-patch-tool/616487</a>
+<br />
+<a href="http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into">http://stackoverflow.com/questions/32656577/if-i-have-2-xml-files-how-to-create-xslt-which-will-transform-first-file-into</a>
+<br />
+<br />
+"I'm sure with exslt:dynamic you could write an interpreter for RFC5261 patches" (o11c)
+<br />
+<br />
+<a href="https://www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp">www.codeproject.com/Articles/759021/All-about-XML-transformation-using-XSLT-and-Csharp</a>
+
+<h2>Алгоритм</h2>
+Ооо, да тут на докторскую распиcать можно:
+<br />
+2008, <a href="http://www.zora.uzh.ch/16421/1/fluri_dissertation_2008.pdf">http://www.zora.uzh.ch/16421/1/fluri_dissertation_2008.pdf</a>
+<br />
+<br />
+<a href="http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf">X-Diff: An Effective Change Detection Algorithm for XML Documents , Yuan Wang, David J. DeWitt, Jin-Yi Cai</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(<a href="http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf">http://www.inf.unibz.it/~nutt/Teaching/XMLDM1112/XMLDM1112Coursework/WangEtAl-ICDE2003.pdf</a>)
+<br />
+
+<br />
+
+<a href="http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf">http://www.grantjenks.com/wiki/_media/ideas:simple_fast_algorithms_for_the_editing_distance_between_tree_and_related_problems.pdf</a>
+<br />
+<a href="http://research.cs.queensu.ca/TechReports/Reports/1995-372.pdf">http://research.cs.queensu.ca/TechReports/Reports/1995-372.pdf</a>
+
+
+<h2>Разные ссылки</h2>
+<a href="http://xsltdev.ru/lib/xmltools">http://xsltdev.ru/lib/xmltools</a>
+<br />
+<br />
+вообще говоря, надо почитать:
+<br />
+1) про API и исходники библиотеки в mono (разобраться, какие там классы зачем, хотя бы сколько их в единицах/штуках)
+<br />
+2) как не делать собственный парсер XPath, а заиспользовать готовый
+<br />
+3) ещё есть пяток .pdf-ов, которые можно прочитать (но не очень хочется)
 
 </body>
 </html>
