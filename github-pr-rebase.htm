@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как выполнить rebase для pull request на github?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как выполнить rebase для pull request на github?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+Когда нужен rebase - когда PR был сделан, но не принят сразу, а за это время авторы продвинули проект вперед.
+
+<h3>скопировать ветку master</h3>
+<dl>
+<dt>git fetch upstream/master</dt>
+<dd>
+получить изменения с далёкого репозитория на сервере upstream в директорию .git
+</dd>
+
+<dt>git checkout master</dt>
+<dd>
+переключаемся на ветку master, 
+<br />
+при этом выполняется два действия:
+<br />
+- локальные файлы заменяются на содержимое ветки (может не выполнится, если есть незакомиченные изменения)
+<br />
+- ветка переключается на указанную
+<br />
+если на ветку master не переключиться, то следующая команда запортит текущую ветку
+</dd>
+
+<dt>git reset --hard upstream/master
+<br />
+HEAD is now at 946ee2f Update and rename msbuild-commands.md to publish.md
+</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;^^ просто установить локальную копию в точно такое состояние, в каком эта ветка лежит в далёком репозитории
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://stackoverflow.com/questions/11356460/how-to-cleanly-get-copy-a-remote-git-branch-to-local-repository">http://stackoverflow.com/questions/11356460/how-to-cleanly-get-copy-a-remote-git-branch-to-local-repository</a>
+</dd>
+
+<dt>git push origin master -f</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;^^ эта команда вносит изменения в далёкий репозиторий origin из текущего состояния (-f = принудительно)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://stackoverflow.com/questions/10510462/force-git-push-to-overwrite-remote-files">http://stackoverflow.com/questions/10510462/force-git-push-to-overwrite-remote-files</a>
+</dd>
+</dl>
+
+
+<table><tr><td style="vertical-align:top;">
+<h3>выполнить rebase</h3>
+</td><td style="vertical-align:top;">
+<a href="https://www.kernel.org/pub/software/scm/git/docs/git-rebase.html">https://www.kernel.org/pub/software/scm/git/docs/git-rebase.html</a>
+</td></tr></table>
+
+<dl>
+
+<dt>git branch -v</dt>
+<dd>
+показать список веток
+</dd>
+
+<dt>git checkout mybranchname</dt>
+<dd>
+переключиться на ветку, которая засабмичена как PR
+</dd>
+
+<dt>git rebase origin/master</dt>
+<dd>
+выполнить перемещение
+<br />
+<a href="http://stackoverflow.com/questions/7929369/how-to-rebase-local-branch-with-remote-master">http://stackoverflow.com/questions/7929369/how-to-rebase-local-branch-with-remote-master</a>
+</dd>
+
+
+</dl>
+
+
+<h3>Подчистить историю</h3>
+git rebase меняет id коммитов
+<br />
+Так что это хорошее время для того, чтобы привести историю ветки в логически удобный вид (например объединить всё в один коммит)
+
+<h3>Опубликовать</h3>
+
+<dt>git push -f</dt>
+<dd>
+отправить ветку на сервер
+</dd>
+
+
+
+<h3>Разное</h3>
+Что такое github - крупнейший (в 2015-м году) веб-сервис для хостинга IT-проектов и их совместной разработки. (<a href="https://ru.wikipedia.org/wiki/GitHub">https://ru.wikipedia.org/wiki/GitHub</a>)
+<br />
+Что такое Pull Request - предложение от контрибтютора к авторам проекта (<a href="http://habrahabr.ru/post/125999/">http://habrahabr.ru/post/125999/</a>)
+
+</body>
+</html>
