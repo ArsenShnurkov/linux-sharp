@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Бывает ли msbuild под mono?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Бывает ли msbuild под mono?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<pre><xmp>
+16:37 <migueldeicaza> A large chunk was completed last week 
+16:38 <migueldeicaza> @alistair well Mono has its implementation, xbuild, and it lacks a lot of things
+16:38 <migueldeicaza> We had started to contribute to the open sourced msbuild, in the xplat branch, and were getting good traction
+16:39 <migueldeicaza> We were systematically fixing every test suite and fixing the code to make it work on Unix 
+16:39 <migueldeicaza> The effort was to bring msbuild functionality as-is to Mono
+16:40 <migueldeicaza> But the msbuild team sort of took over that branch, and started chopping things left and right to make it work with CoreCLR
+16:40 <migueldeicaza> So we are left in the very uncomfortable position of the cross platform msbuild being now an unspecified subset of msbuild with the sole goal of supporting CoreCLR
+</xmp></pre>
+
+</body>
+</html>

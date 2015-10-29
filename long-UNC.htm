@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Что такое UNC?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Что такое UNC?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="https://github.com/alphaleonis/AlphaFS/issues/213">https://github.com/alphaleonis/AlphaFS/issues/213</a>
+
+<h1 class="title">2.2.57 UNC</h1>
+  
+  <div id="mainSection">
+            <div id="mainBody">
+                
+                <div class="section" id="collapseableSection">
+                    
+
+<p>A Universal Naming Convention (UNC) string is used to
+specify the location of resources such as shared files or devices.</p>
+
+<p>For <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_8a7f6700-8311-45bc-af10-82e10accd331">RPC</a>
+implementations, this type is declared as follows:</p>
+
+<dl>
+<dd>
+<div><pre>&nbsp;typedef STRING UNC;
+</pre></div>
+</dd></dl>
+
+<p>There are three UNC schemes based on namespace selectors:
+filespace selector, Win32API selector, and device selector. Only the filespace
+selector is parsed for on-wire traffic, the other two pass opaque <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_ad861812-8cb0-497a-80bb-13c95aa4e425">BLOBs</a> to the consuming
+entity. The filespace selector is a null-terminated <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_fd33af2e-e1ce-4f8e-a706-f9fb8123f9b0">Unicode character</a> string in
+the following ABNF syntax: </p>
+
+<dl>
+<dd>
+<div><pre>&nbsp;UNC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = "\\" host-name "\" share-name&nbsp; [ "\" object-name ]
+&nbsp;host-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = "[" IPv6address ‘]" / IPv4address / reg-name&nbsp; 
+&nbsp;&nbsp;&nbsp; ; IPv6address, IPv4address, and reg-name as specified in [RFC3986] 
+&nbsp;share-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1*80pchar
+&nbsp;pchar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = %x20-21 / %x23-29 / %x2D-2E / %x30-39 / %x40-5A / %x5E-7B / %x7D-FF&nbsp; 
+&nbsp;object-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = *path-name [ "\" file-name ]
+&nbsp;path-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1*255pchar
+&nbsp;file-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1*255fchar [ ":" stream-name [ ":" stream-type ] ]
+&nbsp;fchar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = %x20-21 / %x23-29 / %x2B-2E / %x30-39 / %x3B / %x3D / %x40-5B / %x5D-7B /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %x7D-FF 
+&nbsp;stream-name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = *schar
+&nbsp;schar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = %x01-2E / %x30-39 / %x3B-5B /%x5D-FF
+&nbsp;stream-type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1*schar
+</pre></div>
+</dd></dl>
+
+<p><strong>host-name:</strong>   The host name of a
+server or the <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_b0276eb2-4e65-4cf1-a718-e0920a614aca">domain</a>
+name of a domain hosting resource, using the syntax of IPv6address,
+IPv4address, and reg-name as specified in<a href="http://go.microsoft.com/fwlink/?LinkId=90453">[RFC3986]</a>,. The
+host-name string MUST be a NetBIOS name as specified in <a href="https://msdn.microsoft.com/en-us/library/dd891412.aspx">[MS-NBTE]</a>
+section <a href="https://msdn.microsoft.com/en-us/library/dd891456.aspx">2.2.1</a>,
+a <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_1769aec9-237e-44ed-9014-1abb3ec6de6e">fully qualified domain
+name (FQDN)</a> as specified in <a href="http://go.microsoft.com/fwlink/?LinkId=90264">[RFC1035]</a> and <a href="http://go.microsoft.com/fwlink/?LinkId=90268">[RFC1123]</a>, or an IPv4
+address as specified in [RFC1123] section 2.1 or an IPv6 address as specified
+in <a href="http://go.microsoft.com/fwlink/?LinkId=90464">[RFC4291]</a> section
+2.2.</p>
+
+<p><strong>share-name: </strong>  The name of a <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_a49a79ea-dac7-4016-9a84-cf87161db7e3">share</a> or a resource to be
+accessed. The format of this name depends on the actual file server protocol
+that is used to access the share. Examples of file server protocols include SMB
+(as specified in <a href="https://msdn.microsoft.com/en-us/library/cc246231.aspx">[MS-SMB]</a>),
+NFS (as specified in <a href="http://go.microsoft.com/fwlink/?LinkId=90430">[RFC3530]</a>),
+and NCP (as specified in [NOVELL]).</p>
+
+<p><strong>object-name:</strong>   The name of an
+object; this name depends on the actual resource accessed.</p>
+
+<dl>
+<dd>
+<p>The notation "[\<strong>object-name</strong>]*"
+indicates that zero or more object names may exist in the path, and each
+object-name is separated from the immediately preceding <strong>object-name</strong> with
+a backslash path separator. In a UNC path used to access files and directories
+in an SMB share, for example, <strong>object-name</strong> may be the name of a file or a
+directory. The <strong>host-name</strong>, <strong>share-name</strong>, and <strong>object-name</strong> are
+referred to as "pathname components" or "path components".
+A valid UNC path consists of two or more path components. The <strong>host-name</strong>
+is referred to as the "first pathname component", the <strong>share-name</strong>
+as the "second pathname component", and so on. The last component of
+the path is also referred to as the "leaf component". The protocol
+that is used to access the resource, and the type of resource that is being
+accessed, define the size and valid characters for a path component. The only
+limitations that a <a href="https://msdn.microsoft.com/en-us/library/cc230275.aspx#gt_0b8086c9-d025-45b8-bf09-6b5eca72713e">Distributed
+File System (DFS)</a> places on path components are that they MUST be at least
+one character in length and MUST NOT contain a backslash or null.</p>
+</dd></dl>
+
+<p><strong>path-name</strong>:   One or more pathname
+components separated by the "\" backslash character. All pathname
+components other than the last pathname component denote directories or reparse
+points.</p>
+
+<p><strong>file-name</strong>:   The "leaf
+component" of the path, optionally followed by a ":" colon
+character and a <strong>stream-name</strong> , optionally followed by a ":"
+colon character and a <strong>stream type</strong>. The <strong>stream-name</strong>, if specified,
+MAY be zero-length only if <strong>stream-type</strong> is also specified; otherwise, it
+MUST be at least one character. The <strong>stream-type</strong>, if specified, MUST be
+at least one character.</p>
+</body>
+</html>
