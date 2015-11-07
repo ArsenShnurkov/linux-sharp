@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как определить платформу</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как определить платформу</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+<a href="http://www.mono-project.com/docs/faq/technical/#how-to-detect-the-execution-platform">http://www.mono-project.com/docs/faq/technical/#how-to-detect-the-execution-platform</a>
+<br />
+<a href="http://stackoverflow.com/questions/692410/hello-os-with-c-sharp-mono">http://stackoverflow.com/questions/692410/hello-os-with-c-sharp-mono</a>
+<br />
+<a href="http://stackoverflow.com/questions/10138040/how-to-detect-properly-windows-linux-mac-operating-systems">http://stackoverflow.com/questions/10138040/how-to-detect-properly-windows-linux-mac-operating-systems</a>
+<br />
+<a href="http://stackoverflow.com/questions/32415679/how-can-i-get-the-real-os-version-in-c">http://stackoverflow.com/questions/32415679/how-can-i-get-the-real-os-version-in-c</a>
+<br />
+
+<pre><xmp>
+if (Type.GetType("Mono.Runtime") != null) 
+{
+    // we're on Mono
+    IsMono = true;
+} 
+else
+    IsMono = false;
+    
+int p = (int) Environment.OSVersion.Platform;
+if ((p == 4) || (p == 6) || (p == 128)) {
+        Console.WriteLine ("Running on Unix");
+} else {
+        Console.WriteLine ("NOT running on Unix");
+}
+
+public static bool IsLinux
+{
+    get {
+        bool isLinux = System.IO.Path.DirectorySeparatorChar == '/';
+        return isLinux;
+    }
+}
+</xmp></pre>
+
+<h2>__MonoCS__</h2>
+<a href="http://stackoverflow.com/questions/329043/how-can-i-conditionally-compile-my-c-sharp-for-mono-vs-microsoft-net/329072#329072">http://stackoverflow.com/questions/329043/how-can-i-conditionally-compile-my-c-sharp-for-mono-vs-microsoft-net/329072#329072</a>
+
+<h2>Platform property in msbuild</h2>
+<a href="https://msdn.microsoft.com/en-us/library/bb629394.aspx">https://msdn.microsoft.com/en-us/library/bb629394.aspx</a>
+
+<dl>
+<dt>Platform</dt>
+<dd>The operating system you are building for. Valid values are "Any CPU", "x86", and "x64".</dd>
+</dl>
+
+
+<h2>manifesting</h2>
+manifesting your application for Windows 10 so that Environment.OSVersion.Version
+<br />
+would return the right value (I recently had to do this to get the software I work on to detect Windows 10),
+<br />
+but I'm not sure it would help you if you are on a non-Windows platform.
+<br />
+I did a bit of searching and it seems that Mono, for instance, seems to have problems listening to the <strong>app.manifest</strong> file.
+ 
+</body>
+</html>

@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>DBus и как его изучить</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>DBus и как его изучить</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+D-Bus was started in 2002, version 1.0 &mdash; considered API stable &mdash;  was released in November 2006
+<br />
+<br />
+a port for Windows exists.
+<br />
+
+<br />
+2005-01-05, Robert Love, <a href="http://www.linuxjournal.com/article/7744">http://www.linuxjournal.com/article/7744</a>
+<br />
+<br />
+<a href="https://en.wikipedia.org/wiki/D-Bus">https://en.wikipedia.org/wiki/D-Bus</a>
+<br />
+<br />
+<br />
+Implementations of D-Bus:
+<br />
+D-Bus on libdbus
+<br />
+GDBus (GNOME),
+<br />
+QtDBus (Qt/KDE),
+<br />
+dbus-java,
+<br />
+sd-bus (part of systemd)
+<br />
+<br />
+D-BUS is an interprocess communication (IPC) system, providing a simple yet powerful mechanism allowing applications to talk to one another, communicate information and request services.
+<br />
+D-BUS was designed from scratch
+<br />
+D-BUS' initial goal is to be a replacement for CORBA and DCOP, the remote object systems used in GNOME and KDE, respectively.
+<br />
+D-BUS can become a <strong>unified</strong> and agnostic IPC mechanism 
+used by both desktops, satisfying their needs and ushering in new features.
+<br />
+think UNIX domain sockets on steroids.
+<br />
+<br />
+A single bus shared by the entire system allows for propagation of events, from the kernel (see The Kernel Event Layer)
+to the uppermost applications on the system.
+<br />
+Now, events such as disk full and printer queue empty or even battery power low 
+can bubble up the system stack, available 
+for whatever application cares, allowing the system to respond and react.
+<br />
+<br />
+D-BUS implements a remote object system,
+letting one application request services and invoke methods from a different object—think CORBA without the complications.
+<br />
+<br />
+<h2>Wire mechanism</h2>
+Processes connected to a bus don't know how it is internally implemented, 
+but D-Bus specification guarantees that 
+every process connected to the bus is able to communicate with each other through it.
+<br />
+<br />
+The D-Bus specification defines the wire protocol: how to build the D-Bus messages to be exchanged between processes within a D-Bus connection.
+But it doesn't define the underlying transport method for delivering such messages.
+<br />
+<br />
+<font style="color:red">Как вообще работает DBus ?</font>
+<br />
+<strong>libdbus</strong> is intended to be a low-level backend for the higher level bindings.
+Much of the libdbus API is only useful for binding implementation.
+<br />
+Objects are addressed using path names, such as /org/cups/printers/queue.
+<br />
+<br />
+Messages are sent to objects.
+<br />
+the basic unit of IPC in D-BUS is a message, not a byte stream.
+<br />
+D-BUS breaks up IPC into discrete messages, complete with headers (metadata) and a payload (the data). 
+<br />
+The message format is binary, typed, fully aligned and simple.
+<br />
+It is an inherent part of the wire protocol.
+<br />
+<br />
+Processes on the message bus are associated with objects and implemented interfaces on that object. 
+<br />
+<br />
+D-BUS, however, provides a daemon, known as the message bus daemon, that routes messages between processes on a specific bus.
+<br />
+<br />
+Applications can send to or listen for various <strong>events</strong> on the bus. 
+<br />
+<br />
+A final unique feature is the creation of not one but two of these buses, the system bus and the session bus.
+<br />
+The system bus is global, system-wide and runs at the system level.
+All users of the system can communicate over this bus with the <strong>proper permissions</strong>
+allowing the concept of system-wide events.
+<br />
+The session bus, however, is <strong>created during user login</strong> and runs at the user, or session, level.
+
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://forum.kde.org/viewtopic.php?f=43&t=62126">https://forum.kde.org/viewtopic.php?f=43&t=62126</a>
+<br />
+<br />
+An application can have any number of connections with the bus.
+<br />
+Each connection gets an unique identifier so 
+one can send messages to a specific connection and one can check which specific connection a message came from.
+<br />
+Connections can optionally be associated with additional names, often referred to as "well known names", e.g. org.kde.knotify
+
+<h3>four types of messages</h3>
+There are four types of messages: method calls, method returns, errors and signals.
+<br />
+Method calls are sent to a specific connection, same for method returns and errors.
+<br />
+(theoretically all connections can see them, in reality they are filtered by a default filter in the library)
+<br />
+Signals are "broadcasted" to all connections.
+<br />
+Signals are notification that a specific event has occurred.
+They are simple, asynchronous, one-way heads-up messages.
+<br />
+The events are sent asynchronously, and without polling.
+<br />
+Method call messages allow an application to request the invocation of a method on a remote object.
+<br />
+Method return messages provide the return value resulting from a method invocation.
+<br />
+Error messages provide exceptions in response to a method invocation. 
+
+<h3>type system</h3>
+D-BUS is fully typed and type-safe.
+Both a message's header and payload are fully typed.
+Valid types include byte, Boolean, 32-bit integer,
+32-bit unsigned integer, 64-bit integer, 64-bit unsigned integer, double-precision floating point and string.
+A special array type allows for the grouping of types. A DICT type allows for dictionary-style key/value pairs. 
+<br />
+<br />
+Messages have a well-defined structure, even the types of the data carried in their payload are defined,
+allowing the bus to validate them and to reject any ill-formed message.
+In this regard, D-Bus is closer to an RPC mechanism than to a classic IPC mechanism,
+with its own type definition system and its own marshaling.
+
+<h3>security</h3>
+D-BUS is secure. It implements a simple protocol based on <strong>SASL profiles</strong> 
+for authenticating one-to-one connections. 
+<br />
+что такое SASL-профили?
+<br />
+предлагают читать секцию 4 документа <a href="ftp://ietf.org//rfc/rfc2222.txt">ftp://ietf.org//rfc/rfc2222.txt</a>
+<br />
+<br />
+An administrator can control access to any interface on the bus.
+
+<h2>D-BUS daemon</h2>
+The D-BUS daemon was written from the ground up with security in mind. 
+<br />
+In the reference implementation this role is performed by dbus-daemon,
+and so it is in all other implementations 
+since no one has developed an alternative.
+<br />
+dbus-daemon itself is built on top of libdbus.
+<br />
+<br />
+When a message bus daemon like dbus-daemon is used to implement a D-Bus bus,
+all processes that want to connect to the bus must know the bus address,
+the address by which a process can establish a D-Bus connection to the central message bus process.
+<br />
+In this scenario, the message bus daemon selects the bus address
+and the remainder processes must pass that value to their corresponding libdbus or equivalent libraries.
+dbus-daemon defines a different bus address for every bus instance it provides.
+These addresses are defined in the daemon's configuration files.
+<br />
+Two processes can use a D-Bus connection to exchange messages directly between them
+
+<br />
+<br />
+<a href="https://github.com/mono/dbus-sharp">https://github.com/mono/dbus-sharp</a>
+<br />
+<br />
+2006, <a href="https://blogs.gnome.org/tko/2006/07/27/c-and-dbus-making-development-easier-or-not/">https://blogs.gnome.org/tko/2006/07/27/c-and-dbus-making-development-easier-or-not/</a>
+<br />
+<br />
+<img src="dbus-sharp-object.png" alt="dbus-sharp-object.png" />
+<br />
+<br />
+<dl>
+<dt>dbus-binding-tool</dt>
+<dd>takes a (hand written) XML file describing a DBus object interface and generates client and server side glue code.
+Combined with the C implementation this gives you a shared library you can start wrapping for C#.</dd>
+</dl>
+dbus-binding-tool --mode=glib-server
+<br />
+<br />
+<font style="color:red">а что, сразу на чистом C# протокол реализовать нельзя?</font>
+<br />
+<dl>
+<dt>gapi2-parser<dt>
+<dd>takes a (hand written) XML file referencing source files to parse 
+as well as some namespace annotations and 
+generates an XML description of the GObject(s).
+<br />
+The parser is a C source and header parser that produces an XML document describing the API.
+</dd>
+<dt>gapi2-codegen</dt>
+<dd>takes the output of gapi2-parser and generates C# source files.
+<br />
+The generator takes an XML API file as input and produces C# source files to implement the specified API.
+</dd>
+<dt>gapi2-fixup</dt>
+<dd>takes a bunch of extra (hand written) files and then customizes the generated code in wonderful ways I’m sure, but I didn’t want to go there
+<br />
+The fixup tool is an alteration engine to manipulate XML API files via a set of transformation rules.
+</dd>
+</dl>
+
+<h2>GAPI overview</h2>
+<font style="color:red">Зачем вообще существует GAPI-парсер?</font>
+<br />
+<br />
+<a href="http://www.mono-project.com/docs/gui/gtksharp/gapi/">http://www.mono-project.com/docs/gui/gtksharp/gapi/</a>
+<br />
+GAPI tools are distributed with Gtk#
+<br />
+managed bindings to native libraries which utilize glib and GObject.
+<br />
+examples of libraries: Gtk, Atk, Pango, Gdk, libgnome, libgnomeui,libgnomecanvas, GtkGLArea.
+<br />
+
+<h2>dbus-send</h2>
+Using dbus-send, or preferrably 
+having gnome-vfs send the DBus message directly from the application itself,
+should be more efficient than loading the mono runtime just to send a few bytes down the socket. 
+<br />
+#!/bin/sh
+<br />
+exec dbus-send --session --type=method_call --dest=org.gnome.LastExit /org/gnome/LastExit org.gnome.LastExit.Open string:"$1"
+<br />
+<br />
+The echo server example appeared to be working, but mono was segfaulting when the client was trying to handle the method call response. 
+<br />
+<br />
+a different implementation was released shortly after.
+They cheated, there’s no GObject exposed to C# side but just a simple function for setting a callback function.
+On the plus side it causes much less headaches.
+I was also told there are better mono bindings around, waiting for commit approval somewhere. 
+<br />
+Wrapping GObjects in C# by hand isn’t actually that hard
+
+<h2>GObject and GBoxed</h2>
+You should specify at a minimum all the public header files and the source files 
+that contain class_init and get_type method implementations 
+for all the public GObject and GBoxed types in the library.
+
+<h3>Kernel Event Layer</h3>
+The Kernel Event Layer is a kernel-to-user communication mechanism
+that uses a high-speed netlink socket to communicate asynchronously with user space.
+<br />
+This Kernel Event Layer was merged into the 2.6.10-rc1 kernel. 
+<br />
+The Kernel Event Layer is tied to sysfs, the tree of kobjects that lives at /sys on modern Linux systems.
+<br />
+Each directory in sysfs is tied to a kobject, which is a structure in the kernel used to represent objects;
+sysfs is an object hierarchy exported as a filesystem.
+<br />
+<br />
+Each Kernel Event Layer event is modeled as though it originated from a sysfs path.
+<br />
+Thus, the events appear as if they emit from kobjects.
+<br />
+<br />
+This mechanism can be tied into D-BUS, allowing the kernel to send D-BUS signals
+<br />
+The sysfs paths are easily translatable to D-BUS paths,
+making the Kernel Event Layer and D-BUS a natural fit.
+
+
+<h2>D-BUS API</h2>
+The core D-BUS API, written in C, is rather low-level and large.
+<br />
+On top of this API, bindings integrate with programming languages and environments, including Glib, Python, Qt and Mono.
+<br />
+<br />
+Using D-BUS starts with including its header:
+<br />
+#include &lt;dbus/dbus.h&gt;
+
+<h2>GLib</h2>
+the Glib bindings treat D-BUS connections as GObjects and allow messaging to integrate into the Glib mainloop.
+<br />
+<br />
+The header file &lt;dbus/dbus-glib.h&gt; declares multiple functions for connecting D-BUS to the Glib mainloop. 
+
+<h2>Count of buses</h2>
+1 - system session
+<br />
+N - a session bus for each user login session
+<br />
+total = 1 + N
+
+<h3>lifetime management</h3>
+bus sends a notification when a bus name is released due to a process termination.
+<br />
+Bus names can be used as a simple way to implement single instance applications
+
+<h2>Unix-domain socket</h2>
+Unix-domain socket are filesystem objects, and therefore they can be identified by a filename, 
+so a valid address would be unix:path=/tmp/.hiddensocket
+<br />
+Both processes must pass the same address 
+to their respective communications libraries 
+to establish the D-Bus connection between them.
+<br />
+An address can also provide additional data to the communications library
+in the form of comma-separated key=value pairs.
+
+<h2>Service activation</h2>
+dbus-daemon improves the feature set already provided by D-Bus itself with additional functionality.
+For example, service activation allows to automatically start services
+only when they are needed —when the first request to any bus name of such service arrives to the message bus daemon.
+<br />
+dbus-daemon improves the feature set already provided by D-Bus itself with additional functionality.
+For example, service activation allows to automatically start services only when they are needed
+— when the first request to any bus name of such service arrives to the message bus daemon.
+
+<h2>Usages</h2>
+NetworkManager network daemon, BlueZ bluetooth stack and Pulseaudio sound server 
+<br />
+use D-Bus to provide part or all of its services, and
+<br />
+systemd is promoting traditional system daemons to D-Bus services, such as logind.
+
+</body>
+</html>

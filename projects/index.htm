@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>*.**proj</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>*.**proj</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Visual Studio project files, i.e. .csproj and .vbproj files, are MSBuild scripts. When Visual Studio 2005 builds 
+a project it actually calls MSBuild.exe and passes it the project file. The project files are the starting point of your builds, 
+and they provide the main entry point for extending the build process
+<br />
+Everything that happens when a project builds is defined in some MSBuild build script.
+It follows that every step can be altered, overwritten or removed. In other words,
+you could go ahead and write the whole default build process yourself, using MSBuild and the provided tasks.
+<br />
+<br />
+Most projects use project items that represent files;
+<br />
+The IDE instructs the project to save itself or a project item.
+<br />
+The IDE calls the IPersistFileFormat interface on the project
+to indicate that the project should persist its project items as appropriate.
+Therefore, the object owns all aspects of its file and format.
+This includes the name of the format of the object.
+
+<h2>Extension</h2>
+To determine file name extensions,
+<br />
+projects implement the IPersistFileFormat interface, which provides information enabling the client of an object 
+<br />
+to implement the Save As dialog box—that is, to fill in the Save As Type drop-down list and manage the initial file name extension.
+
+<h2>Commit model</h2>
+in a file-based model with local files, each project can be saved autonomously.
+<br />
+In a repository model, you can save several items in one transaction.
+<br />
+<br />
+When data objects are opened in direct mode, 
+<br />
+changes that were made to the data are incorporated immediately or when the user manually saves the file.
+<br />
+When data objects are opened by using transacted mode, changes are saved to a temporary location in memory 
+and are not committed until the user manually chooses to save the file.
+<br />
+At that time, all changes must occur together or no changes will be made.
+<br />
+<br />
+Will persisted data objects be opened in direct mode or transacted mode?
+
+<h2>How items are saved</h2>
+IDE examines the running document table (RDT) and 
+the hierarchy passes the commands to the IVsPersistHierarchyItem and the IVsPersistHierarchyItem2 interfaces.
+<br />
+The IsItemDirty method is implemented to determine whether the item has been modified.
+<br />
+If the item has, the SaveItem method is implemented to save the modified item.
+<br />
+The methods on the IVsPersistHierarchyItem2 interface are used to determine whether an item can be reloaded
+and, if the item can be, to reload it. Additionally, the IgnoreItemFileChanges method
+can be implemented to cause changed items to be discarded without being saved.
+<br />
+
+</body>
+</html>

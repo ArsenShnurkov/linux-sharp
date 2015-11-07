@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как работать с .sln</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как работать с .sln</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="http://stackoverflow.com/questions/707107/parsing-visual-studio-solution-files">http://stackoverflow.com/questions/707107/parsing-visual-studio-solution-files</a>
+<br />
+The .NET 4.0 version of the Microsoft.Build assembly 
+contains a SolutionParser class in the Microsoft.Build.Construction namespace 
+that parses Visual Studio solution files.
+<br />
+<br />
+Можно <a href="how-to-determine-platform.htm">определить операционную систему</a>.
+Идея в том, чтобы в скрипте msbuild определить операционную систему, на которой выполняется сборка и
+в зависимости от этого определить #define MONO
+<br />
+тогда проектам было бы достаточно только заинклюдить этот скрипт
+<br />
+<br />
+fact is that the solution file pretty much magically becomes a MSBuild file when MSBuild executes it
+-- which is what happens when you build the solution in visual studio.
+<br />
+<br />
+
+<a href="http://stackoverflow.com/questions/28196339/how-can-csproj-know-about-its-solution">http://stackoverflow.com/questions/28196339/how-can-csproj-know-about-its-solution</a>
+<br />
+Variables $(SolutionDir), $(SolutionPath), $(SolutionExt), etc, only defined when you build your .sln file, they are not defined when you build project directly.
+<br />
+<br />
+
+VS 2005 - <a href="https://msdn.microsoft.com/en-us/library/bb165951%28v=vs.80%29.aspx">https://msdn.microsoft.com/en-us/library/bb165951(v=vs.80).aspx</a>
+<br />
+VS 2015 - <a href="https://msdn.microsoft.com/en-us/library/bb165951(v=vs.140).aspx">https://msdn.microsoft.com/en-us/library/bb165951(v=vs.140).aspx</a>
+<br />
+<a href="http://stackoverflow.com/questions/2472183/replace-sln-with-msbuild-and-wrap-contained-projects-into-targets">http://stackoverflow.com/questions/2472183/replace-sln-with-msbuild-and-wrap-contained-projects-into-targets</a>
+<br />
+<a href="http://www.jayway.com/2015/03/13/visual-studio-how-to-create-a-solution-template-with-multiple-projects/">http://www.jayway.com/2015/03/13/visual-studio-how-to-create-a-solution-template-with-multiple-projects/</a>
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/bb165922.aspx">https://msdn.microsoft.com/en-us/library/bb165922.aspx</a>
+<br />
+A solution is a grouping of one or more projects that work together to create an application.
+<br />
+The project and status information that pertain to the solution are stored in two solution files,
+a text-based solution (.sln) file and a binary solution user option (.suo) file.
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/bb165327.aspx">https://msdn.microsoft.com/en-us/library/bb165327.aspx</a>
+<br />
+<p>When a solution is opened, the following process takes place.  </p>
+<ol class="ordered"><li><p>The environment reads the solution.</p></li><li><p>If the environment finds a <strong>CLSID</strong>, it loads the corresponding VSPackage.</p></li><li><p>If a VSPackage is loaded, the environment calls <strong>QueryInterface</strong> for <a href="https://msdn.microsoft.com/en-us/library/microsoft.visualstudio.shell.interop.ivspackage.aspx">IVsPackage</a> interface, for the interface that the VSPackage requires. </p><ol class="ordered"><li><p>When reading from an .sln file, the environment calls <strong>QueryInterface</strong> for <strong>IVsPersistSolutionProps</strong>.</p></li><li><p>When reading from an .suo file, the environment calls <strong>QueryInterface</strong> for <strong>IVsPersistSolutionOpts</strong>.</p></li></ol></li></ol>
+
+<br />
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/bb165951%28v=vs.80%29.aspx">https://msdn.microsoft.com/ru-ru/library/bb165951(v=vs.80).aspx</a>
+<br />
+Only the .sln file contains entries in the preSolution and postSolution sections.
+There are no similar sections in the .suo file since the solution needs this information to load properly.
+<br />
+<pre><xmp>
+GlobalSection(SolutionConfiguration) = preSolution
+	ConfigName.0 = Debug
+       ConfigName.1 = Release
+EndGlobalSection
+</xmp></pre>
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/bb166499%28v=vs.80%29.aspx">https://msdn.microsoft.com/ru-ru/library/bb166499(v=vs.80).aspx</a>
+<br />
+<br />
+If your VSPackage is loaded as a result of being referenced in the .sln file, the environment calls ReadSolutionProps to read in the .sln file.
+<br />
+When a user opens a solution, the environment cycles through the preSolution, Project, and postSolution information in the .sln file 
+to load the solution, projects within the solution, and any persisted information attached to the solution.
+
+
+<h2>GlobalSection(SolutionProperties) = preSolution</h2>
+<a href="http://www.windowsdevcenter.com/pub/a/dotnet/excerpt/vshacks_chap1/?page=4">http://www.windowsdevcenter.com/pub/a/dotnet/excerpt/vshacks_chap1/?page=4</a>
+<br />
+Visual Studio 2005 includes an additional section that is not present
+in any of the older versions of Visual Studio;
+
+<pre><code>    GlobalSection(SolutionProperties) = preSolution
+        HideSolutionNode = FALSE
+    EndGlobalSection</code></pre>
+<br />
+If the FALSE is switched to TRUE, then the solution node is hidden in
+the IDE.
+<br />
+<br />
+<a href="http://goobbe.com/questions/8104536/visual-studios-sln-file-solutionproperties-or-performance">http://goobbe.com/questions/8104536/visual-studios-sln-file-solutionproperties-or-performance</a>
+<br />
+I believe HideSolutionNode is true by default, until you add a second project to the solution (at least with vs2010 and probably 2012.)
+<br />
+<br />
+<a href="http://www.nivisec.com/2008/09/vsts-projects-have-recently-been-added.html">http://www.nivisec.com/2008/09/vsts-projects-have-recently-been-added.html</a>
+<br />
+I also managed to fix our "Some of the properties associated with the solution could not be read." 
+error as well by removing a "GlobalSection(SolutionProperties) = preSolution" section that had no projects listed in it.
+
+<h2>Как вынести конфигурации в отдельный файл</h2>
+<a href="http://stackoverflow.com/questions/5596329/visual-studio-2010-cannot-load-a-project-where-the-projectconfiguration-elemen">http://stackoverflow.com/questions/5596329/visual-studio-2010-cannot-load-a-project-where-the-projectconfiguration-elemen</a>
+
+
+<h2>IDE</h2>
+<a href="http://superuser.com/questions/255690/how-do-i-differentiate-between-2-different-solutions-of-the-same-name-in-visual">http://superuser.com/questions/255690/how-do-i-differentiate-between-2-different-solutions-of-the-same-name-in-visual</a>
+
+
+<h2>RDT</h2>
+When the solution is opened in Visual Studio, an entry is made for the solution file (Solution1.sln) in the running document table (RDT).
+<br />
+<br />
+If an element of the project is opened for editing, there is an entry for the project file in the RDT.
+
+<h2>.suo</h2>
+The .suo file contains user-specific options, such as 
+private notes, that are not intended to be shared or placed under source code control.
+
+
+</body>
+</html>
