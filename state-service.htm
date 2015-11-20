@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>ASP.NET state service</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>ASP.NET state service</h1>
+</td><td style="vertical-align:top;">
+<a href="session-identifier-as-http-get-parameter-howto.htm">Как поместить идентификатор сессии в параметр GET, а не в URL?</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+это такой сервис, который используется для хранения состояния сессий вместо SQL-сервера.
+<br />
+<font style="color:red">Что является его реализацией в mono?</font>
+<br />
+<br />
+The ASP.NET state service is installed with ASP.NET, and 
+<br />
+by default is located in 
+<br />
+%windir%\Microsoft.NET\Framework\version\aspnet_state.exe.
+
+<h2>Как включить этот режим</h2>
+In the Web.config file for the application, set 
+<br />
+mode to "StateServer" and 
+<br />
+stateConnectionString to a value, such as "tcpip=dataserver:42424".
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>первый вызов, без идентификатора сессии</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>первый вызов, без идентификатора сессии</h1>
+</td><td style="vertical-align:top;">
+<a href="../session-identifier-as-http-get-parameter-howto.htm">Как поместить идентификатор сессии в параметр GET, а не в URL?</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<h2>автоматическое перенаправление в asp .net</h2>
+
+<a href="http://www.developer.com/net/asp/article.php/2216431/Enabling-POST-in-Cookieless-ASPNET-Applications.htm">http://www.developer.com/net/asp/article.php/2216431/Enabling-POST-in-Cookieless-ASPNET-Applications.htm</a>
+<br />
+Asp.Net intercepts the posted request, adds the session id, and redirects it to the same page.
+Of course, this process is only necessary once; after the session id is in the URL, there is no need to insert it again.
+In IE the redirection is invisible to the user because it supports the redirect request in the HTTP header.
+In the case of Opera 6.01, it doesn't; hence the "Object has moved here" communication.
+<br />
+The downside of redirecting a request in this manner is that it's always as a GET request.
+making transferring of our posted data impossible.
+<br />
+it's clear that to resolve this problem we have to find out when Asp.Net redirects the response,
+clear it, and once again post our data with the session id string.
+<br />
+<a href="https://en.wikipedia.org/wiki/HTTP_302">https://en.wikipedia.org/wiki/HTTP_302</a>
+<br />
+ещё есть код 307 (и 303)
+<br />
+<br />
+я проверял wireshark-ом, выдаётся 302, работает автоматически в firefox и в chrome
+<br />
+поэтому при заходе на главную страницу сразу добавляется идентификатор сессии
+
+<h2>Проблема SID и ботов в PHP</h2>
+The first time a page is accessed, PHP doesn't yet know if the browser is accepting cookies or not,
+so after session_start() is called, SID will be non-empty, and 
+the PHPSESSID gets inserted in all link URLs on that page that are properly using SID.
+<br />
+<br />
+This has the consequence that if, for example, a search engine bot hits your home page first,
+all links that it sees on your home page will have the ugly PHPSESSID=... in them.
+<br />
+<br />
+This appears to be the default behavior. A work-around is to turn on session.use_only_cookies,
+but then you lose session data for anyone who has their cookies turned off.
+
+</body>
+</html>

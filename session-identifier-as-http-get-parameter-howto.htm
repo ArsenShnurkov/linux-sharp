@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как поместить идентификатор сессии в параметр GET, а не в URL?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как поместить идентификатор сессии в параметр GET, а не в URL?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="http://stackoverflow.com/questions/31459612">http://stackoverflow.com/questions/31459612/how-to-place-session-id-into-get-parameter-of-http-request-instead-of-url-in-coo</a>
+<br />
+<a href="state-service.htm">ASP.NET state service</a>
+</td></tr></table>
+
+<a href="session-identifier-as-http-get-parameter-howto/sessionState-in-webconfig.htm">Как записывать XML-тег "sessionState" в файле web.Config</a>
+<br />
+<a href="session-identifier-as-http-get-parameter-howto/session.htm">что мы знаем про сессии вообще</a>
+<br />
+<a href="session-identifier-as-http-get-parameter-howto/first-call.htm">первый вызов, без идентификатора сессии</a>
+<br />
+<br />
+
+Существуют три метода передачи идентификатора сессии:
+<ul>
+<li>Cookies
+<li>параметр GET или POST запросов HTTP
+<li>Модификация URL
+</ul>
+Куки в браузере могут быть включены или выключены пользователем в настройках браузера.
+
+
+<h2>ASP.NET AJAX</h2>
+Settings that use cookies encoded in the URL are not supported by the ASP.NET AJAX client script libraries.
+<br />
+<font style="color:red">вот не было печали, знать бы ещё, что это за клиентские библиотеки такие, зачем они нужны,
+как работают, когда их использовать, как доработать для поддержки "session ID passed in the request"</font>
+<br />
+<br />
+When you configure an AJAX-enabled ASP.NET Web site, use only the default value of UseCookies for the cookieless attribute.
+<br />
+<font style="color:red">ну спасибо за совет, чё</font>
+
+<h2>maximum permissible URI length</h2>
+If the combination of the 
+<br />
+anonymous identification ticket,
+<br />
+forms authentication ticket,
+<br />
+session ID, and 
+<br />
+user data 
+<br />
+is greater than the maximum permissible URI length, the request will fail with a 400-Bad Request error.
+<br />
+<br />
+<font style="color:red">Много видов тикетов и ни одной ссылки на страницы, где про их использование каждого из них написано.
+Плохая у MS документация.</font>
+
+<h2>Session_End</h2>
+There's a Session_End event in global.asax which you can use to detect when sessions end.
+<br />
+<br />
+<br />
+“If session expiration from ASP.NET page it will automatically redirect to login page.”
+<br />
+<a href="http://www.aspsnippets.com/Articles/Reload-Refresh-and-Redirect-Pages-using-Meta-Tags-in-ASP.Net.aspx">http://www.aspsnippets.com/Articles/Reload-Refresh-and-Redirect-Pages-using-Meta-Tags-in-ASP.Net.aspx</a>
+<br />
+<a href="http://forums.asp.net/t/1767976.aspx/1">http://forums.asp.net/t/1767976.aspx/1</a>
+<br />
+<a href="https://msmvps.com/blogs/shahed/archive/2007/09/05/redirect-to-login-page-on-session-expiration-asp-net.aspx">https://msmvps.com/blogs/shahed/archive/2007/09/05/redirect-to-login-page-on-session-expiration-asp-net.aspx</a>
+<br />
+<br />
+<a href="http://csharpdotnetfreak.blogspot.com/2008/11/detecting-session-timeout-and-redirect.html">http://csharpdotnetfreak.blogspot.com/2008/11/detecting-session-timeout-and-redirect.html</a>
+<br />
+I have set session timeout for one minute , it expires if inactivity is for 1 minute , otherwise not 
+<br />
+you can try setting SlidingExpiration = true in web.config is your session is timing out after certain time irrespective of activity/inactivity 
+
+
+<h2>Как выглядит ID по-умолчанию?</h2>
+http://yourserver/folder/(session ID here)/default.aspx
+<br />
+<br />
+Вот конкретный пример:
+<br />
+http://127.0.0.1:8085/(A1471828581099FE96B6164D)/index.aspx 
+
+<h2>Кто использует куки?</h2>
+In ASP.NET, session management and forms authentication
+are the only two system features that use cookies under the hood.
+<br />
+Аутентификация может работать и в Cookieless-режиме, начиная с ASP .NET 2.0
+
+<h2>IHttpHandler</h2>
+Asp.Net provides a mechanism for implementing global methods by implementing the IHttpHandler interface.
+<br />
+IHttpHandler allows the programmer to capture and handle events thrown by an instance of the HttpApplication object
+that processes all incoming requests, in essence, the controller in an MVC architecture.
+<br />
+HttpApplication throws a whole array of events at different points in the lifetime of processing a page.
+<br />
+The IHttpHandler interface requires that we implement one method, public void Init (HttpApplication application).
+<br />
+let's register a handler for setting up session state.
+<br />
+application.AcquireRequestState
+      += new EventHandler(this.Application_AcquiredSession);
+<br />
+Now, in our handler we can see whether our posted data is still available:
+<br />
+private void Application_AcquiredSession(Object source, EventArgs e)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;HttpRequest req = HttpContext.Current.Request;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string reqtype = req.RequestType;	
+<br />
+}
+<br />
+I've used a call to HttpContext.Current instead of casting the source object to an HttpApplication.
+In our module, it wouldn't make much difference, but in other modules
+the event might be thrown by something different then an HttpApplication,
+so the call to HttpContext.Current will always be safe.
+<br />
+If we now run our debugger, we can see that the request is already a GET request.
+<br />
+The request is redirected before the session is acquired. 
+This makes it a little bit difficult to make an all-purpose module 
+because we can't use Session.IsCookieless to detect whether the session is cookieless.
+Our only alternative is to read the web.config file directly.
+<br />
+I haven't done much research into this subject,
+but I'm sure there's a solution on how to read elements
+from the web.config file differing from the &lt;appsettings&gt; element.
+<br />
+<br />
+There's some discrepency on how Asp.Net goes about processing IHttpModules.
+MSDN tells us that each request gets a unique instance of an IHttpModule.
+After processing, the module goes back into a pool to be effectively recycled.
+This is why we have to implement the IDisposable interface.
+<br />
+each module could be handling many requests at once.
+If this happens to be the case, we can assume that only the EventHandlers are thread safe
+and the lock is maintained by HttpApplication.
+<br />
+to register our custom module in web.config. In the system.web section, we add:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;httpModules&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;add type="CookielessPostFixModule, OurModule" name="CookielessPostFixModule" /&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/httpModules&gt;
+
+
+ 
+<h2>ApplyAppPathModifier</h2>
+call to HttpRequest.ApplyAppPathModifier. This method returns the path modified with the inserted session id.
+
+
+<h2>Как это делают в PHP</h2>
+&lt;a href="nextpage.php?<span style="background-color:yellow">&lt;?php echo <a href="http://php.net/manual/ru/function.htmlspecialchars.php">htmlspecialchars</a>(SID); ?&gt;</span>"&gt;Нажмите сюда&lt;/a&gt;, чтобы продолжить.
+
+<br />
+<br />
+Подразумевается, что абсолютные (полные, неотностельные) URL указывают только на внешние сайты 
+и потому SID к ним не добавляется, 
+так как включенная по умолчанию отправка увеличивала бы риски в области безопасности, 
+в частности, риск утечки SID другому серверу.
+<br />
+<br />
+если при компиляции PHP  была использована опция --enable-trans-sid,
+<br />
+то вызов функции htmlspecialchars вписывать руками не надо,
+<br />
+он записывается (при выключенных куках) в страницу автоматически
+
+
+
+<h2>Разница между форматами идентификаторов</h2>
+<font style="color:red">Можно ли на ASP .NET закодировать трекинг сессий, совместимый с сессиями PHP-сайта?
+Поскольку закодировать можно всё, то как конкретно это сделать?</font>
+<br />
+<br />
+PHP generates id that is 26 characters long and 
+<br />
+ASP.NET generates one that is 24 characters long
+<br />
+<br />
+Название куки в ASP .NET:
+<br />
+cookieName. Optional String attribute. This attribute is new in the .NET Framework version 2.0.
+<br />
+Specifies the name of the cookie that stores the session identifier.
+<br />
+The default is "<strong>ASP.NET_SessionId</strong>".
+<br />
+<br />
+в PHP
+<br />
+browser storing the sesssion cookie as PHPSESSID
+<br />
+<br />
+ini_set('session.name', 'DOMAIN1');
+<br />
+Sometimes ini_set plays up and is unable to set the ini values correctly, might be down to permissions.
+<br />
+<br />
+&lt;?
+<br />
+if(ini_set('session.name', 'DOMAIN1') === false || !session_name('DOMAIN1'))
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;die('Unable to set session scope');
+<br />
+}
+<br />
+<br />
+phpinfo();
+<br />
+?&gt;
+
+
+<br />
+<br />
+Имя cookie-набора HTTP для использования в аутентификации (по умолчанию .ASPXAUTH).
+<br />
+Если множество приложений работают на одном веб-сервере,
+<br />
+каждому cookie-набору безопасности каждого приложения должно быть назначено уникальное имя
+
+</body>
+</html>

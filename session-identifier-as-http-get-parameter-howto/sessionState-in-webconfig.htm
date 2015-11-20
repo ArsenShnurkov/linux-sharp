@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как записывать XML-тег "sessionState" в файле web.Config</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как записывать XML-тег "sessionState" в файле web.Config</h1>
+</td><td style="vertical-align:top;">
+<a href="cookieless-scenarios.htm">сценарии</a>,
+<br />
+<a href="../session-identifier-as-http-get-parameter-howto.htm">Как поместить идентификатор сессии в параметр GET, а не в URL?</a>,
+<br />
+<a href="https://ru.wikipedia.org/wiki/Web.config">https://ru.wikipedia.org/wiki/Web.config</a>
+<br />
+<a href="../state-service.htm">ASP.NET state service</a>
+</td></tr></table>
+<font style="color:red">Что такое <strong>session-state data</strong>? Для чего используется? Это то же самое, что <strong>session-state</strong> или нет?</font>
+<br />
+<br />
+<a href="https://msdn.microsoft.com/library/h6bb9cz9%28v=vs.100%29.aspx">https://msdn.microsoft.com/library/h6bb9cz9(v=vs.100).aspx</a>
+<br />
+<br />
+configuration Element (General Settings Schema)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;system.web Element (ASP.NET Settings Schema)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sessionState Element (ASP.NET Settings Schema)
+<br />
+<br />
+<font style="color:red">Что это за схемы такие - General Settings и ASP .NET Settings? 
+<br />
+Что вообще такое схемы? (видимо, это схемы, описывающие формат XML)</font>
+<br />
+<br />
+В версии 2.0
+<br />
+<br />
+&lt;sessionState
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;mode="[Off|InProc|StateServer|SQLServer<span style="color:green">|Custom</span>]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;timeout="number of minutes"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cookieName="session identifier cookie name"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cookieless="[true|false|AutoDetect|UseCookies|UseUri|UseDeviceProfile]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;regenerateExpiredSessionId="[True|False]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sessionIDManagerType="session manager type"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sqlConnectionString="sql connection string"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sqlCommandTimeout="number of seconds"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:lightgray">allowCustomSqlDatabase</span>="[True|False]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;useHostingIdentity="[True|False]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:lightgray">stateConnectionString</span>="tcpip=server:port"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;stateNetworkTimeout="number of seconds"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;customProvider="custom provider name"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;compressionEnabled="[True|False]"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sqlConnectionRetryInterval="number of seconds"&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;providers&gt;...&lt;/providers&gt;
+<br />
+&lt;/sessionState&gt;
+<br />
+<br />
+В версии 1.1
+<br />
+<br />
+&lt;sessionState mode="Off|InProc|StateServer|SQLServer"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cookieless="true|false"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;timeout="number of minutes"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;stateConnectionString="tcpip=server:port"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sqlConnectionString="sql connection string"
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;stateNetworkTimeout="number of seconds"/&gt;
+              
+<br />
+<br />
+<font style="color:red">Зачем нужен каждый из атрибутов? Ну, наверное есть типовые сценарии использования,
+для разных сценариев использования нужны разные атрибуты, я так думаю</font>
+
+<h2>cookieless</h2>
+Ставим sessionState в значение cookieless="UseUri"
+<br />
+<font style="color:red">и что это даёт? к чему это приводит?
+Какие эффекты возникают?
+Каким кодом это обрабатывается и в каких местах для каких целей используется?</font>
+
+<h2>sessionIDManagerType</h2>
+значение по умолчанию - это пустая строка. а если не по-умолчанию,
+<br />
+то нужно вписать "fully qualified type of the session ID Manager".
+<br />
+<font style="color:red">что такое "session ID Manager" и зачем он нужен?</font>
+<br />
+<font style="color:red">как формируется "fully qualified type name"?</font>
+
+
+
+<h2>regenerateExpiredSessionId</h2>
+Specifies whether the session ID will be reissued when an expired session ID is specified by the client.
+ <br />
+<font style="color:red">А что конкретно означает "will be reissued"? будет загружена старая сессия, но для неё будет сгенерирован новый идентификатор?
+<br />
+будет создана новая сессия, но для неё будет использован старый идентификатор?
+<br />
+будет создана новая сессия и для неё будет сгенерирован новый идентификатор (а разве он и так не был бы сгенерирован?)</font>
+<br />
+By default, session IDs are reissued only for the cookieless mode when regenerateExpiredSessionId is enabled.
+<br />
+For more information, see IsCookieless.
+<br />
+Optional Boolean attribute. The default is true. This attribute is new in the .NET Framework version 2.0.
+
+
+
+
+
+
+
+
+
+
+
+
+<hr />
+то что нужно задать (поменять значения по-умолчанию) - написано выше. А ниже - другое разное.
+
+<h2>mode</h2>
+Optional <span><a href="https://msdn.microsoft.com/en-us/library/system.web.sessionstate.sessionstatemode(v=vs.100).aspx">SessionStateMode</a></span> attribute.
+<br />
+<br />
+Specifies where to store session state values.
+<br />
+For more information, see <span><a href="https://msdn.microsoft.com/en-us/library/ms178586(v=vs.100).aspx">Session-State Modes</a></span>.
+<br />
+The <span><span class="input">mode</span></span> attribute can be one of the following possible values.
+The default is the <span><a href="https://msdn.microsoft.com/en-us/library/system.web.sessionstate.sessionstatemode(v=vs.100).aspx">InProc</a></span> value.
+<br />
+<br />
+<div class="tableSection"><div class="mtps-table" xmlns="http://www.w3.org/1999/xhtml"><div class="mtps-row"><span class="mtps-th"><span>Value</span></span><span class="mtps-th"><span>Description</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">Custom</span></span></span></span><span class="mtps-cell"><span>Session state is using a custom data store to store session-state information.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">InProc</span></span></span></span><span class="mtps-cell"><span>Session state is in process with an ASP.NET worker process.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">Off</span></span></span></span><span class="mtps-cell"><span>Session state is disabled.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">SQLServer</span></span></span></span><span class="mtps-cell"><span>Session state is using an out-of-process SQL Server database to store state information.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">StateServer</span></span></span></span><span class="mtps-cell"><span>Session state is using the out-of-process ASP.NET state service to store state information.</span>
+<br />
+<br />
+<font style="color:red">Ну ок, значение по умолчанию InProc - зачем вообще записывать состоянии сессии на сервер сессий?
+<br />
+разве это так плохо, оставлять worker-процесс работающим на время сессии? Или на выгрузке worker-процесса много экономится?</font>
+<br />
+<font style="color:red">Если имеется в виду, что сервер сессий один, а фронтендов много,
+то что мешает оправлять одну и ту же сессию на один и тот же фронтенд, 
+а перераспределение нагрузки делать запуском новых сессий на незагруженных серверах?
+В этом случае не возникает ситуации, когда одна сессия нужна двум серверам и сервер сессий не нужен.
+Но раз так сделали, то была какая-то причина, какие-то соображения?
+</font>
+<br />
+<br />
+In the .NET Framework version 1.1, <strong>if</strong> the mode attribute was set to SQLServer,
+and client impersonation was in effect, ASP.NET connected to the computer running SQL Server
+using the client credentials from the ASP.NET client impersonation.
+<br />
+<br />
+Начиная с .NET Framework версии 2.0, <strong>useHostingIdentity</strong> = true по-умолчанию
+<br />
+If <span><span class="input">true</span></span>,
+ASP.NET connects to the session-state store using one of the following process credentials:
+<ul>
+<li>The hosting process, which is ASPNET for Microsoft Internet Information Services (IIS) versions 5 and 5.1
+or NETWORK SERVICE for Microsoft Windows Server 2003.</p></li>
+<li>The application impersonation identity, which is when the following configuration is used:
+<br />
+<span><span class="input">&lt;identity impersonate="true" userName="</span></span><span class="parameter">domain\username</span><span><span class="input">" password="</span></span><span class="parameter">secure password</span><span><span class="input">" /&gt;</span></span> 
+</li></ul>
+
+<br />
+<br />
+<strong>timeout</strong>
+<br />
+Specifies the number of minutes a session can be idle before it is abandoned.
+<br />
+<font style="color:red">Что значит "abandoned"? Что при этом происходит с session data, если они удаляются, то кем?</font>
+<br />
+The timeout attribute cannot be set to a value that is greater than 525,600 minutes (1 year)
+for the in-process and state-server modes.
+<br />
+Optional TimeSpan attribute. The default is 20 minutes.
+<br />
+The session timeout configuration setting applies only to ASP.NET pages.
+Changing the session timeout value does not affect the session time-out for ASP pages.
+Similarly, changing the session time-out for ASP pages does not affect the session time-out for ASP.NET pages.
+
+
+
+
+
+
+
+<br />
+<br />
+<strong>customProvider</strong> - String. Optional attribute. Empty string ("") is the default. Attribute is new in the .NET Framework version 2.0.
+<br />
+Specifies the name of a custom session-state provider to use for storing and retrieving session-state data.
+<br />
+The provider is specified in the providers element.
+<br />
+The provider is used only when the session-state mode is set to the Custom value.
+<br />
+For more information, see Session-State Modes.
+
+
+
+<br />
+<br />
+По-умолчанию используется имя базы данных <strong>ASPState</strong>. Значение атрибута allowCustomSqlDatabase = false по-умолчанию.
+<br />
+Начиная с .NET Framework version 2.0, чтобы использовать своё имя базы данных,
+надо задать <strong>allowCustomSqlDatabase</strong> = true и добавить название БД в параметр <strong>sqlConnectionString</strong>
+<br />
+названия параметров в строке соединения - initial catalog или database
+<br />
+<br />
+<strong>partitionResolverType</strong> - partition session-state data across multiple backend nodes when in SQL or state-server mode.
+</body>
+</html>

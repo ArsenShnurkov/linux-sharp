@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>сценарии</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>сценарии</h1>
+</td><td style="vertical-align:top;">
+<a href="sessionState-in-webconfig.htm">Как записывать XML-тег "sessionState" в файле web.Config</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="http://blogs.msdn.com/b/cjacks/archive/2005/08/31/458571.aspx">http://blogs.msdn.com/b/cjacks/archive/2005/08/31/458571.aspx</a>
+<br />
+<br />
+The other day, I was working through a problem that a customer was having while using cookieless session state in ASP.NET. This got me thinking about when this is an appropriate approach to take.
+<br />
+<br />
+Many web developers are concerned about their ability to support a browser that does not accept cookies. While it is quite uncommon for somebody to have a browser that doesn't support cookies these days, it is still possible that somebody has a browser that supports it, but they have explicitly turned off this functionality.
+<br />
+<br />
+There are a limited number of places to place data to emulate a session on the web. You can place data in the URL (the query string), you can place data in the headers (cookies are contained in headers that the browser manages for you), and you can place data in the body of the post (such as a hidden form field). Since it's difficult to control the headers on the client without explicit support like Cookies have, and since not every web request a client will make to your site will be a POST, the remaining option is to use the URL. ASP.NET mangles the URL in order to embed the session ID.
+<br />
+<br />
+Of course, this opens up social engineering security vulnerabilities. With a non-persistent cookie, all but the most absolutely technically proficient users will be unable to even find this session identifier, and convincing somebody to take these steps would be extraordinarily unlikely indeed. With a persistent cookie, it would still be difficult to convince somebody to dig in to their Cookies folder, locate and grab the one for that site, and then send it to the person who intends to spoof that identity. However, with the session identifier embedded in the URL, all it takes is a request to "send me a link to that page." The unknowing victim opens up the browser, navigates to that page, copies the URL (by this time, users are so accustomed to having long and complicated URLs that they don't think twice about the unusual sequence of characters in the middle), pastes it into an email, and now (assuming they get to the site before the session expires) the attacker has the ability to spoof the identity of that session.
+<br />
+<br />
+This, of course, is nothing new. As with any securable resources, it is a matter of making a trade-off. How valuable is the reach of the application, compared to the value of the information you are hoping to secure? What was interesting about this particular scenario is that they were implementing cookieless session state in a scenario where the probability of cookies being disabled is either extremely unlikely or outright impossible.
+<br />
+<br />
+One scenario was an intranet example. Since it was an intranet application, they were using Windows Authorization. Of course, this implies that the web site itself will be living in the Local Intranet security zone, since by default this is the only zone where a token will be passed. If you go in to Internet options, click on the Privacy tab, and crank up the privacy to Block All Cookies, you will notice that cookies will still work in the Local Intranet zone. This setting applies to the Internet zone! (Trusted Sites are also exempted from this, giving you the option of accepting cookies from sites that you explicitly trust, and not accepting them from anybody else.) Now, it is possible to disable cookies in the Local Intranet zone. One way is to create a Customized Privacy Import File. But exactly how likely will it be that somebody will go to this amount of trouble to disable cookies in the Local Intranet zone, and how often will the best answer be to invest resources and accept lowered security in order to support an employee going to these lengths to disable functionality from their own company? In my view, it is unlikely to the point of not being a meaningful consideration.
+<br />
+<br />
+The other scenario was an extranet scenario, where they did not want to have a dependency on cookies. There were two problems that I saw. One was important, but not decisive. They were holding some reasonably valuable information in session state, so the decision whether or not to increase the exposure of this information was one to be carefully contemplated. More importantly, they were using forms authentication. In both 1.0 and 1.1 of the framework, forms authentication is always based on cookies. If a client doesn't accept cookies, they cannot even get in to the application. Given this, is there any value in supporting cookieless session state, since no cookie-disabled user will ever be able to create a session anyway since they can never authenticate? Obviously not! Now, the 2.0 framework will support cookieless forms authentication, but until that time, it is additional security exposure to support a scenario that can never exist.
+<br />
+<br />
+So, in addition to understanding how cookieless session state affects the overall security of your application, consider as well whether this is a scenario that is likely, or even possible, for the client to be facing.
+
+</body>
+</html>

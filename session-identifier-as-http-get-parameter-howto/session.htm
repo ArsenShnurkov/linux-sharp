@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>что мы знаем про сессии вообще</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>что мы знаем про сессии вообще</h1>
+</td><td style="vertical-align:top;">
+<a href="../session-identifier-as-http-get-parameter-howto.htm">Как поместить идентификатор сессии в параметр GET, а не в URL?</a>,
+<br />
+<a href="../state-service.htm">ASP.NET state service</a>
+</td></tr></table>
+
+Есть объект Session, 
+<pre><xmp>
+    IsCookieless = <% =Session.IsCookieless.ToString() %>
+</xmp></pre>
+
+который позволяет
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/03sekbw5.aspx">https://msdn.microsoft.com/en-us/library/03sekbw5.aspx</a>
+<br />
+ читать/записывать объекты в SessionState
+<br />
+<br />
+Session variables are stored in a SessionStateItemCollection object 
+that is exposed through the HttpContext.Session property.
+<br />
+In an ASP.NET page object, the current session variables are exposed through the <a href="https://github.com/mono/mono/blob/032f313d5f3b99954cabb3e152b3c8d4424d5a2b/mcs/class/System.Web/System.Web.UI/Page.cs#L489">Session property of the 
+System.Web.UI.Page</a> 
+
+<br />
+<br />
+
+A Web Forms page or
+<br />
+class that has access to the current request context
+<br />
+using the Current property in an ASP.NET application
+<br />
+that has session state enabled.
+<br />
+<br />
+No exception is thrown if you attempt to get a value out of session state that does not exist.
+To be sure that the value you want is in session state, check first for the existence of the object
+<br />
+if (Session["City"] == null) 
+<br />
+// No such value in session state; take appropriate action.
+<br />
+<br />
+
+<h2>Где вообще можно что-нибудь хранить</h2>
+<p>Alternatives to session state include the following:</p>
+            <ul>
+              <li>
+                <p>Application state, which stores variables that can be accessed by all users of an ASP.NET application.</p>
+              </li>
+              <li>
+                <p>Profile properties, which persists user values in a data store without expiring them.</p>
+              </li>
+              <li>
+                <p>ASP.NET caching, which stores values in memory that is available to all ASP.NET applications.</p>
+              </li>
+              <li>
+                <p>View state, which persists values in a page.</p>
+              </li>
+              <li>
+                <p>Cookies.</p>
+              </li>
+              <li>
+                <p>The query string and fields on an HTML form that are available from an HTTP request.</p>
+              </li>
+            </ul>
+
+<h2>enableSessionState</h2>
+Session state can only be used when enableSessionState is set to true, either in a configuration file or in the Page directive.
+<pre><xmp>
+<configuration>       
+	<system.web>
+		<pages enableSessionState="true" /> 
+	</system.web>
+</configuration>
+</xmp></pre>
+
+если этот элемент конфигурации не записать в конфиг (а какое значение по-умолчанию? The default is True.)
+то страницы будут выдавать ошибки-сообщения при любой работе с сессиями.
+<br />
+<br />
+<a href="http://rsdn.ru/forum/dotnet.web/319056.hot">http://rsdn.ru/forum/dotnet.web/319056.hot</a>
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/950xf363%28v=vs.100%29.aspx">https://msdn.microsoft.com/en-us/library/950xf363(v=vs.100).aspx</a>
+<br />
+enableSessionState="[True|False|ReadOnly]"
+<br />
+</span></p></td><td data-th="Description"><p>Optional <span><a href="https://msdn.microsoft.com/en-us/library/system.string(v=vs.100).aspx">String</a></span> attribute.</p><p>Specifies session state requirements for the resources that are within the scope of the configuration file.</p><p>The <span><span class="input">enableSessionState</span></span> attribute can be one of the following possible values. The default is <span><span class="input">True</span></span>.</p><div class="caption"></div><div class="tableSection"><div class="mtps-table" xmlns="http://www.w3.org/1999/xhtml"><div class="mtps-row"><span class="mtps-th"><span>Value</span></span><span class="mtps-th"><span>Description</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">False</span></span></span></span><span class="mtps-cell"><span>Indicates that session state is disabled.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">ReadOnly</span></span></span></span><span class="mtps-cell"><span>Indicates that session state is not writable.</span></span></div><div class="mtps-row"><span class="mtps-cell"><span><span><span class="input">True</span></span></span></span><span class="mtps-cell"><span>Indicates that session state is enabled.</span>
+
+<h2>session ID</h2>
+When a new client begins interacting with a Web application,
+<br />
+a session ID is issued and associated with all the subsequent requests from the same client
+<br />
+while the session is valid.
+<br />
+<br />
+<font style="color:red">Зачем сессии нужны? Для того, чтобы привязывать к сессиям процессы, например процесс ввода данных 
+на нескольких последовательных страницах.
+<br />
+<br />
+Почему надо привязывать процессы к сессиям, а не к клиентам (например по digital fingerprint)?
+<br />
+ну, digital fingerprint это более поздняя технология, и она требует javascript, который может быть выключен
+</font>
+<br />
+<br />
+Как мы узнаём - клиент новый или не новый?
+<br />
+раньше не было digital fingerprint, и поэтому, если сессии нет, то это значит клиент новый,
+а если идентификатор сессии прислал - значит старый
+<br />
+<br />
+<font style="color:red">С чего бы и для каких целей сессии нужно становиться невалидной?</font>
+<br />
+ну, есть подозрение, что можно ссылку с сессией поместить в закладки, или переслать по мессенжеру другому человеку,
+другой человек её откроет и получит доступ к данным первого человека, что нежелательно.
+<br />
+а так, предполагается, что через 20 минут сессия устареет и у злоумышленника не получится перейти по закладке
+<br />
+<br />
+Session ID is used to maintain the server-side state that is associated with the client session across requests.
+
+<h2>server-side state</h2>
+соответствует какому-нибудь идентификатору сессии (и предполагается, что некоторому посетителю,
+который может иметь, а может и не иметь учётной записи в web-приложении)
+
+ 
+</body>
+</html>
