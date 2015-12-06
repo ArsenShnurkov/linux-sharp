@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>История про поиск бага в GitExtensions</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>История про поиск бага в GitExtensions</h1>
+</td><td style="vertical-align:top;">
+<a href="../../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<h2>Второй заход</h2>
+<a href="https://github.com/mono/mono/pull/2273">https://github.com/mono/mono/pull/2273</a>
+<br />
+<br />
+Вопрос в том, как же всё-таки это работало в reference sources (ведь там такой же код)
+<br />
+<font style="color:red">Куда в .NET пропадает XML-declaration? он кодируется или кто-то его убирает?</font>
+<br />
+<br />
+Что делать дальше?
+<br />
+сделать патч для mono, чтобы собрать в gentoo/dotnet.
+<br />
+проблема в том, что я не умею собирать mono (в частности в gentoo)
+<br />
+учись? или ищи работу?
+<br />
+<br />
+В итоге, мне предложили написать юнит-тесты, которые бы работали на Windows, не работали на mono,
+<br />
+а после применения моего патча начинали бы работать на Mono
+<br />
+<br />
+Работу на Windows я могу проверить на AppHb.com, если написать соответствующее web-приложение.
+<br />
+Работу такого же приложения я могу проверить на втором сайте (это чтобы приложение не переписывать под консольный вариант)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Если я запущу тестовый пример на этих двух хостингах и получу разные результаты - значит старая версия Mono работает неправильно.
+Но мне-то надо проверить текущую версию mono...
+<br />
+<br />
+bountysource - как им пользоваться?
+<br />
+как пользоваться NUnit-ом в gentoo-билдах?
+<br />
+<br />
+добавить в файл проекта Git.UI строчки (а поможет это чему?)
+<br />
+&lt;CustomToolNamespace&gt;GitUI.Properties&lt;/CustomToolNamespace&gt;
+<br />
+&lt;LogicalName&gt;GitUI.Resources.resources&lt;/LogicalName&gt;
+<br />
+<br />
+добавить в файл Properties/Resources.Designer.cs
+<br />
+слово Partial (вроде оно там и так есть)
+<br />
+<br />
+изменить namespace файла Properties/Resources.Custom.cs
+<br />
+(вроде с ним тоже всё ок)
+<br />
+<br />
+ - выяснял, почему FileSystemWatcher выдаёт ошибку с HashTable
+<br />
+подумал, что для того, чтобы работал плагин "Show in Github в monodevelop",
+<br />
+нужно, чтобы он видел где находится репозиторий на github
+<br />
+для текущего файла исходников.
+<br />
+<br />
+Это можно было бы орагнизовать, если смонтировать при помощи overlayfs
+<br />
+репозиторий git 
+<br />
+/var/calculate/remote/distfiles/egit-src/mono.git/
+<br />
+на исходники 
+<br />
+/var/tmp/portage/dev-lang/mono-4.2.1.91-r1/work/mono-4.2.1/
+<br />
+и там и там есть файл
+<br />
+mcs/class/System/System.IO/FileSystemWatcher.cs
+<br />
+<br />
+/etc/fstab
+<br />
+overlay /merged overlay noauto,x-systemd.automount,lowerdir=/lower,upperdir=/upper,workdir=/work 0 0
+<br />
+<br />
+mount -t overlayfs -o [mount options] overlayfs [mountpoint for merged system]
+<br />
+Where [mount options] can be:
+<br />
+    lowerdir=somedir: lowerdir is the directory you're going to lay your new filesystem over, if there are duplicates these get overwritten by (actually, hidden in favor of) upperdir's version
+<br />
+    upperdir=somedir: upperdir is the directory you want to overlay lowerdir with. If duplicate filenames exist in lowerdir and upperdir, upperdir's version takes precedence.
+<br />
+    standard mount options. The only one I've seen from code is ro/rw, but you can experiment.
+<br />
+<br />
+/var/calculate/remote/distfiles/egit-src/gitextensions.git
+<br />
+/var/lib/layman/dotnet/dev-util/GitExtensions/files/env_vars.patch
+<br />
+cd /var/calculate/remote/distfiles/egit-src/gitextensions.git
+<br />
+patch -p 1 -i /var/lib/layman/dotnet/dev-util/GitExtensions/files/env_vars.patch
+<br />
+<br />
+Как получить патч для указанных:
+<br />
+файла
+<br />
+SHA1 начальной ревизии
+<br />
+SHA1 конечной ревизии
+<br />
+ Plugins/Gerrit/FormGerritPublish.cs
+<br />
+ GitUI/Properties/Resources.resx
+<br />
+git diff 527cfc9c363873920bb30229e9b2835918e27205 115249b235422fa3ef3b4f4c770a8245140bfc2a -- Plugins/Gerrit/FormGerritPublish.cs >/var/lib/layman/dotnet/dev-util/GitExtensions/files/unused_variable.patch
+<br />
+git diff 527cfc9c363873920bb30229e9b2835918e27205 115249b235422fa3ef3b4f4c770a8245140bfc2a -- GitUI/Properties/Resources.resx >/var/lib/layman/dotnet/dev-util/GitExtensions/files/slash_in_resources.patch
+<br />
+/var/tmp/portage/dev-lang/mono-4.2.1.91-r1/work/mono-4.2.1/mcs/class/System/System.IO/FileSystemWatcher.cs
+
+
+
+
+<h2>Первый заход</h2>
+<dl>
+<dt>windowspositions</dt>
+<dd>- это один из узлов в XML-дереве:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;setting name="WindowPositions" serializeAs="Xml"&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/value&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/setting&gt;
+<br />
+вопросы: 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:red">1) что означает здесь атрибут "serializeAs" ?</font>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:red">2) где задокументировано/описано использование тега settings?</font>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(если нигде, то что понятно про этот тег из исходных текстов?)
+</dd>
+Просто наблюдение:
+<br />
+сериализованный объект класса WindowPositionList представляет собой отдельный XML (со своим заголовком)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:red">Почему ты думаешь, что тут была выполнена сериализация?</font>
+<br />
+The only change made recently is the [iseriliazable]. 2.48 doesnt have this attribute.
+<br />
+<br />
+none of XmlSerializer, DataContractSerializer, JavaScriptSerializer, JSON.NET or protobuf-net really care about SerializableAttribute.
+<br />
+<a href="http://stackoverflow.com/questions/12461321/what-does-system-serializableattribute-do">http://stackoverflow.com/questions/12461321/what-does-system-serializableattribute-do</a>
+<br />
+SerialiableAttribute actually maps to a CLI .class flag, serializable
+<br />
+This doesn't change the meaning, but : as a novelty fact, SerializableAttribute is not actually implemented as an attribute.
+<br />
+<br />
+Apply the SerializableAttribute attribute even if the class also implements the ISerializable interface to control the serialization process.
+<br />
+hotkeys <a href="https://github.com/gitextensions/gitextensions/blob/fe4bb94ca2a74dbbe14348dc41e96284fecdbe06/GitUI/Hotkey/HotkeySettingsManager.cs#L112-L118">converts itself to xml in method SaveSettings</a>, in HotkeySettingsManager.cs, at line 117
+
+
+</body>
+</html>

@@ -17,6 +17,66 @@
 <a href="https://www.linux.org.ru/forum/talks/9556461">https://www.linux.org.ru/forum/talks/9556461</a>
 <br />
 <a href="https://github.com/picoe/Eto/issues/291">https://github.com/picoe/Eto/issues/291</a>
+<br />
+<br />
+Надо бы поразбираться, как работает GtkStatusIcon
+<br />
+<a href="https://developer.gnome.org/gtk3/stable/GtkStatusIcon.html">https://developer.gnome.org/gtk3/stable/GtkStatusIcon.html</a>
+<br />
+И как использовать StatusNotifierItem (SNI, org.freedesktop.StatusNotifierItem)
+<br />
+<br />
+Ещё хорошо бы посмотреть исходники Workrave application
+<br />
+<a href="https://github.com/rcaelers/workrave/tree/7cb9aef971f21c9a473146f9b72693b86a4a76f6/frontend/applets are">https://github.com/rcaelers/workrave/tree/7cb9aef971f21c9a473146f9b72693b86a4a76f6/frontend/applets are</a>
+<br />
+"cinnamon", "common", "gnome-shell", "gnome2", "gnome3", "indicator", "mate", "win32", "xfce"
+
+<br />
+<br />
+И потом, ну почему сразу в трее? может можно приложение "Window List", которое показывает минимизированные окна,
+научить показывать прогресс-бары?
+<br />
+Или сделать отдельный апплет, а к нему сделать отдельную панель внизу.
+<br />
+или вообще сделать эту панель вертикальной.
+<br />
+Весь смысл панели, получается, заключается в том, что она фиксирована по отношению к другим окнам (Dock и Fill свойства),
+а так она такое же окно, в котором можно организовывать интерфейс.
+<br />
+Ну возьми DockPanelSuite и сделай из него WindowManager на C#...
+<br />
+<br />
+Если тебе так хочется доделать иконку в трее,
+<br />
+то тебе надо разобраться, как работает StatusNotifierItem (SNI, org.freedesktop.StatusNotifierItem)
+<br />
+это означает:
+<br />
+- прочитать спецификацию на него, понять все слова
+<br />
+- прочитать спецификацию на DBus
+<br />
+- научиться использовать библиотеку C# для DBus
+<br />
+- разобраться как сделан существующий C-код для работы с DBus (например в WorkRave)
+<br />
+- сделать правильную реализацию хоть как-нибудь
+<br />
+- сделать реализацию для System.Windows.Forms.NotifyIcon (от этого профиксится <a href="http://sourceforge.net/p/keepass/bugs/1212/">бага в программе KeePass</a>)
+<br />
+--- как подзадача там будет - определять, что использовать XEmbed или DBus
+<br />
+&nbsp;&nbsp;&nbsp;(это зависит от того, какое DE используется и какие программы запущены)
+<br />
+&nbsp;&nbsp;&nbsp;как узнать, присутствует ли DBus вообще в системе в запущенном виде?
+<br />
+&nbsp;&nbsp;&nbsp;как узнать, запущено ли приложение, обрабатывающее StatusNotifierItem?
+<br />
+&nbsp;&nbsp;&nbsp;если нет, то запущен ли XEmbed (как fallback)
+<br />
+&nbsp;&nbsp;&nbsp;если нет, то как отложить задачу до ожидания его запуска
+
 
 </body>
 </html>
