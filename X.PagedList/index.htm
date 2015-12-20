@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как просматривать страницы списка в Razor</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как просматривать страницы списка в Razor</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+
+Мне в репозитории <a href="https://github.com/ernado-x/X.PagedList">https://github.com/ernado-x/X.PagedList</a> понравился пример UnobtrusiveAjaxController.
+<br />
+<br />
+Хотелось бы разобраться как он работает.
+<br />
+<br />
+Во-первых, есть класс-контроллер:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;public class UnobtrusiveAjaxController : BaseController
+<br />&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Unobtrusive Ajax
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public ActionResult Index(int? page)
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var listPaged = GetPagedNames(page); // GetPagedNames is found in BaseController
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (listPaged == null)
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return HttpNotFound();
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ViewBag.Names = listPaged;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Request.IsAjaxRequest()
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? (ActionResult)PartialView("UnobtrusiveAjax_Partial")
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: View();
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />
+Тут есть переменная типа Dynamic, с которыми я раньше дела не имел.
+<br />
+<br />[Dynamic]
+<br />public dynamic ViewBag {
+<br />&nbsp;&nbsp;&nbsp;&nbsp;[return: Dynamic]
+<br />&nbsp;&nbsp;&nbsp;&nbsp;get;
+<br />}
+<br />
+<br />
+она из библиотеки Mvc, класса ControllerBase:
+<br />
+abstract class BaseController : Controller
+<br />
+abstract class Controller : ControllerBase, IActionFilter, IAuthenticationFilter, IAuthorizationFilter, IDisposable, IExceptionFilter, IResultFilter, IAsyncController, IController, IAsyncManagerContainer
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controllerbase.viewbag%28v=vs.118%29.aspx">https://msdn.microsoft.com/en-us/library/system.web.mvc.controllerbase.viewbag(v=vs.118).aspx</a>
+<br />
+Gets the dynamic view data dictionary.
+<br />
+Type: System.Object
+<br />
+The dynamic view data dictionary.
+<br />
+<br />
+Тут интересно почитать про использованный синтаксис с ключевым словом Dynamic
+<br />
+Про определение dynamic в спецификации языка, в каком году оно там появлось, что означает
+<br />
+и описание атрибута DynamicAttribute
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.dynamicattribute%28v=vs.110%29.aspx">https://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.dynamicattribute(v=vs.110).aspx</a>
+<br />
+DynamicAttribute indicates that the use of Object on a member is meant to be treated as a dynamically dispatched type.
+<br />
+Namespace:   System.Runtime.CompilerServices
+<br />
+Assembly:  System.Core (in System.Core.dll)
+<br />
+.NET Framework: Available since 4.0
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/20150687/c-sharp-dlr-datatype-inference-with-dynamic-keyword">http://stackoverflow.com/questions/20150687/c-sharp-dlr-datatype-inference-with-dynamic-keyword</a>
+<br />
+When you use dynamic, the entire expression is treated at compile time as a dynamic expression, which causes the compiler to treat everything as dynamic and get run-time binding.
+<br />
+This is explained in 7.2 of the C# Language specification:
+<br />
+<span style="background-color:AntiqueWhite">When no dynamic expressions are involved, C# defaults to static binding, which means that the compile-time types of constituent expressions are used in the selection process. However, when one of the constituent expressions in the operations listed above is a dynamic expression, the operation is instead dynamically bound.</span>
+<br />
+This basically means that most operations (the types are listed in section 7.2 of the spec) which have any element that is declared as dynamic will be evaluated as dynamic, and the result will be a dynamic. 
+<br />
+<br />
+неплохо бы выяснить, где сама спецификация, и что написано в пункте 7.2, вот как раз фраза из текста есть для поиска в гугле.
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/13467103/where-can-i-find-the-c-sharp-5-language-specification">http://stackoverflow.com/questions/13467103/where-can-i-find-the-c-sharp-5-language-specification</a>
+
+
+<h2>.Names</h2>
+То есть, Names - это переменная-член какого-то типа, который был положен во ViewBag
+<br />
+<br />
+everthing that you put into a ViewBag will be reflected in the ViewData of the same Controller, so you can check ViewData (ie ViewData.Keys)
+<br />
+<br />
+dynamics are internally dictionaries
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/system.dynamic.dynamicobject%28v=vs.110%29.aspx">https://msdn.microsoft.com/en-us/library/system.dynamic.dynamicobject(v=vs.110).aspx</a>
+<br />
+<br />
+In C#, to enable dynamic behavior for instances of classes derived from the DynamicObject class, you must use the dynamic keyword.
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/dd264736%28v=vs.110%29.aspx">https://msdn.microsoft.com/en-us/library/dd264736(v=vs.110).aspx</a>
+<br />
+<br />
+<a href="https://github.com/mono/mono/blob/b7a308f660de8174b64697a422abfc7315d07b8c/mcs/class/dlr/Runtime/Microsoft.Scripting.Core/Actions/DynamicObject.cs#L37">https://github.com/mono/mono/blob/b7a308f660de8174b64697a422abfc7315d07b8c/mcs/class/dlr/Runtime/Microsoft.Scripting.Core/Actions/DynamicObject.cs#L37</a>
+<br />
+<br />
+ViewData is a dictionary object that you put data into, which then becomes available to the view. ViewData is a derivative of the ViewDataDictionary class, so you can access by the familiar "key/value" syntax. 
+<br />
+ViewBag object is a wrapper around the ViewData object that allows you to create dynamic properties for the ViewBag.
+<br />
+<br />
+dynamic ViewBag = new System.Dynamic.ExpandoObject();
+<br />
+<a href="http://stackoverflow.com/questions/14896013/how-viewbag-in-asp-net-mvc-works/14985891#14985891">http://stackoverflow.com/questions/14896013/how-viewbag-in-asp-net-mvc-works/14985891#14985891</a>
+<br />
+<a href="http://www.codeguru.com/csharp/article.php/c19053/Using-DynamicObject-and-ExpandoObject.htm">http://www.codeguru.com/csharp/article.php/c19053/Using-DynamicObject-and-ExpandoObject.htm</a>
+<br />
+<br />
+It implements "DynamicObject", so it can be used as a "dynamic" properly. Then in the lower it overrides the three dynamic object methods, in each they use the data from the provided ViewData.
+<br />
+They use a Func&lt;ViewDataDictionary&gt;, to always access the dictionary datad that is currently assigned to the property in the other class.
+<br />
+If they pass the VIewDataDictionary directly, then always that instance will be used, even when another instance was assigned to the ViewData property (not wanted)
+
+        
+<h2>return View();</h2>
+Как работает return View(); ?
+<br />
+<br />
+MVC tries to look for a view named "SomeControllerMethod.cshtml". It uses the name of the method as a guide for looking for a view file.
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/13883306/how-does-asp-net-mvc-determine-the-view-to-use-from-a-controller">http://stackoverflow.com/questions/13883306/how-does-asp-net-mvc-determine-the-view-to-use-from-a-controller</a>
+
+<h2>RenderSection</h2>
+<a href="http://www.dotnetcurry.com/showarticle.aspx?ID=636">http://www.dotnetcurry.com/showarticle.aspx?ID=636</a>
+<br />
+это 2010-я студия, значит 5 лет назад
+<br />
+<br />
+By default, ASP.NET will not serve pages beginning with an underscore.
+
+
+<h2>Client certificates</h2>
+<a href="https://github.com/NancyFx/Nancy/wiki/Accessing-the-client-certificate-when-using-SSL">https://github.com/NancyFx/Nancy/wiki/Accessing-the-client-certificate-when-using-SSL</a>
+
+<h2>covariance, сontravariance, invariance</h2>
+Что такое covariance и сontravariance ? invariance
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/ee207183.aspx">https://msdn.microsoft.com/en-us/library/ee207183.aspx</a>
+<br />
+<br />
+// Covariance. 
+<br />
+IEnumerable&lt;string&gt; strings = new List&lt;string&gt;();
+<br />
+IEnumerable&lt;object&gt; objects = strings;
+<br />
+<br />
+// Contravariance.           
+<br />
+Action&lt;object&gt; actObject = SetObject;
+<br />
+Action&lt;string&gt; actString = actObject;
+<br />
+<br />
+In .NET Framework 4, C# support covariance and contravariance in generic interfaces and delegates and allow for implicit conversion of generic type parameters.
+<br />
+You can declare variant generic interfaces by using the in and out keywords for generic type parameters.
+<br />
+If you have a contravariant generic delegate as a method parameter, you can use the type as a generic type parameter for the delegate.
+<br />
+It is also possible to support both covariance and contravariance in the same interface, but for different type parameters.
+<br />
+interface IMyInterface&lt;out R, in A&gt;
+<br />
+<br />
+Classes that implement variant interfaces are invariant.
+<br />
+// The interface is covariant.
+<br />
+ICovariant&lt;Button&gt; ibutton = new SampleImplementation&lt;Button&gt;();
+<br />
+ICovariant&lt;Object&gt; iobj = ibutton;
+<br />
+// The class is invariant.
+<br />
+SampleImplementation&lt;Button&gt; button = new SampleImplementation&lt;Button&gt;();
+<br />
+// The following statement generates a compiler error
+<br />
+// because classes are invariant.
+<br />
+// SampleImplementation&lt;Object&gt; obj = button;
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/dd997386.aspx">https://msdn.microsoft.com/en-us/library/dd997386.aspx</a>
+<br />
+<br />
+Где без этой ковариантности не обойтись и где она полезна, мне пока не ясно. То есть, я пишу мало кода на шаблонах, и не сталкивался с этим.
+
+</body>
+</html>
