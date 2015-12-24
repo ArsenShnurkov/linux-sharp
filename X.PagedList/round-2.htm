@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как просматривать страницы списка в Razor, часть 2</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как просматривать страницы списка в Razor, часть 2</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>,
+<a href="index.htm">Как просматривать страницы списка в Razor</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<h2>Подключить код</h2>
+
+Очевидно, что нужно добавить reference или package в .csproj
+
+<h3>Reference</h3>
+Ссылки на другой проект в .csproj-файле выглядят так:
+<br />
+<br />
+<font type="tt">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;<br />
+&lt;Project ToolsVersion=&quot;4.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;<br />
+&nbsp;&nbsp;...<br />
+&nbsp;&nbsp;&lt;ItemGroup&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ProjectReference Include=&quot;..\X.PagedList\X.PagedList.csproj&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Project&gt;{55002A4E-D21E-432D-BAAC-1A9BEFF4115B}&lt;/Project&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Name&gt;X.PagedList&lt;/Name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ProjectReference&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ProjectReference Include=&quot;..\X.PagedList.Mvc\X.PagedList.Mvc.csproj&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Project&gt;{3E8629F8-D927-4D5F-A351-47DDE2AE37D1}&lt;/Project&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Name&gt;X.PagedList.Mvc&lt;/Name&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ProjectReference&gt;<br />
+&nbsp;&nbsp;&lt;/ItemGroup&gt;</font>
+<br />
+<br />
+Добавить такие строчки можно при помощи monodevelop:
+<br />
+<img src="edit-references.png" alt="edit-references.png" />
+<br />
+  
+<h3>Package</h3>
+С добавлением package  посложнее, потому что перед тем как добавить package, его надо сначала создать.
+
+<h3>Демопример</h3>
+Почему я не могу использовать демопример из репозитория?
+<br />
+при сборке выдаётся ошибка:
+<br />
+error : All projects referencing X.PagedList.Mvc.csproj must install nuget package Microsoft.Bcl.Build.
+<br />
+это произошло после того, как я заменил зависимость от PCL на зависимость от стандартного mono
+<br />
+вероятно, классы в этих комплектах библиотек сгруппированы по-разному.
+<br />
+<br />
+несмотря на то, что Microsoft.Bcl.Build добавлен в проект X.PagedList.Mvc.Example, компиляция не проходит.
+<br />
+<br />
+Я убрал этот пакет (два пакета - Microsoft.Bcl и Microsoft.Bcl.Build) из всех проектов и всё скомпилировалось.
+
+<h2>Что дальше?</h2>
+Надо выписать пример использования XPagedList (то есть, что куда и как добавлять в совершенно новый mvc-проект помимо reference)
+<br />
+<br />
+Очевидно, что надо придумать некий URL, передавая который пользователь будет запрашивать вывод списка.
+<br />
+/controller/action -&gt; /search-results/index.cshtml
+<br />
+Затем надо написать контроллер, который обрабатывает запросы, приходящие на этот URL
+<br />
+Затем создать index.cshtml, который будет автоматизированно отображаться при помощи кода return View();
+
+<h2>MasterPage</h2>
+всё вроде бы ясно и понятно (ну почти), за исключением того, что я не вижу, где подключается шаблон сайта (Master Page)
+<br />
+Как отключить шаблон сайта?
+<br />
+2008-10-16,  Microsoft ASP.NET Team, Creating Page Layouts with View Master Pages
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.asp.net/mvc/overview/older-versions-1/views/creating-page-layouts-with-view-master-pages-cs">http://www.asp.net/mvc/overview/older-versions-1/views/creating-page-layouts-with-view-master-pages-cs</a>
+<br />
+You add a new view master page to an MVC project by right-clicking the Views\Shared folder, selecting the menu option Add, New Item, and selecting the MVC View Master Page template
+<br />
+так, это не то. Нам нужно выяснить как это делают в синтаксисе Razor
+<br />
+2010-10-22, ScottGu, ASP.NET MVC 3: Layouts with Razor
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://weblogs.asp.net/scottgu/asp-net-mvc-3-layouts">http://weblogs.asp.net/scottgu/asp-net-mvc-3-layouts</a>
+<br />
+<br />
+Если удалить этот контент:
+<br />
+<font type="tt">@{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Layout = "~/Views/Shared/_Layout.cshtml";<br />
+}</font>
+<br />
+из файла /Views/_ViewStart.cshtml
+<br />
+то всё приходит к ожидаемому состоянию.
+<br />
+<a href="http://stackoverflow.com/questions/4081811/correct-way-to-use-viewstart-cshtml-and-partial-razor-views">http://stackoverflow.com/questions/4081811/correct-way-to-use-viewstart-cshtml-and-partial-razor-views</a>
+<br />
+<br />
+Ну, основой принцип вроде бы понятен. Что дальше? Опакетить? Прикрутить к Coatl-List?
+<br />
+Прикрутить к web-beagle? Для web-beagle надо понять, как использовать Nancy (так же, как в antd). Кроме того, в Beagle должен быть старый код, графика, стили, которые можно перенести на новый движок.
+
+<br />
+<br />
+Надо посмотреть код самого X.PagedList (ну, просто потому, что это можно сделать. Возможно прийдёт какое-то понимание)
+
+<h2>Опакетить и забыть</h2>
+1. Нужен .nuspec
+<br />
+есть он в репозитории готовый? <a href="https://github.com/kpi-ua/X.PagedList/search?q=nuspec">Нету</a>
+<br />
+2. нужны патчи для вырезания PCL или команда для утилит. Патчи, ясное дело, быстрее (написать).
+<br />
+Или можно собирать из своего замороженного репозитория, где такие патчи будут прямо в git
+<br />
+за те два дня пока я копался, появилась какая-то новая ветка для какого-то MVC 6, а я не в курсе, о чём были предыдущие пять...
+
+</body>
+</html>
