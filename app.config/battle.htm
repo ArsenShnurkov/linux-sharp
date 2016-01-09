@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Битва с конфигом</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Битва с конфигом</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Иногда бывает желание протестировать простой код.
+<br />
+<br />
+Код такой:
+<br />
+var cs = ConfigurationManager.ConnectionStrings["MyConnectionString"];
+<br />
+var providerName = cs.ProviderName;
+<br />
+var factory = DbProviderFactories.GetFactory(providerName);
+<br />
+<br />
+Для того, чтобы этот код работал, к программе должен прилагаться файл app.config,
+который кем-то <font style="color:red">(кстати, кем?)</font> переименовывается в MyApp.exe.config во время сборки.
+<br />
+<br />
+Для того, чтобы этот код протестировать, создаётся .dll-ка с unit-тестами и запускается через nunit3-console:
+<br />
+nunit3-console MyTestDll.dll
+<br />
+NUnit запускает для теста отдельный процесс, а внутри создает отдельный AppDomain для этой .dll-ки
+<br />
+и загружает MyTestDll.dll.config
+<br />
+<br />
+это в теории. А на практике:
+<br />
+# nunit3-console
+<br />
+bash: nunit3-console: command not found
+<br />
+<br />
+# cat /usr/bin/nunit
+<br />
+#!/bin/sh
+<br />
+exec mono /usr/share/nunit-3//nunit-console.exe "$@"
+<br />
+<br />
+в monodevelop:
+<br />
+вызываем контекстное меню на узле Solution в окне Solution Explorer:
+<br />
+<img src="Add-new-project.png" alt="Add-new-project.png" />
+<br />
+выбираем тип проекта "NUnit Library Project"
+<br />
+<img src="Choose-a-template-for-your-new-project.png" alt="Choose-a-template-for-your-new-project.png" />
+<br />
+жмём "Next"
+<br />
+Вводим название проекта в поле "Project Name:"
+<br />
+<img src="Configure-your-new-project.png" alt="Configure-your-new-project.png" />
+<br />
+жмём "Create"
+<br />
+<br />
+В полученном из шаблона проекте используется пакет (package) NUnit 2.6.3 (проапдейтим до 2.6.4)
+<br />
+<br />
+Заготовка кода такая:
+<br />
+using NUnit.Framework;
+<br />
+using System;
+<br />
+<br />
+namespace AdoNetConnectionTest.NUnit
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[TestFixture ()]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;public class Test
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Test ()]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void TestCase ()
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+<br />
+Добавляем код, запускаем, получаем
+<br />
+System.NullReferenceException : Object reference not set to an instance of an object
+<br />
+добавляем конфиг
+<br />
+System.ArgumentException : Unable to find the requested .Net Framework Data Provider.  It may not be installed.
+<br />
+System.Configuration.ConfigurationErrorsException : Failed to find or load the registered .Net Framework Data Provider.
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/a6cd7c08%28v=vs.110%29.aspx">https://msdn.microsoft.com/en-us/library/a6cd7c08(v=vs.110).aspx</a>
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/4ksaf9z5%28v=vs.71%29.aspx">Implementing a .NET Framework Data Provider</a>
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/aa719821%28v=vs.71%29.aspx">Creating a .NET Framework Data Provider Library</a>
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/aa720697%28v=vs.71%29.aspx">Sample .NET Framework Data Provider</a>
+<br />
+<br />
+# gacutil -l deveeldb
+<br />
+The following assemblies are installed into the GAC:
+<br />
+deveeldb, Version=2.0.0.31533, Culture=neutral, PublicKeyToken=0738eb9f132ed756
+<br />
+Number of items = 1
+<br />
+<br />
+
+&lt;configuration&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;system.data&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;DbProviderFactories&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;add
+invariant=&quot;MySql.Data.MySqlClient&quot;
+type=&quot;MySql.Data.MySqlClient.MySqlClientFactory,MySql.Data,  Version=6.6.4.0, Culture=neutral, PublicKeyToken=C5687FC88969C44D&quot;
+name=&quot;MySQL Data Provider&quot;
+description=&quot;.Net Framework Data Provider for MySQL&quot;
+/&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;add
+invariant=&quot;Deveel.Data.Client.DeveelDBClient&quot;
+type=&quot;Deveel.Data.Client.DeveelDBClientFactory,deveeldb, Version=2.0.0.31533, Culture=neutral, PublicKeyToken=0738eb9f132ed756
+name=&quot;DeveelDB Data Provider&quot;
+description=&quot;.Net Framework Data Provider for DeveelDB&quot;
+/&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/DbProviderFactories&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/system.data&gt;
+<br />
+&lt;/configuration&gt;
+<br />
+<br />
+System.InvalidOperationException : The requested .Net Framework Data Provider's implementation does not have an Instance field of a System.Data.Common.DbProviderFactory derived type.
+<br />
+
+</body>
+</html>
