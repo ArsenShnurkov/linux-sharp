@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>type-conversion-bug</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>type-conversion-bug</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">How to use DeveelDB</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Deveel.Data.Client.DeveelDbException : An error occurred while executing the non-query command
+<br />
+INSERT INTO mytable (myident, mystamp, mycontent) VALUES (1, TODATE('2016-01-01'), '2 weeks ago'), (2, TODATE('2016-01-07'), '1 week ago');
+<br />
+<br />
+Deveel.Data.Client.DeveelDbException: An error occurred while executing a query. ---&gt; System.Runtime.Remoting.ServerException: Unable to convert type STRING(32767) of TODATE(2016-01-01) into type DATE of column APP.mytable.mystamp
+<br />
+System.InvalidOperationException: Unable to convert type STRING(32767) of TODATE(2016-01-01) into type DATE of column APP.mytable.mystamp
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.InsertStatement.Deveel.Data.Sql.Statements.IPreparableStatement.Prepare (IRequest context) [0x00315] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/InsertStatement.cs#L131">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/InsertStatement.cs#L131</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.StatementExtensions.Prepare (IStatement statement, IExpressionPreparer preparer, IRequest context) [0x0003e] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/StatementExtensions.cs#L43">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/StatementExtensions.cs#L43</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.RequestExtensions.Execute (IRequest request, Deveel.Data.Sql.SqlQuery query) [0x0004c] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/RequestExtensions.cs#L69">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/RequestExtensions.cs#L69</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.QueryExtensions.ExecuteQuery (IQuery query, Deveel.Data.Sql.SqlQuery sqlQuery) [0x00003] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/QueryExtensions.cs#L26">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/QueryExtensions.cs#L26</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.CoreExecuteQuery (IQuery context, System.String text, IEnumerable`1 parameters) [0x0009e] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L336">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L336</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.ExecuteQuery (IQuery context, System.String text, IEnumerable`1 parameters) [0x00008] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L274">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L274</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.ExecuteQuery (Int64 commitId, System.String text, IEnumerable`1 parameters) [0x0002b] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L264">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L264</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector+ServerMessageProcessor.ProcessQuery (IDictionary`2 metadata, Deveel.Data.Protocol.QueryExecuteRequest request) [0x0003a] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L673">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L673</a> , ErrorCode: -1, ErrorClass: -1
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ClientConnector+ClientMessageProcessor.ProcessMessage (IMessageEnvelope message) [0x0009f] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ClientConnector.cs#L107">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ClientConnector.cs#L107</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.ConnectionClient.SendMessage (IMessage message) [0x0001b] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/ConnectionClient.cs#L165">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/ConnectionClient.cs#L165</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.ConnectionClient.ExecuteQuery (Int32 commitId, Deveel.Data.Sql.SqlQuery query) [0x0000a] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/ConnectionClient.cs#L246">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/ConnectionClient.cs#L246</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.DeveelDbConnection.ExecuteQuery (Int32 commitId, Deveel.Data.Sql.SqlQuery query) [0x0000a] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbConnection.cs#L280">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbConnection.cs#L280</a>
+<br />
+&nbsp;&nbsp;--- End of inner exception stack trace ---
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.DeveelDbConnection.ExecuteQuery (Int32 commitId, Deveel.Data.Sql.SqlQuery query) [0x0001d] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbConnection.cs#L282">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbConnection.cs#L282</a>
+<br />
+&nbsp;&nbsp;at (wrapper remoting-invoke-with-check) Deveel.Data.Client.DeveelDbConnection:ExecuteQuery (int,Deveel.Data.Sql.SqlQuery)
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.DeveelDbCommand.ExecuteQuery () [0x0002d] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbCommand.cs#L102">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbCommand.cs#L102</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Client.DeveelDbCommand.ExecuteNonQuery () [0x00015] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbCommand.cs#L342">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Client/DeveelDbCommand.cs#L342</a>
+<br />
+&nbsp;&nbsp;----&gt; Deveel.Data.Client.DeveelDbException : An error occurred while executing a query.
+<br />
+&nbsp;&nbsp;----&gt; System.Runtime.Remoting.ServerException : Unable to convert type STRING(32767) of TODATE(2016-01-01) into type DATE of column APP.mytable.mystamp
+<br />
+System.InvalidOperationException: Unable to convert type STRING(32767) of TODATE(2016-01-01) into type DATE of column APP.mytable.mystamp
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.InsertStatement.Deveel.Data.Sql.Statements.IPreparableStatement.Prepare (IRequest context) [0x00315] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/InsertStatement.cs#L131">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/InsertStatement.cs#L131</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.StatementExtensions.Prepare (IStatement statement, IExpressionPreparer preparer, IRequest context) [0x0003e] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/StatementExtensions.cs#L43">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/StatementExtensions.cs#L43</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.RequestExtensions.Execute (IRequest request, Deveel.Data.Sql.SqlQuery query) [0x0004c] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/RequestExtensions.cs#L69">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/RequestExtensions.cs#L69</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Sql.Statements.QueryExtensions.ExecuteQuery (IQuery query, Deveel.Data.Sql.SqlQuery sqlQuery) [0x00003] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/QueryExtensions.cs#L26">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Sql.Statements/QueryExtensions.cs#L26</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.CoreExecuteQuery (IQuery context, System.String text, IEnumerable`1 parameters) [0x0009e] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L336">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L336</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.ExecuteQuery (IQuery context, System.String text, IEnumerable`1 parameters) [0x00008] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L274">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L274</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector.ExecuteQuery (Int64 commitId, System.String text, IEnumerable`1 parameters) [0x0002b] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L264">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L264</a>
+<br />
+&nbsp;&nbsp;at Deveel.Data.Protocol.ServerConnector+ServerMessageProcessor.ProcessQuery (IDictionary`2 metadata, Deveel.Data.Protocol.QueryExecuteRequest request) [0x0003a] in <a href="https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L673">https://github.com/ArsenShnurkov/deveeldb/blob/1d54fe4434fdfd0ae691e6088b527f4d6286a781/src/deveeldb/Deveel.Data.Protocol/ServerConnector.cs#L673</a> , ErrorCode: -1, ErrorClass: -1
+&nbsp;&nbsp;
+</body>
+</html>
