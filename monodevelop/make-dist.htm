@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>как устроен make dist</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>как устроен make dist</h1>
+</td><td style="vertical-align:top;">
+<a href="dependencies.htm">Зависимости monodevelop</a>,
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+<a href="https://github.com/gentoo/dotnet/issues/160#issuecomment-174301826">dotnet/issues/160</a>,
+<a href="http://stackoverflow.com/questions/34976911/how-makes-pattern-rules-distinguish-callers/34977183#34977183">SQ34976911</a>
+</td></tr></table>
+
+<a href="https://github.com/mono/monodevelop/blob/0967f73f0f2ae8180424a145bf27ae6760c2f045/Makefile#L54-L92">https://github.com/mono/monodevelop/blob/master/Makefile#L54-L92</a>
+<br />
+<br />
+Неясно, как срабатывает цель dist-recursive.
+<br />
+<a href="https://github.com/mono/monodevelop/blob/0967f73f0f2ae8180424a145bf27ae6760c2f045/Makefile#L54">dist: update_submodules remove-stale-tarballs dist-recursive</a>
+<br />
+Соответствующее правило имеет левую часть со знаком процента
+<br />
+<a href="https://github.com/mono/monodevelop/blob/0967f73f0f2ae8180424a145bf27ae6760c2f045/Makefile#L22">%-recursive: $(CONFIG_MAKE)</a>
+<br />
+<br />
+A pattern rule looks like an ordinary rule, except that its target contains the character ‘%’ (exactly one of them). 
+<br />
+<a href="http://www.gnu.org/software/make/manual/make.html#Pattern-Rules">http://www.gnu.org/software/make/manual/make.html#Pattern-Rules</a>
+<br />
+the ‘%’ can match any nonempty substring, while other characters match only themselves.
+
+<!--
+<br />
+<br />
+Ну, это вообще-то не очень объясняет, зачем использовать такое правило... Хороший бы туториал по этому поводу найти...
+<br />
+<br />
+all-recursive clean-recursive install-recursive uninstall-recursive distcheck-recursive
+<br />
+they all match to rule %-recursive, but i don't understood how that % rule works differently in this different cases
+<br />
+distclean-recursive
+<br />
+<br />
+IRC #workingset @ freenode
+<br />
+<br />
+<a href="http://linux.die.net/man/1/make">http://linux.die.net/man/1/make</a>
+<br />
+ -n, --just-print, --dry-run, --recon
+<br />
+Print the commands that would be executed, but do not execute them.
+<br />
+<br />
+-->
+<br />
+<br />
+ In a pattern rule that has multiple targets (see Introduction to Pattern Rules), ‘$@’ is the name of whichever target caused the rule’s recipe to be run.
+ <br />
+<a href="http://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">http://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html</a>
+<br />
+$* will expand to the part of the target that matched the pattern
+<br />
+<br />
+в 31 строке заход в директорию, потом рекурсивный вызов make с предачей $* в качестве параметра
+
+
+
+</body>
+</html>

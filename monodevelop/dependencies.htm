@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Зависимости monodevelop</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Зависимости monodevelop</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Что пишет официальная стправка:
+<br />
+<a href="http://www.monodevelop.com/developers/building-monodevelop/">http://www.monodevelop.com/developers/building-monodevelop/</a>
+<br />
+<br />
+MonoDevelop is split in several tarballs: one for the main application, and one for each optional add-in.
+<br />
+<br />
+The MonoDevelop build system consists of a ‘main’ module, which contains the main distribution, and a number of additional add-ins in subdirectories of Ǝxtras’.
+<br />
+<br />
+The "Extras" add-ins are designed to be built and distributed separately, and therefore build against your system-installed MonoDevelop by default.
+<br />
+<br />
+ensures that they will be loaded when MonoDevelop is launched with ‘make run’ in this top-level directory.
+<br />
+<br />
+You can select the list of extra add-ins to be built by running this command:
+<br />
+./configure --select
+<br />
+<br />
+You can also configure a predefined list of modules by specifying a build profile using the –profile option.
+<br />
+<br />
+
+
+
+Во-первых, все пакеты, перечисленные в SRC_URI:
+<br />
+<a href="https://github.com/gentoo/dotnet/blob/a54e1710c21e4d6f1126b96a5ce99cbe304c7f2b/dev-util/monodevelop/monodevelop-5.9.5.9-r1.ebuild#L10-L17">https://github.com/gentoo/dotnet/blob/a54e1710c21e4d6f1126b96a5ce99cbe304c7f2b/dev-util/monodevelop/monodevelop-5.9.5.9-r1.ebuild#L10-L17</a>
+<br />
+<br />
+NUnit.2.6.3
+<br />
+NUnit.Runners.2.6.3
+<br />
+Microsoft.AspNet.Mvc.5.2.2
+<br />
+System.Web.Mvc.Extensions.Mvc.4.1.0.9
+<br />
+Microsoft.AspNet.Razor.3.2.2
+<br />
+Microsoft.AspNet.WebPages.3.2.2
+<br />
+Microsoft.Web.Infrastructure.1.0.0.0
+<br />
+<br />
+Во-вторых, проекты в списке .gitmodules:
+<br />
+<a href="https://github.com/mono/monodevelop/blob/081f0e88c2ed43bb8213229f1e6d3144d3835441/.gitmodules">https://github.com/mono/monodevelop/blob/081f0e88c2ed43bb8213229f1e6d3144d3835441/.gitmodules</a>
+<br />
+<br />
+<a href="http://github.com/mono/cecil">http://github.com/mono/cecil</a>
+<br />
+<a href="http://github.com/mono/mono-tools">http://github.com/mono/mono-tools</a>
+<br />
+<a href="http://github.com/mono/mdtestharness">http://github.com/mono/mdtestharness</a>
+<br />
+<a href="http://github.com/icsharpcode/NRefactory">http://github.com/icsharpcode/NRefactory</a>
+<br />
+<a href="http://github.com/mono/mono-addins">http://github.com/mono/mono-addins</a>
+<br />
+<a href="http://github.com/mono/ikvm-fork">http://github.com/mono/ikvm-fork</a>
+<br />
+<a href="http://github.com/mono/debugger-libs">http://github.com/mono/debugger-libs</a>
+<br />
+<a href="http://github.com/mono/guiunit">http://github.com/mono/guiunit</a>
+<br />
+<a href="http://github.com/fsharp/xamarin-monodevelop-fsharp-addin">http://github.com/fsharp/xamarin-monodevelop-fsharp-addin</a>
+<br />
+<a href="http://github.com/mono/nuget-binary">http://github.com/mono/nuget-binary</a>
+<br />
+<a href="http://github.com/mono/xwt">http://github.com/mono/xwt</a>
+<br />
+<a href="http://github.com/mono/monomac">http://github.com/mono/monomac</a>
+<br />
+<a href="http://github.com/mono/sharpsvn-binary">http://github.com/mono/sharpsvn-binary</a>
+<br />
+<a href="http://github.com/mono/libgit2sharp">http://github.com/mono/libgit2sharp</a>
+<br />
+<a href="http://github.com/mono/libgit-binary">http://github.com/mono/libgit-binary</a>
+<br />
+<a href="http://github.com/mono/libgit2">http://github.com/mono/libgit2</a>
+<br />
+<a href="http://github.com/icsharpcode/RefactoringEssentials">http://github.com/icsharpcode/RefactoringEssentials</a>
+<br />
+<a href="http://github.com/mono/roslyn">http://github.com/mono/roslyn</a>
+<br />
+<br />
+
+Что мы тут НЕ видим? не видим referencesources, а тем временем откуда-то они берутся. Значит надо смотреть, <a href="make-dist.htm">как устроен make dist</a>
+
+
+<h2>Parallel Mono Environment</h2>
+you can configure a parallel Mono environment to use them
+<br />
+See the section on MONO_GAC_PREFIX in the Parallel Mono Environment guide.
+<br />
+<br />
+
+</body>
+</html>
