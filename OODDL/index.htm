@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Object oriented data definition language</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Object oriented data definition language</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">links list</a>
+<br />
+&nbsp;
+</td></tr></table>
+Peter J Barclay and Jessie B Kennedy, A Conceptual Language for Querying Object Oriented Data
+<br />
+<a href="http://researchrepository.napier.ac.uk/2989/1/JKenbncod93.pdf">http://researchrepository.napier.ac.uk/2989/1/JKenbncod93.pdf</a>
+<br />
+Peter J Barclay and Jessie B Kennedy, Viewing Objects
+<br />
+http://researchrepository.napier.ac.uk/2989/1/JKenbncod93.pdf
+<br />
+1993, Peter J Barclay. Object Oriented Model ling of Complex Data with Automatic Generation of a Persistent Representation. PhD thesis, Napier University, Edinburgh, 1993.
+<br />
+1995, Kenneth J. Mitchell, Jessie B. Kennedy and Peter J. Barclay, Using a Conceptual Data Language to Describe a Database and its Interface
+<br />
+<a href="http://researchrepository.napier.ac.uk/2986/1/JKenbncod95.pdf">http://researchrepository.napier.ac.uk/2986/1/JKenbncod95.pdf</a>
+<br />
+<br />
+1) нужно уметь немного описывать объекно-ориентированный синтаксис. Тут надо или свой язык изобрести, или парсить C#/Java/C++ и всё остальное.
+<br />
+2) нужно уметь описывать объекты в субд, тут поможет стандарт на SQL
+<br />
+3) нужно уметь описывать отображение второго на первое
+<br />
+4) могут быть специальные схемы и ключевые слова, например для определения/описания показателей, классификаторов, справочников, реестров, регистров (как в 1C, хотя я и не знаю как там именно это сделано)
+<br />
+<br />
+HQL в Hibeernate Orm
+<a href="https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html">https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html</a>
+<br />
+Marek Vok´aˇc and Jens M. Glattetre, Using a Domain-Specific Language and custom tools to model a multi-tier service-oriented application — experiences and challenges
+<br />
+We have chosen to use a domain-specific language both to model the
+external service-oriented interfaces, and to manage the transition to the
+internal, object-oriented implementation.
+<br />
+Generic UML constructs such as class diagrams do not capture enough semantics to model these concepts.
+<br />
+By defining a UML Profile that incorporates the concepts we wish
+to model, we have in effect created a Domain-Specific Language for our
+application. The models are edited using Rational XDE, but we have substituted
+our own code generator
+<br />
+Unified Modelling Language (UML), 
+Model-Driven Architecture (MDA)
+<br />
+good tool support is perhaps the single most important factor
+<br />
+MDA specification published by OMG (1) contains a bare three pages on the subject of transformations 
+from the platform-independent to the platformspecific models.
+<br />
+our search did not turn up any tools that we considered to be
+sufficiently advanced, robust and scalable to support the kind of modelling we
+wished to undertake.
+<br />
+Microsoft’s initiative on Software Factories and extensible modelers is interesting (9),
+but it is still at an early stage and not suitable for production.
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/194754/rendering-uml-diagrams-from-text-files">http://stackoverflow.com/questions/194754/rendering-uml-diagrams-from-text-files</a>
+
+<h2>nplant</h2>
+<a href="http://plantuml.com/PlantUML_Language_Reference_Guide.pdf">http://plantuml.com/PlantUML_Language_Reference_Guide.pdf</a>
+<br />
+<br />
+source code (in java):
+<br />
+<a href="http://sourceforge.net/p/plantuml/code/HEAD/tree/trunk/">http://sourceforge.net/p/plantuml/code/HEAD/tree/trunk/</a>
+<br />
+<br />
+<a href="https://github.com/nplant/nplant">https://github.com/nplant/nplant</a>
+<br />
+This library is not intended to replace PlantUML - it's simply a tool to help create PlantUML notation.
+<br />
+<br />
+<a href="https://github.com/pierre3/PlantUmlClassDiagramGenerator">https://github.com/pierre3/PlantUmlClassDiagramGenerator</a>
+
+<h2>Class Diagrams (.cd files)</h2>
+<a href="https://social.msdn.microsoft.com/Forums/vstudio/en-US/78598309-ad66-4984-b8e8-84056c61fcf4/class-diagrams-xsd?forum=csharpgeneral">https://social.msdn.microsoft.com/Forums/vstudio/en-US/78598309-ad66-4984-b8e8-84056c61fcf4/class-diagrams-xsd?forum=csharpgeneral</a>
+<br />
+<a href="http://stackoverflow.com/questions/727567/net-class-diagrams-without-using-the-designer">http://stackoverflow.com/questions/727567/net-class-diagrams-without-using-the-designer</a>
+<br />
+ EnvDTE. The APIs are pretty cryptic, and also generalized.
+ <br />
+With the EnvDTE COM object(either CoCreated or supplied in a VS macro) use DTE.Solution.Open to open your solution.
+Then use DTE.Solution.Projects to find your project with the Class Diagram, and
+Project.ProjectItems to find the class Diagram files.
+<br />
+<a href="https://habrahabr.ru/post/73790/">https://habrahabr.ru/post/73790/</a>
+<br />
+<br />
+2005, Patrick Tseng, <a href="http://blogs.msdn.com/b/classdesigner/archive/2005/07/29/444501.aspx">http://blogs.msdn.com/b/classdesigner/archive/2005/07/29/444501.aspx</a>
+<br />
+
+<h2>NClass</h2>
+<a href="https://en.wikipedia.org/wiki/NClass">https://en.wikipedia.org/wiki/NClass</a>
+<br />
+Author
+<br />
+Balazs Tihanyi (btihanyi@users.sourceforge.net)
+<br />
+The Mono framework is now officially supported. (q) <a href="http://nclass.sourceforge.net/support.html">http://nclass.sourceforge.net/support.html</a>
+<br />
+(the Mono implementation of WinForms may contain bugs that can't be by-passed in NClass, but hopefully will be fixed soon)
+<br />
+2013, <a href="http://sourceforge.net/p/nclass/code/HEAD/tree/NClass/">http://sourceforge.net/p/nclass/code/HEAD/tree/NClass/</a>
+<br />
+2015-06, <a href="https://github.com/SamiDidier/NClass">https://github.com/SamiDidier/NClass</a>
+<br />
+<a href="http://stackoverflow.com/questions/6657871/free-uml-tool-ideally-for-net">http://stackoverflow.com/questions/6657871/free-uml-tool-ideally-for-net</a>
+<br />
+<a href="http://stackoverflow.com/questions/1716119/free-uml-drawing-library-for-net">http://stackoverflow.com/questions/1716119/free-uml-drawing-library-for-net</a>
+<br />
+<a href="http://sourceforge.net/projects/numl/">http://sourceforge.net/projects/numl/</a>
+<br />
+<a href="http://stackoverflow.com/questions/2787868/generating-xmi-or-graphic-uml-diagrams-not-code-documentation-in-c-net">http://stackoverflow.com/questions/2787868/generating-xmi-or-graphic-uml-diagrams-not-code-documentation-in-c-net</a>
+
+<br />
+Known issues under Mono:
+<ul>
+<li>Cannot load application settings
+<li>The ErrorProvider icon rarely shows up
+<li>Screen refreshing can be extremely slow (OS-dependent)
+<li>Cannot print (well, it could if the PrintPreviewControl were removed)
+<li>Mouse cursor doesn't change above the resize squares
+<li>Drag & drop file opening doesn't work (on Windows)
+<li>Button sizes in Options dialog are incorrect (some AutoSize problem)
+<li>ToolStripSplitButton doesn't work with right Alignment, had to move to the left
+<li>Cannot save into EMF format
+</ul>
+
+</body>
+</html>
