@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>опакечивание cecil</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>опакечивание cecil</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+внутри проекта есть файл:
+<br />
+<a href="https://github.com/jbevain/cecil/blob/3b21b22e454faec782d1b21ad1e98b88fd297a2a/Mono.Cecil.nuspec">https://github.com/jbevain/cecil/blob/3b21b22e454faec782d1b21ad1e98b88fd297a2a/Mono.Cecil.nuspec</a>
+<br />
+<br />
+раньше там была ещё версия .Net framework 2.0, но в этом коммите её убрали.
+<br />
+<br />
+Проблема в строках <a href="https://github.com/jbevain/cecil/blob/3b21b22e454faec782d1b21ad1e98b88fd297a2a/Mono.Cecil.nuspec#L18-L21">18-20</a> заключается в том, что надо собрать
+несколько бинарных файлов для разных версий Framework.
+<br />
+<br />
+в <a href="https://github.com/gentoo/dotnet/blob/7b316f212e670192162257791d231c7a050ed489/eclass/dotnet.eclass">dotnet.eclass</a>
+<br />
+добавляются USE-флаги из переменной USE_DOTNET
+<br />
+так же USE-флаги могут быть добавлены в самом ebuild.
+<br />
+<br />
+Это к тому, что можно перебрать флаги из IUSE циклом и если установлен файл для некоторого framework-а, то собрать отдельную версию .dll-ок
+<br />
+<br />
+А потом упаковать все собранные версии единым .nuspec (тот который есть прийдётся пропатчить)
+<br />
+<br />
+<a href="https://docs.nuget.org/create/nuspec-reference#specifying-files-to-include-in-the-package">https://docs.nuget.org/create/nuspec-reference#specifying-files-to-include-in-the-package</a>
+<br />
+<br />
+
+
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>resgen и libpng</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>resgen и libpng</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+
+resgen имеет привычку падать при компилировании файлов .resx в .resources
+<br />
+можно было бы создать другой проект (например nresgen),
+в который скопировать код из resgen, код из system.windows.forms для работы с форматом ResX для XML
+а так же добавить зависимость для библиотеки обработки .png-файлов, написанной на pure C# (вместо libpng работающей через interop)
+<br />
+<br />
+Получится, что некоторые файлы (в частности /usr/bin/resgen) устанавливаются несколькими пакетами (пакетом mono и пакетом nresgen)
+<br />
+можно было бы написать модуль eselect для выбора одного из двух этих resgen
+<br />
+<br />
+мне не ясно, как убрать предупреждение о том, что файл устанавливается двумя пакетами (ты сначала проверь, что то предупреждение действительно есть)
+обычно выдаваемое при установке второго пакета (collision)
+
+</body>
+</html>
