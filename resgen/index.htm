@@ -30,5 +30,298 @@ resgen имеет привычку падать при компилирован�
 мне не ясно, как убрать предупреждение о том, что файл устанавливается двумя пакетами (ты сначала проверь, что то предупреждение действительно есть)
 обычно выдаваемое при установке второго пакета (collision)
 
+<h2>Как заменить resgen в portage?</h2>
+
+
+Как monodevelop запускает resgen ?
+<br />
+ну, он запускает msbuild или xbuild, а уже они запускают resgen
+<br />
+<br />
+The tools in the Toolset that MSBuild defines come from the following sources:
+<br />
+&nbsp;&nbsp;The .NET Framework folder.
+<br />
+&nbsp;&nbsp; Additional managed tools.
+<br />
+The managed tools include ResGen.exe and TlbImp.exe. 
+<br />
+<br />
+утилиты сборки (xbuild и msbuild) читают узел ToolsVersion из файла-проекта
+ToolsVersion attribute on the Project element in the project file.
+затем ищут соответствующий toolset, где ищут - переопределяется из своего (утилиты) конфига,
+(а определяется в реестре (в windows). Где определяется в mono - неясно)
+You can modify the value of $(MSBuildToolsPath) by defining a custom Toolset.
+<br />
+<br />
+MSBuild Toolset = <a href="https://msdn.microsoft.com/en-us/library/bb383796.aspx">https://msdn.microsoft.com/en-us/library/bb383796.aspx</a>
+<br />
+<br />
+When a ToolsVersion value is defined in a project file,
+<br />
+MSBuild uses that value to determine the values of the Toolset properties that are available to the project.
+<br />
+<br />
+This behavior can be overridden by using the /ToolsVersion flag.
+When you build a solution on the command line and specify a ToolsVersion for msbuild.exe,
+all projects and their project-to-project dependencies are built according to that ToolsVersion,
+even if each project in the solution specifies its own ToolsVersion.
+<br />
+<br />
+MSBuildToolsPath
+<br />
+<br />
+One Toolset property is $(MSBuildToolsPath),
+which specifies the path of the .NET Framework tools.
+Only that Toolset property (or $(MSBuildBinPath)), is required.
+<br />
+<br />
+MSBuild finds the Microsoft.CSharp.targets file by using the MSBuildToolsPath reserved property.
+<br />
+<br />
+&lt;Import Project=&quot;$(MSBuildToolsPath)\Microsoft.CSharp.targets&quot; /&gt;
+<br />
+<br />
+# pwd
+<br />
+/usr/lib64/mono
+<br />
+# grep -R &quot;resgen&quot; * 
+<br />
+Binary file 4.5/resgen.exe.mdb matches
+<br />
+Binary file 4.5/resgen.exe matches
+<br />
+Binary file gac/Microsoft.Build.Tasks.Core/14.0.0.0__b03f5f7f11d50a3a/Microsoft.Build.Tasks.Core.dll.mdb matches
+<br />
+Binary file gac/Microsoft.Build.Tasks.v4.0/4.0.0.0__b03f5f7f11d50a3a/Microsoft.Build.Tasks.v4.0.dll.mdb matches
+<br />
+Binary file gac/Microsoft.Build.Tasks.v12.0/12.0.0.0__b03f5f7f11d50a3a/Microsoft.Build.Tasks.v12.0.dll.mdb matches
+<br />
+
+<br />
+# find . -iname &quot;xbuild.exe.config&quot;
+<br />
+./xbuild/12.0/bin/xbuild.exe.config
+<br />
+./xbuild/14.0/bin/xbuild.exe.config
+<br />
+./4.5/xbuild.exe.config
+<br />
+<br />
+You may define toolsets but not sub-toolsets in the configuration file.
+<br />
+<br />
+configuration file for MSBuild.exe could include the following Toolset definition
+<br />
+if you wished to override the default behavior of ToolsVersion 12.0.
+<br />
+<br />
+&lt;msbuildToolsets default=&quot;12.0&quot;&gt;
+<br />
+&nbsp;&nbsp;&lt;toolset toolsVersion=&quot;12.0&quot;&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property name=&quot;MSBuildToolsPath&quot; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;C:\SpecialPath&quot; /&gt;
+<br />
+&nbsp;&nbsp;&lt;/toolset&gt;
+<br />
+&lt;/msbuildToolsets&gt;
+<br />
+<br />
+ToolsetConfigurationSection is a custom configuration section
+<br />
+that can be used by any MSBuild host for custom configuration.
+<br />
+&lt;msbuildToolsets&gt; must also be defined in the configuration file, as follows.
+<br />
+<br />
+&lt;configSections&gt;
+<br />
+&nbsp;&nbsp;&lt;section name=&quot;msbuildToolsets&quot;       
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Type=&quot;Microsoft.Build.BuildEngine.ToolsetConfigurationSection, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Microsoft.Build.Engine, Version=12.0.0.0, Culture=neutral, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PublicKeyToken=b03f5f7f11d50a3a&quot;
+<br />
+&nbsp;&nbsp;&lt;/section&gt;
+<br />
+&lt;/configSections&gt;
+<br />
+<br />
+вот та строчка, которая получает точное месторасположение утилиты resgen.exe:
+<br />
+<br />
+<a href="https://github.com/mono/mono/blob/0985d4aa4be4a9286db4e36cf75e3b18a31e5ff9/mcs/class/Microsoft.Build.Tasks/Microsoft.Build.Tasks/GenerateResource.cs#L382">https://github.com/mono/mono/blob/0985d4aa4be4a9286db4e36cf75e3b18a31e5ff9/mcs/class/Microsoft.Build.Tasks/Microsoft.Build.Tasks/GenerateResource.cs#L382</a>
+<br />
+&nbsp;&nbsp;return ToolLocationHelper.GetPathToDotNetFrameworkFile (ToolExe, TargetDotNetFrameworkVersion.VersionLatest);
+<br />
+<br />
+Sub-toolsets were introduced in the .NET Framework 4.5.
+<br />
+<br />
+Sub-toolsets allow MSBuild to automatically switch which set of tools to use
+<br />
+based on the context in which the build is being run.
+<br />
+For example, MSBuild uses a newer set of tools when it's run in Visual Studio 2012
+<br />
+than when it's run in Visual Studio 2010,
+<br />
+without your having to explicitly change the project file.
+<br />
+<br />
+During a build, MSBuild automatically determines and sets
+<br />
+a default value for the VisualStudioVersion property if it's not already defined.
+<br />
+<br />
+Alternately, you can determine the Toolset programmatically by calling the methods of the
+<br />
+ToolLocationHelper class. The class includes these methods:
+<br />
+...
+<br />
+GetPathToDotNetFramework returns the path of the .NET Framework folder.
+<br />
+GetPathToDotNetFrameworkSdk returns the path of the managed tools folder.
+<br />
+GetPathToBuildTools returns the path of the build tools.
+<br />
+<br />
+Sub-toolsets become active in the presence of the VisualStudioVersion build property.
+<br />
+This property may take one of these values:
+<br />
+    ᰐ.0” specifies the .NET Framework 4 sub-toolset
+<br />
+    ᰑ.0” specifies the .NET Framework 4.5 sub-toolset
+<br />
+    ᰒ.0” specifies the .NET Framework 4.5.1 sub-toolset
+<br />
+Sub-toolsets 10.0 and 11.0 should be used with ToolsVersion 4.0.
+<br />
+In later versions, the sub-toolset version and the ToolsVersion should match.
+<br />
+<br />
+MSBuild provides overloads for the 
+<a href="https://github.com/mono/mono/blob/master/mcs/class/Microsoft.Build.Utilities/Microsoft.Build.Utilities/ToolLocationHelper.cs">ToolLocationHelper</a>
+ methods that add a VisualStudioVersion enumerated value as a parameter
+
+<!--
+Не видно задачи, связанной с компиляцией ресурсов в файле Microsoft.Common.tasks:
+<br />
+<br />
+# grep -R  &quot;Microsoft.Build.Tasks.Core&quot;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.AL&quot;			AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.AssignTargetPath&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.AssignCulture&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.AssignProjectConfiguration&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CallTarget&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CombinePath&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Copy&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CreateCSharpManifestResourceName&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot;/&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CreateVisualBasicManifestResourceName&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot;/&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CreateItem&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.CreateProperty&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Csc&quot;			AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Delete&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Error&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Exec&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.FindAppConfigFile&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.FindUnderPath&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.GenerateResource&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.GetAssemblyIdentity&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.GetFrameworkPath&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.GetFrameworkSdkPath&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.GetReferenceAssemblyPaths&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.LC&quot;			AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.MakeDir&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Message&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.MSBuild&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.ReadLinesFromFile&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.RemoveDir&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.RemoveDuplicates&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.ResolveAssemblyReference&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.SignFile&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Touch&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Vbc&quot;			AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.Warning&quot;		AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.WriteCodeFragment&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot;/&gt;
+<br />
+xbuild/14.0/bin/Microsoft.Common.tasks:	&lt;UsingTask TaskName=&quot;Microsoft.Build.Tasks.WriteLinesToFile&quot;	AssemblyName=&quot;Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+-->
+<br />
+<br />
+<a href="https://github.com/mono/mono/blob/fa1cb5bbf426bfb7673f5f01ef0c2fc71fc25c8f/msvc/scripts/order.xml#L4473-L4482">https://github.com/mono/mono/blob/fa1cb5bbf426bfb7673f5f01ef0c2fc71fc25c8f/msvc/scripts/order.xml#L4473-L4482</a>
+<br />
+<br />
+<a href="https://github.com/mono/mono/tree/master/mcs/class/Microsoft.Build.Tasks">https://github.com/mono/mono/tree/master/mcs/class/Microsoft.Build.Tasks</a>
+<br />
+<a href="https://github.com/mono/mono/blob/master/mcs/class/Mono.XBuild.Tasks">https://github.com/mono/mono/blob/master/mcs/class/Mono.XBuild.Tasks</a>
+<br />
+<br />
+Итого, для того, чтобы запустить другой resgen, он всё ещё должен называтся resgen.exe,
+<br />
+надо его положить в некую директорию
+<br />
+а директрию указать в конфиге xbuild
+<br />
+(а как же тогда /usr/bin/resgen ? получается на него сделан симлинк или как?)
+<br />
+<br />
+# file /usr/lib64/mono/4.5/resgen.exe
+<br />
+/usr/lib64/mono/4.5/resgen.exe: PE32 executable (console) Intel 80386 Mono/.Net assembly, for MS Windows
+<br />
+<br />
+допустим, что можно сделать отдельную директорию, наделать там симлинков
+<br />
+эту директорию положить в переменную MSBuildToolsPath
+<br />
+и во время сборки указывать эту версию утилит ключом командной строки
+<br />
+<br />
+Пакет тогда просто установит эту директорию (хотя есть соблазн сделать это через overlayfs а не при помощи симлинков, но нет eclass-а для работы с overlayfs)
+
+
 </body>
 </html>
