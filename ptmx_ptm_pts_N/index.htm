@@ -14,11 +14,34 @@
 &nbsp;
 </td></tr></table>
 
+Good example code in C:
+<br />
+<a href="http://rachid.koucha.free.fr/tech_corner/pty_pdip.html">http://rachid.koucha.free.fr/tech_corner/pty_pdip.html</a>
+<br />
+(shows when to dup and when to fork)
+<br />
+<br />
 <a href="http://unix.stackexchange.com/a/120071">http://unix.stackexchange.com/a/120071</a>
 <br />
 <a href="https://github.com/poderosaproject/">https://github.com/poderosaproject/</a>
 <br />
 How to pass handles to another process, If you can't fork in mono?
+<br />
+<br />
+<a href="http://www.codeproject.com/Articles/170017/Solving-Problems-of-Monitoring-Standard-Output-and">http://www.codeproject.com/Articles/170017/Solving-Problems-of-Monitoring-Standard-Output-and</a>
+<br />
+<br />
+Create a System.Diagnostic.ProcessStartInfo object, and set the UseShellExecute property to false, and the RedirectStandardInput, RedirectStandardOutput, RedirectStandardError properties to true.
+<br />
+Call System.Diagnostic.Process.Start() passing in the pre-initialized ProcessStartInfo object to that method.
+<br />
+To read output asynchronously (do not block waiting of output), add an event handler to the Process.OutputDataReceived event and call Process.BeginOutputReadLine(). The handler will receive text when the process writes to its standard output stream.
+<br />
+To read output synchronously (block until process writes text to output stream), call the Process.Read(), Process.ReadLine(), or Process.ReadToEnd() methods.
+<br />
+<br />
+
+
 
 </body>
 </html>
