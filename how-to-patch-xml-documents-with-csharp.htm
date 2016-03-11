@@ -11,7 +11,9 @@
 </td><td valign="top">
 <a href="index.htm">C# development for linux</a>
 <br />
-&nbsp;
+<a href="http://arsenshnurkov.github.io/gentoo-mono-handbook/xml-files/index.htm">http://arsenshnurkov.github.io/gentoo-mono-handbook/xml-files/index.htm</a>
+<br />
+<a href="https://en.wikipedia.org/wiki/Comparison_of_file_comparison_tools">https://en.wikipedia.org/wiki/Comparison_of_file_comparison_tools</a>
 </td></tr></table>
 
 <h2>RFC5261 и зачем он</h2>
@@ -30,32 +32,43 @@ License: unlicense
 эта либа берет патч и накатывает его.
 
 <h3>Как создать патч</h3>
-Создавать патчи можно при помощи программы xmlpatch - <a href="http://sourceforge.net/projects/xmlpatch">http://sourceforge.net/projects/xmlpatch</a>
+
+Кратко - никак, надо программировать свою утилиту.
+
+<h3>Diffplex</h3>
+утилита - аналог meld.
 <br />
-но есть варианты:
+позволяет создавать unufued diff-ы как это делает юниксовый diff,
 <br />
-на C# (инфа с <a href="http://letmeask.co/foxfeedspro/details/item_68014/">http://letmeask.co/foxfeedspro/details/item_68014/</a>):
+нет примера, как создавать файл в формате RFC5261
 <br />
-&nbsp;&nbsp;&nbsp;&nbsp;xmlunit.net
+Лицензия: Apache 2.0
 <br />
-&nbsp;&nbsp;&nbsp;&nbsp;Diffplex
-<br />
-&nbsp;&nbsp;&nbsp;&nbsp;xmlspecificationcompare 
-<br />
-на Java <a href="http://www.roseindia.net/opensource/xmldiff.php">http://www.roseindia.net/opensource/xmldiff.php</a>
+<a href="https://github.com/mmanela/diffplex">https://github.com/mmanela/diffplex</a>
 
 <h3>xmlunit.net</h3>
 <a href="https://github.com/xmlunit/xmlunit.net">https://github.com/xmlunit/xmlunit.net</a>
 <br />
 focused on unit-testing, there is no examples of patching in the internet
 
-<h3>Diffplex</h3>
-<a href="https://github.com/mmanela/diffplex">https://github.com/mmanela/diffplex</a>
-<br />
-There is no examples of patching in the internet
+<h3>другие варианты</h3>
 
-<h3>Xml Specification Compare and XPath discovery</h3>
-<a href="http://xmlspecificationcompare.codeplex.com/">http://xmlspecificationcompare.codeplex.com/</a>
+xmlpatch - An XML patch library utilizing libxml2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://sourceforge.net/projects/xmlpatch">http://sourceforge.net/projects/xmlpatch</a>
+<br />
+<a href="http://formaldev.blogspot.ru/2013/08/introducing-xml-specification-compare.html">Xml Specification Compare and XPath discovery</a> (на C#, инфа с <a href="http://letmeask.co/foxfeedspro/details/item_68014/">http://letmeask.co/foxfeedspro/details/item_68014/</a>):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://xmlspecificationcompare.codeplex.com/">https://xmlspecificationcompare.codeplex.com/</a>
+
+
+<h4>Java</h4>
+<a href="http://www.roseindia.net/opensource/xmldiff.php">http://www.roseindia.net/opensource/xmldiff.php</a>
+<br />
+<a href="http://pages.cs.wisc.edu/~yuanwang/xdiff.html">X-Diff</a>
+
+<h4>JavaScript</h4>
+<a href="https://en.wikipedia.org/wiki/Pretty_Diff">https://en.wikipedia.org/wiki/Pretty_Diff</a>
 
 
 
