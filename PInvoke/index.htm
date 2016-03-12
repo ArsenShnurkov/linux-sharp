@@ -14,6 +14,158 @@
 &nbsp;
 </td></tr></table>
 
+<a href="https://github.com/dotnet/corefx/blob/4221edbaa7f73562765b2732d965084a6684b589/src/System.Diagnostics.Process/src/System/Diagnostics/Process.Unix.cs#L226-L239">https://github.com/dotnet/corefx/blob/4221edbaa7f73562765b2732d965084a6684b589/src/System.Diagnostics.Process/src/System/Diagnostics/Process.Unix.cs#L226-L239</a>
+<br />
+<br />
+// Invoke the shim fork/execve routine.  It will create pipes for all requested
+<br />// redirects, fork a child process, map the pipe ends onto the appropriate stdin/stdout/stderr
+<br />// descriptors, and execve to execute the requested process.  The shim implementation
+<br />// is used to fork/execve as executing managed code in a forked process is not safe (only
+<br />// the calling thread will transfer, thread IDs aren't stable across the fork, etc.)
+<br />int childPid, stdinFd, stdoutFd, stderrFd;
+<br />if (Interop.Sys.ForkAndExecProcess(
+<div style="margin-left:1em;">filename, argv, envp, cwd,
+<br />startInfo.RedirectStandardInput, startInfo.RedirectStandardOutput, startInfo.RedirectStandardError,
+<br />out childPid, 
+<br />out stdinFd, out stdoutFd, out stderrFd) != 0)
+</div>{
+<div style="margin-left:1em;">throw new Win32Exception();
+</div>}
+<br />
+<br />
+<font style="color:red">что такое shim routine?</font>
+<br />
+shim = тонкая прокладка
+<br />
+<font style="color:red">Зачем выполнять "maps pipe ends"</font>
+<br />
+<font style="color:red">Обычно при форке все нити клонируются?</font>
+<br />
+One important thing that differs the child process from the parent is that the child has only one thread.
+<br />
+<a href="https://www.linuxprogrammingblog.com/threads-and-fork-think-twice-before-using-them">https://www.linuxprogrammingblog.com/threads-and-fork-think-twice-before-using-them</a>
+<br />
+if you choose to use threading, you can fork(2) a new process, with the following hints from the fork(2) manpage:
+<br />
+ The child process is created with a single thread — the one that called fork().
+ The entire virtual address space of the parent is replicated in the child, 
+ including the states of mutexes, condition variables, and other pthreads objects; the use of pthread_atfork(3)
+ may be helpful for dealing with problems that this can cause.
+<br />
+fork() only copies the calling thread, and any mutexes held in child threads will be forever locked in the forked child.
+<br />
+<a href="http://stackoverflow.com/a/6079669/6017919">http://stackoverflow.com/a/6079669/6017919</a>
+<br />
+malloc mutexes might be left locked
+<br />
+It's safe to fork in a multithreaded program as long as you are very careful about the code between fork and exec.
+You can make only re-enterant (aka asynchronous-safe) system calls in that span.
+In theory, you are not allowed to malloc or free there, although in practice the default Linux allocator is safe,
+and Linux libraries came to rely on it End result is that you must use the default allocator.
+<br />
+if the threads in different processes use the same shared memory to comunicate, you have to devise a synchronization mechanism.
+<br />
+<font style="color:red">Как сделано, что остаётся только одна нить?</font>
+<br />
+<br />
+
+<a href="https://github.com/terassy/xferoc/blob/3c8519cf21ebe3b3b8930f49240a70ef3c946548/src/Common/src/Interop/Unix/libcoreclr/Interop.ForkAndExecProcess.cs#L35-L39">https://github.com/terassy/xferoc/blob/3c8519cf21ebe3b3b8930f49240a70ef3c946548/src/Common/src/Interop/Unix/libcoreclr/Interop.ForkAndExecProcess.cs#L35-L39</a>
+<br />[DllImport("libcoreclr", SetLastError = true)]
+<br />private static extern unsafe int ForkAndExecProcess(
+<div style="margin-left:1em;">string filename, byte** argv, byte** envp, string cwd,
+<br />int redirectStdin, int redirectStdout, int redirectStderr,
+<br />out int lpChildPid, out int stdinFd, out int stdoutFd, out int stderrFd);
+</div>            
+<font style="color:red">Что такое libcoreclr ?</font>
+<br />
+это вот этот проект:
+<br />
+<a href="https://github.com/dotnet/coreclr">https://github.com/dotnet/coreclr</a>
+<br />
+<br />
+extern "C" {
+<div style="margin-left:1em;">int ForkAndExecProcess(
+<div style="margin-left:1em;">const char* filename,
+<br />char* const argv[],
+<br />char* const envp[],
+<br />const char* cwd,
+<br />int redirectStdin,
+<br />int redirectStdout,
+<br />int redirectStderr,
+<br />int* childPid,
+<br />int* stdinFd,
+<br />int* stdoutFd,
+<br />int* stderrFd
+</div>);
+</div>}
+<br />
+Вероятно в старом mono это сделано в другом месте? (может быть в Mono.Posix?)
+<br />
+<br />
+<font style="color:red">Что такое cwd?</font>
+<br />
+<a href="https://github.com/dotnet/coreclr/pull/515/files#diff-8d4e0920df83c506ddc099f043816d99R212">Рабочая директория</a>
+<br />
+path passed to chdir in child process
+<br />
+<br />
+Есть ещё какой-то код:
+<br />
+<a href="https://github.com/mono/mono/blob/c153626bdf923ef47b48eaf119423b39dfb8184a/mono/io-layer/processes.c#L561-L567">https://github.com/mono/mono/blob/c153626bdf923ef47b48eaf119423b39dfb8184a/mono/io-layer/processes.c#L561-L567</a>
+
+<h3>Shared memory alternative to pipes</h3>
+the share-nothing philosophy of forked processes is good for reducing shared-data bugs 
+but does mean you either need to create pipes to move data between processes 
+or use shared memory (shmget(2) or shm_open(3)).
+
+<h3>Как запускать процесс?</h3>
+Рекомендуют дожидаться завершения процесса таким способом:
+<br />
+process.WaitForExit();
+<br />
+process.Dispose() ;
+<br />
+process = null;
+<br />
+System.GC.Collect();
+<br />
+System.GC.WaitForPendingFinalizers();
+<br />
+System.GC.Collect();
+<br />
+То есть, получается, после форка нить продолжает выполнение в родительском процессе и может начать ждать завершения.
+<br />
+Кто-то ещё должен читать/писать в потоки которые соединены  с дочерним процессом.
+
+<h3>Как закрыть все дескрипторы</h3>
+В дочернем процессе перед exec надо закрыть все лишние дескрипторы кроме трёх стандартных.
+<br />
+Windows сразу так и делает, а в linux нужно делать это вручную.
+<br />
+<br />
+<a href="http://stackoverflow.com/a/1644590/6017919">http://stackoverflow.com/a/1644590/6017919</a>
+<br />
+You simply need to be careful and set close-on-exec on all file descriptors you care about.
+<br />
+#include &lt;fcntl.h&gt;
+<br />fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC);
+<br />
+<br />#include &lt;unistd.h&gt;
+<br />/* please don't do this */
+<br />for (i = getdtablesize(); i --&gt; 3;) {
+<div style="margin-left:1em;">if ((flags = fcntl(i, F_GETFD)) != -1)
+<div style="margin-left:1em;">fcntl(fd, F_SETFD, flags | FD_CLOEXEC);
+</div></div>}
+
+
+<h3>Как проверить, что дескрипторы освобождаются?</h3>
+sounds like your process is running out of file descriptors.
+If you are using stdin/stdout and stderr for each child you will use up 3 per process.
+If you don't clean up dead processes I can imagine you hitting limits quite easily
+<br />
+<br />
+
+
 надо что-нибудь такое потестить:
 <br />
 1. Просто вызов C-функций из C# кода.
@@ -23,7 +175,7 @@
 <br />
 2. Вызов делегатов из C-кода
 <br />
-сначала мы как-то попанаем в кправляемый код, потом вызываем функции из C, а они долго работают и всё это время вызывают делегаты из C#
+сначала мы как-то попанаем в управляемый код, потом вызываем функции из C, а они долго работают и всё это время вызывают делегаты из C#
 <br />
 то есть на примере с freeciv - из C# кода запускам главную функцию сервера (надо переоформить код exe-шника в .dll,
 а плагин реализующий ИИ будет вызывать C# делегаты).
