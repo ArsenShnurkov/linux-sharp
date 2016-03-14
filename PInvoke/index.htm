@@ -205,5 +205,15 @@ done by linking `libmono’
 <br />
 в принципе, и из клиента ведь можно создать домен? Потом функция main через PInvoke затянет данные, выставит коллбеки и можно будет реагировать...
 
+
+<h2>Парсинг строки аргументов для execve</h2>
+<a href="https://github.com/dotnet/corefx/blob/4221edbaa7f73562765b2732d965084a6684b589/src/System.Diagnostics.Process/src/System/Diagnostics/Process.Unix.cs#L428">https://github.com/dotnet/corefx/blob/4221edbaa7f73562765b2732d965084a6684b589/src/System.Diagnostics.Process/src/System/Diagnostics/Process.Unix.cs#L428</a>
+<br />
+Что интересно, этот код написан как попало (а не преобразованием грамматика -&gt; парсер
+<br />
+И он не обрабатывает всякие фичи bash (вроде подставноки переменных окружения и обработки одиночных кавычек)
+<br />
+насчет кавычек наверное можно придумать ситуацию где это сработает неожиданно для пользователя (оставляется читателю в качестве упражнения)
+
 </body>
 </html>
