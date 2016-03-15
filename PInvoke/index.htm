@@ -215,5 +215,24 @@ done by linking `libmono’
 <br />
 насчет кавычек наверное можно придумать ситуацию где это сработает неожиданно для пользователя (оставляется читателю в качестве упражнения)
 
+<h2>man execve</h2>
+<a href="http://linux.die.net/man/2/execve">http://linux.die.net/man/2/execve</a>
+<br />
+#include &lt;unistd.h&gt;
+<br />
+int execve(const char *filename, char *const argv[], char *const envp[]); 
+
+
+<h2>AllocNullTerminatedArray</h2>
+<span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">unsafe</span> <span class="pl-k">void</span> <span class="pl-en">AllocNullTerminatedArray</span>(<span class="pl-k">string[]</span> <span class="pl-smi">arr</span>, <span class="pl-k">ref</span> <span class="pl-smi">byte</span>** arrPtr)
+<br />
+<br />
+<a href="https://github.com/terassy/xferoc/blob/3c8519cf21ebe3b3b8930f49240a70ef3c946548/src/Common/src/Interop/Unix/libcoreclr/Interop.ForkAndExecProcess.cs#L41-L70">https://github.com/terassy/xferoc/blob/3c8519cf21ebe3b3b8930f49240a70ef3c946548/src/Common/src/Interop/Unix/libcoreclr/Interop.ForkAndExecProcess.cs#L41-L70</a>
+<br />
+<br />
+Допустим, что память выделяется до форка, потом процесс форкается, а потом освобождать память не надо.
+<br />
+Malloc можно просто обернуть. <font style="color:red">Почему в других местах реализовано по-другому? (и как именно?)</font>
+
 </body>
 </html>
