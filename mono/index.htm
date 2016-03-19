@@ -10,19 +10,12 @@
 <h1>Как собрать mono</h1>
 </td><td style="vertical-align:top;">
 <a href="../index.htm">Разработка на C# под linux</a>
-<br />
-&nbsp;
 </td></tr></table>
 
-Иконка в .svg - <a href="https://github.com/mono/mono/blob/master/mcs/ScalableMonoIcon.svg">https://github.com/mono/mono/blob/master/mcs/ScalableMonoIcon.svg</a>
+<h2>Цели</h2>
+1) <a href="mono-from-repo-directly.htm">собрать mono из git по SHA1</a> (а не через make dist по меткам)
 <br />
-<img src="https://raw.githubusercontent.com/mono/mono/master/mcs/ScalableMonoIcon.svg" alt="ScalableMonoIcon.svg" />
-<br />
-<svg width="200" height="200"
-     xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink">
-  <image x="0" y="0" width="200" height="200" xlink:href="https://raw.githubusercontent.com/mono/mono/master/mcs/ScalableMonoIcon.svg" type="image/svg+xml" />
-</svg>
+2) довести через autoconf tools параметр /p:Configuration:Debug
 
 <h2>Сборка mono</h2>
 
@@ -43,10 +36,25 @@ Submodule 'external/debian-snapshot' (git://<a href="https://github.com/directhe
 Submodule 'external/ikdasm' (git://<a href="https://github.com/mono/ikdasm">github.com/mono/ikdasm</a>.git) registered for path 'external/ikdasm'
 <br />
 Submodule 'external/ikvm' (git://<a href="https://github.com/mono/ikvm-fork">github.com/mono/ikvm-fork</a>.git) registered for path 'external/ikvm'
+<div style="margin-left:1em"><a href="https://github.com/gentoo/dotnet/issues/182">https://github.com/gentoo/dotnet/issues/182</a>
 <br />
+IKVM не собирается, что-то там не так с патчем (вероятно, что билд не работал никогда)
+</div>
 Submodule 'external/referencesource' (git://<a href="https://github.com/mono/referencesource">github.com/mono/referencesource</a>) registered for path 'external/referencesource'
 <br />
 Submodule 'external/rx' (git://<a href="https://github.com/mono/rx">github.com/mono/rx</a>.git) registered for path 'external/rx'
+
+
+<h2>Пакетирование для NuGet</h2>
+Иконка в .svg - <a href="https://github.com/mono/mono/blob/master/mcs/ScalableMonoIcon.svg">https://github.com/mono/mono/blob/master/mcs/ScalableMonoIcon.svg</a>
+<br />
+<img src="https://raw.githubusercontent.com/mono/mono/master/mcs/ScalableMonoIcon.svg" alt="ScalableMonoIcon.svg" />
+<br />
+<svg width="200" height="200"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <image x="0" y="0" width="200" height="200" xlink:href="https://raw.githubusercontent.com/mono/mono/master/mcs/ScalableMonoIcon.svg" type="image/svg+xml" />
+</svg>
 
 </body>
 </html>
