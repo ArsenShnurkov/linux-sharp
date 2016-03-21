@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Опакечивание ikvm</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Опакечивание ikvm</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="http://stackoverflow.com/questions/36139839/how-to-download-an-archive-with-specific-revision-from-cvs-web-interface">http://stackoverflow.com/questions/36139839/how-to-download-an-archive-with-specific-revision-from-cvs-web-interface</a>
+<br />
+<br />
+
+
+Официальный сайт - <a href="http://www.ikvm.net/">http://www.ikvm.net/</a>
+<br />
+Репозиторий - <a href="https://sourceforge.net/projects/ikvm/">https://sourceforge.net/projects/ikvm/</a> (Исходные тексты ikvm находятся на сервисе sourceforge)
+<br />
+в репозитории CVS, вот web-интерфейс к репозиторию - <a href="http://ikvm.cvs.sourceforge.net/viewvc/ikvm/">http://ikvm.cvs.sourceforge.net/viewvc/ikvm/</a> (web-based CVS repository viewer)
+<br />
+<br />
+стабильные пакеты gentoo делаются для сборки исходников программы некой фиксированной версии
+<br />
+<br />
+Формирование архива исходников программы из репозитория обеспечивает 
+<br />
+программная компонента VCView 1.1.6 (<a href="http://viewvc.tigris.org/">Powered by ViewVC 1.1.6</a>, released 2012-10-24)
+<br />
+<br />
+Неясно, выдаёт эта компонента архив только для последней версии исходников или ей можно указать какую ревизию нужно использовать,
+а если можно указать, то как это делать.
+<br />
+<br />
+<br />
+Можно найти исходные тексты VCView и посмотреть как формируется архив, предусмотрено ли там задание ревизии
+<br />
+<br />
+Можно найти документацию на VCView, чтобы не анализировать код
+<br />
+Это она - <a href="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/docs/url-reference.html">http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/docs/url-reference.html</a>
+<br />
+Можно установить VCView в виртуальную машину и провести эксперимент по выборке двух разных ревизий (чтобы наверняка быть уверенным, что фича может работать)
+<br />
+Можно проверить работоспособность фичи на sourceforge
+<br />
+<br />
+Выяснение факта возможности сборки по ревизии позволит выяснить, возможна ли сборка ikvm 
+из исходного репозитория gentoo-методом без предварительной сборки архива в отдельном месте
+<br />
+<br />
+это позволит собрать ikvm 8.1 (последнюю актуальную версию)
+написать туториал и начать пользоваться hsqsldb, git-клиентом, возможно mondrian
+<br />
+<br />
+Изучение VCView не вдохновляет, так как возможен (абстрактно-теоретически, не было деклараций) переход ikvm на git-хостинг
+<br />
+Версия ikvm есть и на github, но там она 7.4 - <a href="https://github.com/gluck/ikvm">https://github.com/gluck/ikvm</a>,
+<br />
+в то время как последняя - 8.1
+<br />
+<br />
+Есть ли смысл изучать VCView, если за это время можно изучить что-нибудь другое, более перспективное?
+
+<h2>Почитать документацию на ViewVC</h2>
+<table>
+  <tr>
+    <td id="pathrev-param"><code>pathrev</code></td>
+    <td>The current sticky revision (Subversion) or sticky tag (CVS),
+        as described in the <code>help_rootview.html</code> ViewVC
+        help page. In Subversion, because path information is revision
+        controlled, this value is also used to look up paths in the
+        repository, providing a means of accessing paths that no
+        longer exist in HEAD.</td>
+  </tr>
+</table>
+
+
+<a href="http://ikvm.cvs.sourceforge.net/viewvc/ikvm/?view=tar&pathrev=HEAD">http://ikvm.cvs.sourceforge.net/viewvc/ikvm/?view=tar&pathrev=HEAD</a>
+<br />
+Что если нужна ревизия с определённым номером, а не HEAD?
+<br />
+Как определить нужный номер?
+<br />
+Список ревизий - <a href="http://ikvm.cvs.sourceforge.net/viewvc/ikvm/ikvm/japi/japi-status.build?view=log&pathrev=HEAD">http://ikvm.cvs.sourceforge.net/viewvc/ikvm/ikvm/japi/japi-status.build?view=log&pathrev=HEAD</a>
+<br />
+<a href="http://ikvm.cvs.sourceforge.net/viewvc/ikvm/?view=tar&pathrev=HEAD&revision=1.16">http://ikvm.cvs.sourceforge.net/viewvc/ikvm/?view=tar&pathrev=HEAD&revision=1.16</a>
+
+<br />
+<br />
+Пролема в том, что
+
+<h2>исходные тексты ViewVC</h2>
+Исходные тексты лежат на <a href="http://viewvc.tigris.org/svn/viewvc/trunk/">http://viewvc.tigris.org/svn/viewvc/trunk/</a>, login: guest, password - пустой
+<br />
+под управлением Subversion 1.6.0 (r36650). Subversion = svn, для неё пока не надо искать, как вытаскивать архив по ревизии,
+<br />
+нужная ревизия доступна для просмотра через web по тегу - <a href="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/">http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/</a>
+<br />
+svn checkout &lt;url-to-repostitory&gt;
+<br />
+svn checkout http://viewvc.tigris.org/svn/viewvc
+
+<h2><img height="50em;" src="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/notes/logo/viewvc-logo.svg" alt="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/notes/logo/viewvc-logo.svg" /> - как работает?</h2>
+<a href="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/bin/cgi/viewvc.cgi">http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/bin/cgi/viewvc.cgi</a>
+<br />
+<br />
+Apache передаёт URI с именем /viewvc/* в python-скрипт:
+<br />
+как настравивать Apache написано в файле - <a href="http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/INSTALL">http://viewvc.tigris.org/svn/viewvc/tags/1.1.16/INSTALL</a>
+<br />
+<br />
+скрипт вызывает какой-то другой код (про который в документации написано, что он просто отображает директории)
+<br />
+и там же написано, что используется зависимость
+<br />
+<a href="http://www.gnu.org/software/rcs/rcs.html">RCS</a> (=Revision Control System) - <a href="http://www.cs.purdue.edu/homes/trinkle/RCS/">http://www.cs.purdue.edu/homes/trinkle/RCS/</a>
+<br />
+В общем, можно достать из .cvs-репозитория в директорию определённую ревизию - <a href="http://www.gnu.org/software/rcs/manual/rcs.html#co">http://www.gnu.org/software/rcs/manual/rcs.html#co</a>
+<br />
+неясно только, используется ли это во viewvc или нет.
+
+<h2>как скачать исходники ikvm</h2>
+про скачивание cvs-репозитория написано <a href="http://savannah.gnu.org/cvs/?group=url">тут</a>
+<br />
+cvs -z3 -d:pserver:guest@viewvc.tigris.org:/svn/viewvc co &lt;module&gt;
+
+</body>
+</html>
