@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>не хватает файла ChangeLog в extras/database</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>не хватает файла ChangeLog в extras/database</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+по этому поводу есть бага:
+<br />
+<a href="https://bugzilla.xamarin.com/show_bug.cgi?id=40773">https://bugzilla.xamarin.com/show_bug.cgi?id=40773</a>
+<br />
+
+<pre><xmp>
+# ./configure
+
+Configuring package: main
+-------------------------
+Configuration options: 
+Running aclocal  ...
+aclocal-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Running automake --foreign  ...
+automake-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+automake-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Running autoconf ...
+Running ./configure --enable-maintainer-mode --enable-compile-warnings --with-macarch=i386 --prefix=/usr/local ...
+configure: WARNING: unrecognized options: --enable-compile-warnings
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether UID '0' is supported by ustar format... yes
+checking whether GID '0' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking for mono... /usr/bin/mono
+checking for mcs... /usr/bin/mcs
+checking for fsharpc... /usr/local/bin/fsharpc
+checking for pkg-config... /usr/bin/pkg-config
+checking for update-mime-database... /usr/bin/update-mime-database
+checking for msgfmt... /usr/bin/msgfmt
+checking for msgmerge... /usr/bin/msgmerge
+checking pkg-config is at least version 0.9.0... yes
+checking for UNMANAGED_DEPENDENCIES_MONO... yes
+checking for mono... /usr/bin/mono
+checking for dmcs... /usr/bin/dmcs
+checking for GLIB_SHARP... yes
+checking for GTK_SHARP... yes
+checking for GLADE_SHARP... yes
+checking for MONODOC... yes
+checking for GNOME_SHARP... yes
+checking for GNOME_VFS_SHARP... yes
+checking for GCONF_SHARP... yes
+checking for cmake... /usr/bin/cmake
+checking for LIBSSH2... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating build/Makefile
+config.status: creating build/MacOSX/Makefile
+config.status: creating contrib/Makefile
+config.status: creating contrib/ICSharpCode.Decompiler/Makefile
+config.status: creating external/Makefile
+config.status: creating src/Makefile
+config.status: creating src/core/Makefile
+config.status: creating src/core/Mono.Texteditor/Makefile
+config.status: creating src/core/MonoDevelop.Core/Makefile
+config.status: creating src/core/MonoDevelop.Projects.Formats.MSBuild/Makefile
+config.status: creating src/core/MonoDevelop.Ide/Makefile
+config.status: creating src/core/MonoDevelop.Startup/Makefile
+config.status: creating src/core/MonoDevelop.TextEditor.Tests/Makefile
+config.status: creating src/tools/Makefile
+config.status: creating src/tools/mdhost/Makefile
+config.status: creating src/tools/mdtool/Makefile
+config.status: creating src/tools/mdmonitor/Makefile
+config.status: creating src/addins/Makefile
+config.status: creating src/addins/MonoDeveloperExtensions/Makefile
+config.status: creating src/addins/MonoDeveloperExtensions/NUnit/Makefile
+config.status: creating src/addins/MonoDevelop.UnitTesting/Makefile
+config.status: creating src/addins/MonoDevelop.UnitTesting.NUnit/Makefile
+config.status: creating src/addins/MonoDevelop.UnitTesting.NUnit/NUnitRunner/Makefile
+config.status: creating src/addins/MonoDevelop.UnitTesting.NUnit/NUnit3Runner/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl.Subversion/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl.Subversion.Unix/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl.Subversion.Tests/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl.Git/Makefile
+config.status: creating src/addins/VersionControl/MonoDevelop.VersionControl.Git.Tests/Makefile
+config.status: creating src/addins/VersionControl/Makefile
+config.status: creating src/addins/CSharpBinding/Makefile
+config.status: creating src/addins/CSharpBinding/Autotools/Makefile
+config.status: creating src/addins/CSharpBinding/AspNet/Makefile
+config.status: creating src/addins/ILAsmBinding/Makefile
+config.status: creating src/addins/VBNetBinding/Makefile
+config.status: creating src/addins/ChangeLogAddIn/Makefile
+config.status: creating src/addins/MonoDevelop.GtkCore/Makefile
+config.status: creating src/addins/MonoDevelop.GtkCore/libstetic/Makefile
+config.status: creating src/addins/MonoDevelop.GtkCore/libsteticui/Makefile
+config.status: creating src/addins/TextTemplating/Makefile
+config.status: creating src/addins/TextTemplating/Mono.TextTemplating/Makefile
+config.status: creating src/addins/TextTemplating/TextTransform/Makefile
+config.status: creating src/addins/TextTemplating/MonoDevelop.TextTemplating/Makefile
+config.status: creating src/addins/TextTemplating/Mono.TextTemplating.Tests/Makefile
+config.status: creating src/addins/AspNet/Makefile
+config.status: creating src/addins/MonoDevelop.Autotools/Makefile
+config.status: creating src/addins/MonoDevelop.DesignerSupport/Makefile
+config.status: creating src/addins/MonoDevelop.WebReferences/Makefile
+config.status: creating src/addins/Deployment/Makefile
+config.status: creating src/addins/Deployment/MonoDevelop.Deployment/Makefile
+config.status: creating src/addins/Deployment/MonoDevelop.Deployment.Linux/Makefile
+config.status: creating src/addins/MonoDevelop.Gettext/Makefile
+config.status: creating src/addins/MonoDevelop.RegexToolkit/Makefile
+config.status: creating src/addins/GnomePlatform/Makefile
+config.status: creating src/addins/MacPlatform/Makefile
+config.status: creating src/addins/WindowsPlatform/Makefile
+config.status: creating src/addins/WindowsPlatform/WindowsAPICodePack/Makefile
+config.status: creating src/addins/WindowsPlatform/WindowsAPICodePack/Core/Makefile
+config.status: creating src/addins/WindowsPlatform/WindowsAPICodePack/Shell/Makefile
+config.status: creating src/addins/WindowsPlatform/WindowsPlatform/Makefile
+config.status: creating src/addins/MonoDevelop.AssemblyBrowser/Makefile
+config.status: creating src/addins/MonoDevelop.SourceEditor2/Makefile
+config.status: creating src/addins/Xml/Makefile
+config.status: creating src/addins/MonoDevelop.Refactoring/Makefile
+config.status: creating src/addins/MonoDevelop.Debugger/Makefile
+config.status: creating src/addins/MonoDevelop.Debugger.Gdb/Makefile
+config.status: creating src/addins/MonoDevelop.Debugger.Soft/Makefile
+config.status: creating src/addins/MonoDevelop.Debugger.Soft/MonoDevelop.Debugger.Soft/Makefile
+config.status: creating src/addins/MonoDevelop.Debugger.Soft/MonoDevelop.Debugger.Soft.AspNet/Makefile
+config.status: creating src/addins/MonoDevelop.HexEditor/Makefile
+config.status: creating src/addins/MonoDevelop.DocFood/Makefile
+config.status: creating src/addins/MonoDevelop.PackageManagement/Makefile
+config.status: creating src/addins/MonoDevelop.PackageManagement/MonoDevelop.PackageManagement.Tests/Makefile
+config.status: creating tests/Makefile
+config.status: creating tests/UnitTests/Makefile
+config.status: creating tests/UserInterfaceTests/Makefile
+config.status: creating tests/TestRunner/Makefile
+config.status: creating tests/Ide.Tests/Makefile
+config.status: creating tests/MacPlatform.Tests/Makefile
+config.status: creating tests/MonoDevelop.CSharpBinding.Tests/Makefile
+config.status: creating Makefile
+config.status: creating monodevelop
+config.status: creating mdtool
+config.status: creating monodevelop.pc
+config.status: creating monodevelop-core-addins.pc
+config.status: creating monodevelop-core-mac-addins.pc
+config.status: creating monodevelop.spec
+config.status: creating po/Makefile
+config.status: creating man/Makefile
+config.status: creating theme-icons/Makefile
+configure: WARNING: unrecognized options: --enable-compile-warnings
+
+Configuration summary
+
+   * Installation prefix = /usr/local
+   * Version = 6.1
+   * Version Label = 6.1
+   * Compat Version = 6.0
+   * C# compiler = /usr/bin/dmcs
+   * Mono class library development extensions: yes
+   * Version control providers:
+   *     Subversion (Unix): yes
+   *     Git: yes
+   * Platform bindings: GNOME 
+   * Unit tests: no
+   * Release builds: yes
+
+Now type `make' to compile MonoDevelop
+Configuring package: extras/MonoDevelop.Database
+------------------------------------------------
+Configuration options: 
+Running aclocal  ...
+aclocal-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Running automake --gnu  ...
+automake-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Makefile.am:29: warning: shell if test -d /usr/lib64; then echo ":/usr/lib64/pkgconfig/:/usr/local/lib64/pkgconfig/"; fi: non-POSIX variable name
+Makefile.am:29: (probably a GNU make extension)
+Makefile.am: error: required file './ChangeLog' not found
+automake-1.15: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.CodeGenerator/Makefile.am:43:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.CodeGenerator/Makefile.am:43:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.CodeGenerator/Makefile.am:43:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Components/Makefile.am:96:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Components/Makefile.am:96:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Components/Makefile.am:96:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.ConnectionManager/Makefile.am:68:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.ConnectionManager/Makefile.am:68:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.ConnectionManager/Makefile.am:68:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Designer/Makefile.am:63:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Designer/Makefile.am:63:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Designer/Makefile.am:63:   'Makefile.include' included from here
+MonoDevelop.Database.Query/Makefile.am:56: warning: addprefix $(ADDIN_BUILD: non-POSIX variable name
+MonoDevelop.Database.Query/Makefile.am:56: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:64: warning: subst $(ADDIN_BUILD: non-POSIX variable name
+MonoDevelop.Database.Query/Makefile.am:64: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:65: warning: dir $@: non-POSIX variable name
+MonoDevelop.Database.Query/Makefile.am:65: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:66: warning: subst $(ADDIN_BUILD: non-POSIX variable name
+MonoDevelop.Database.Query/Makefile.am:66: (probably a GNU make extension)
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:78:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:78:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Query/Makefile.am:78:   'Makefile.include' included from here
+MonoDevelop.Database.Sql.MySql/Makefile.am:45: warning: addprefix $(top_srcdir: non-POSIX variable name
+MonoDevelop.Database.Sql.MySql/Makefile.am:45: (probably a GNU make extension)
+MonoDevelop.Database.Sql.MySql/Makefile.am:46: warning: addprefix $(ADDIN_BUILD: non-POSIX variable name
+MonoDevelop.Database.Sql.MySql/Makefile.am:46: (probably a GNU make extension)
+MonoDevelop.Database.Sql.MySql/Makefile.am:46: warning: notdir $(MYSQL_FILES: non-POSIX variable name
+MonoDevelop.Database.Sql.MySql/Makefile.am:46: (probably a GNU make extension)
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Sql.MySql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Sql.MySql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Sql.MySql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Npgsql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Npgsql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Npgsql/Makefile.am:65:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Sql.SqlServer/Makefile.am:61:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Sql.SqlServer/Makefile.am:61:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Sql.SqlServer/Makefile.am:61:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Sqlite/Makefile.am:52:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Sqlite/Makefile.am:52:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Sql.Sqlite/Makefile.am:52:   'Makefile.include' included from here
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+MonoDevelop.Database.Sql/Makefile.am:175:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+MonoDevelop.Database.Sql/Makefile.am:175:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+MonoDevelop.Database.Sql/Makefile.am:175:   'Makefile.include' included from here
+po/Makefile.am:30: warning: patsubst %.po,$(BUILD_DIR: non-POSIX variable name
+po/Makefile.am:30: (probably a GNU make extension)
+po/Makefile.am:31: warning: foreach po,$(FILES: non-POSIX variable name
+po/Makefile.am:31: (probably a GNU make extension)
+po/Makefile.am:31: warning: basename $(po: non-POSIX variable name
+po/Makefile.am:31: (probably a GNU make extension)
+po/Makefile.am:45: warning: dir $@: non-POSIX variable name
+po/Makefile.am:45: (probably a GNU make extension)
+po/Makefile.am:49: warning: dir $@: non-POSIX variable name
+po/Makefile.am:49: (probably a GNU make extension)
+Makefile.include:1: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:1: (probably a GNU make extension)
+po/Makefile.am:60:   'Makefile.include' included from here
+Makefile.include:2: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:2: (probably a GNU make extension)
+po/Makefile.am:60:   'Makefile.include' included from here
+Makefile.include:3: warning: addprefix $(srcdir: non-POSIX variable name
+Makefile.include:3: (probably a GNU make extension)
+po/Makefile.am:60:   'Makefile.include' included from here
+**Error**: automake failed.
+</xmp></pre>
+<br />
+Makefile.am: error: required file './ChangeLog' not found
+<br />
+<br />
+echo &quot;AM_INIT_AUTOMAKE([foreign])&quot; &gt;configure.ac
+<br />
+<br />
+<a href="https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/Initializing-configure.html">https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/Initializing-configure.html</a>
+<br />
+<br />
+stackoverflow says
+<br />
+<a href="http://stackoverflow.com/questions/21773003/error-in-automake">http://stackoverflow.com/questions/21773003/error-in-automake</a>
+<br />
+<br />
+# automake --add-missing
+<br />
+automake-1.15: error: 'configure.ac' is required
+
+</body>
+</html>

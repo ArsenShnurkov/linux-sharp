@@ -16,7 +16,10 @@
 
 <a href="http://stackoverflow.com/questions/36139839/how-to-download-an-archive-with-specific-revision-from-cvs-web-interface">http://stackoverflow.com/questions/36139839/how-to-download-an-archive-with-specific-revision-from-cvs-web-interface</a>
 <br />
+<a href="https://sourceforge.net/p/forge/site-support/12382/">https://sourceforge.net/p/forge/site-support/12382/</a>
 <br />
+<br />
+
 
 
 Официальный сайт - <a href="http://www.ikvm.net/">http://www.ikvm.net/</a>
@@ -125,6 +128,32 @@ Apache передаёт URI с именем /viewvc/* в python-скрипт:
 В общем, можно достать из .cvs-репозитория в директорию определённую ревизию - <a href="http://www.gnu.org/software/rcs/manual/rcs.html#co">http://www.gnu.org/software/rcs/manual/rcs.html#co</a>
 <br />
 неясно только, используется ли это во viewvc или нет.
+
+<pre><xmp>
+<h3>An Exception Has Occurred</h3>
+<h4>Python Traceback</h4>
+<p><pre>Traceback (most recent call last):
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 4337, in main
+    request.run_viewvc()
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 397, in run_viewvc
+    self.view_func(self)
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 3403, in download_tarball
+    generate_tarball(fp, request, [], [])
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 3374, in generate_tarball
+    generate_tarball(out, request, reldir + [file.name], stack, mtime)
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 3374, in generate_tarball
+    generate_tarball(out, request, reldir + [file.name], stack, mtime)
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 3374, in generate_tarball
+    generate_tarball(out, request, reldir + [file.name], stack, mtime)
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/viewvc.py&amp;quot;, line 3292, in generate_tarball
+    request.repos.dirlogs(rep_path, request.pathrev, entries, {})
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/vclib/ccvs/bincvs.py&amp;quot;, line 247, in dirlogs
+    alltags = _get_logs(self, path_parts, entries_to_fetch, rev, subdirs)
+  File &amp;quot;/usr/lib/python2.4/site-packages/viewvc/lib/vclib/ccvs/bincvs.py&amp;quot;, line 1016, in _get_logs
+    raise vclib.Error('Error parsing rlog output. Expected RCS file %s'
+Error: Error parsing rlog output. Expected RCS file /cvsroot-fuse/ikvm/ikvm/classpath/java/lang/Attic/LibraryVMInterfaceImpl.java,v, found /cvsroot-fuse/ikvm/ikvm/classpath/java/lang/Attic/ExceptionHelper.java,v
+</pre></p>
+</xmp></pre>
 
 <h2>как скачать исходники ikvm</h2>
 про скачивание cvs-репозитория написано <a href="http://savannah.gnu.org/cvs/?group=url">тут</a>

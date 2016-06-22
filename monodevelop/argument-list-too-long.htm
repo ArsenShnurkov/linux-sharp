@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Argument list too long</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Argument list too long</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Если выполнить make dist, то может быть выдана ошибка:
+<br />
+make[5]: Entering directory '/var/tmp/tarballs/dotnet/dev-util/monodevelop/main/src/core/MonoDevelop.Ide'
+<br />
+make[5]: execvp: /bin/sh: Argument list too long
+<br />
+Makefile:312: recipe for target 'distdir' failed
+<br />
+make[5]: *** [distdir] Error 127
+<br />
+<br />
+Немного быстрее можно воспроизвести собирая только часть исходного кода
+<br />
+cd /var/tmp/tarballs/dotnet/dev-util/monodevelop/main/src/core/MonoDevelop.Ide
+<br />
+make distdir
+
+<h2>причина ошибки</h2>
+$ find /usr -iname "binfmts.h" | xargs grep MAX_ARG_STRLEN
+<br />
+/usr/src/linux-4.3.0-sabayon/include/uapi/linux/binfmts.h:#define MAX_ARG_STRLEN (PAGE_SIZE * 32)
+<br />
+#define PAGE_SIZE 4096
+<br />
+4096 * 32 = 131072
+<br />
+<br />
+В фрагменте
+<br />
+<pre>distdir: $(DISTFILES)
+        @srcdirstrip=`echo &quot;$(srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+        topsrcdirstrip=`echo &quot;$(top_srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+        list='$^'; \
+          dist_files=`for file in $$list; do echo $$file; done | \
+        ...</pre>
+<br />
+длина DISTFILES = 1363753, превышает лимит даже после дедупликации
+<br />
+<br />
+variable DISTFILES actually contain dupicated icon names.
+<br />
+it is possible to use $^ for deduplication of icon names as in
+<br />
+<a href="http://stackoverflow.com/a/33312941/6017919">http://stackoverflow.com/a/33312941/6017919</a>
+
+<h2>Где исходники?</h2>
+distdir: в файле Makefile.in
+<br />
+<a href="http://stackoverflow.com/questions/37973186/how-autotools-generate-distdir-rule">http://stackoverflow.com/questions/37973186/how-autotools-generate-distdir-rule</a>
+<br />
+во время запуска automake копируется из файла
+<br />
+<a href="http://git.savannah.gnu.org/cgit/automake.git/tree/lib/am/distdir.am#n73">http://git.savannah.gnu.org/cgit/automake.git/tree/lib/am/distdir.am#n73</a>
+<br />
+Строчки с 73 по 290
+
+<h2>Как генерировать файлы</h2>
+внести изменения в Makefile.am
+<br />
+зайти в поддиректорию main, потому что именно там лежит configure.in для Monodevelop
+<br />
+выполнить automake, чтобы сгенерировать Makefile.in-ы
+<br />
+выполнить configure, чтобы сгенерировать Makefile-ы
+<br />
+проверить сборку make dist
+
+<h2>Как работает исходный код</h2>
+why is this parsed via a 'for file in $list ; do echo $file ; done' to pipe the results to sed?  is it just because xargs isn't posix?
+<br />
+hm, xargs is in posix as of 2004 ..
+<br />
+<br />
+
+
+<h2>Как заменить неработающий код</h2>
+можно (я проверял) локально в файле
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/Makefile.am">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/Makefile.am</a>
+<br />
+скопировать код из шаблона, затем поменять на foreach-и
+<br />
+<br />
+можно кстати поискать готовые примеры на github, вдруг кто-нибудь такое уже делал?
+<br />
+во всех файлах makefile.am найти строку distdir и вывести URL где смотреть
+
+<h2>На что заменять</h2>
+<a href="http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments">http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments</a>
+<br />
+<br />
+
+<h2>Как проверять</h2>
+Можно сделать патч только для dev-lang/monodevelop
+<br />
+<br />
+Ну, можно сделать ebuild для automake с патчем для сборки любых пакетов использующих automake
+<br />
+это позволит протестировать патч локально при сборке многих пакетов (потому что autotools используются много где)
+
+<h2>Как отправить патч</h2>
+Нуу, тщательно всё проверив, надо отправить патч на специальный email
+<br />
+<br />
+upstream guide for reporting bugs
+<br />
+<a href="https://www.gnu.org/software/automake/manual/html_node/Reporting-Bugs.html">https://www.gnu.org/software/automake/manual/html_node/Reporting-Bugs.html</a>
+<br />
+bugtracker
+<br />
+<a href="http://debbugs.gnu.org/automake ( redirects to">http://debbugs.gnu.org/automake</a> ( redirects to
+<a href="http://debbugs.gnu.org/cgi/pkgreport.cgi?pkg=automake">http://debbugs.gnu.org/cgi/pkgreport.cgi?pkg=automake</a> )
+
+
+
+</body>
+</html>

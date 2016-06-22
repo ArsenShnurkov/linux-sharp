@@ -15,8 +15,43 @@
 <a href="dependencies.htm">dependencies</a>
 <br />
 <a href="make-dist.htm">как устроен make dist</a>
+<br />
+<a href="http://www.monodevelop.com/developers/building-monodevelop/">http://www.monodevelop.com/developers/building-monodevelop/</a>
 </td></tr></table>
 
+<h2>Создание tarball-а</h2>
+Сначала из ветки репозитория получают тарболл:
+<br />
+<object data="../build1.svg" type="image/svg+xml">image</object>
+<br />
+<br />
+<a href="configure before-make-dist.htm">возможная проблема с make dist</a>
+<br />
+<a href="configure-check-for-fsharpc.htm">возможная проблема с fsharpc</a>
+<br />
+<a href="create-ChangeLog-for-database.htm">не хватает файла ChangeLog в extras/database</a>
+<br />
+<a href="argument-list-too-long.htm">Argument list too long</a>
+<br />
+<br />
+А если выполнить make, то может быть выдана ошибка:
+<br />
+Unable to find version '2.8.2' of package 'NuGet.CommandLine'.
+<br />
+Unable to find version '2.6.4' of package 'NUnit.Runners'.
+
+<h2>Что пишут в <a href="https://github.com/mono/monodevelop/blob/master/README.md">README.md</a></h2>
+git submodule update --init --recursive
+<br />
+./configure --prefix=/path/to/prefix --profile=all
+<br />
+make
+<br />
+make run
+
+
+
+<h2>Названия</h2>
 
 ASP.NET 5 is now called ASP.NET Core 1.0.
 <br />
@@ -100,12 +135,8 @@ SRC_URI=
 <br />
 Надо бы нарисовать картинку - полный список зависимостей, что надо иметь собранным, чтобы не использовать submodules и бинарные пакеты...
 
-<h2>Сборка Monodevelop</h2>
-Сначала из ветки репозитория получают тарболл:
-<br />
-<object data="../build1.svg" type="image/svg+xml">image</object>
-<br />
-<br />
+
+<h2>Сборка</h2>
 <span style="color:red">поискать, на какой машине/сервисе сборки</span>
 <br />
 <br />

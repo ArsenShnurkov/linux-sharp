@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>как считать данные в формате XML из файла в память на C#</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>как считать данные в формате XML из файла в память на C#</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>,
+<br />
+<a href="http://rsdn.ru/forum/dotnet/6433224.all">http://rsdn.ru/forum/dotnet/6433224.all</a>
+</td></tr></table>
+
+<a href="http://stackoverflow.com/questions/1542073/xdocument-or-xmldocument">http://stackoverflow.com/questions/1542073/xdocument-or-xmldocument</a>
+<br />
+I would thoroughly recommend using XDocument aka LINQ to XML. It's much simpler to create documents and process them.
+<br />
+If you're using .NET version 3.0 or lower, you <strong>have</strong> to use XmlDocument aka the classic DOM API. 
+<br />
+<br />
+XmlDocument is great for developers who are familiar with the XML DOM object model. It's been around for a while, and more or less corresponds to a W3C standard. It supports manual navigation as well as XPath node selection.
+<br />
+XDocument powers the LINQ to XML feature in .NET 3.5. It makes heavy use of IEnumerable<> and can be easier to work with in straight C#.
+<br />
+Both document models require you to load the entire document into memory (unlike XmlReader for example).
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/747554/populate-xdocument-from-string">http://stackoverflow.com/questions/747554/populate-xdocument-from-string</a>
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/1879395/how-to-generate-a-stream-from-a-string">http://stackoverflow.com/questions/1879395/how-to-generate-a-stream-from-a-string</a>
+<br />
+<br />
+пространство имён: System.Xml;
+<br />
+Класс XmlDocument
+<br />
+Сборка: System.Xml.dll
+<br />
+<br />
+Метод:
+<br />
+Load(Stream) // Загружает XML-документ из указанного потока.
+<br />
+Load(string) // Загружает XML-документ из указанного URL-адреса.
+<br />
+Load(TextReader) // Загружает XML-документ из указанного TextReader
+<br />
+Load(XmlReader) // Загружает XML-документ из указанного XmlReader.
+<br />
+Метод:
+<br />
+LoadXml(string) // парсит строку с XML-контентом, XmlException
+<br />
+<br />
+var doc = new XmlDocument();
+<br />
+doc.LoadXml(@&quot;&lt;ul&gt;
+<br />
+&nbsp;&nbsp;&lt;li&gt;Coffee&lt;/li&gt;
+<br />
+&nbsp;&nbsp;&lt;li&gt;Tea&lt;/li&gt;
+<br />
+&nbsp;&nbsp;&lt;li&gt;Milk&lt;/li&gt;
+<br />
+&lt;/ul&gt;&quot;);
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/956749/how-can-i-transform-xml-into-a-liststring-or-string">http://stackoverflow.com/questions/956749/how-can-i-transform-xml-into-a-liststring-or-string</a>
+<br />
+<a href="http://stackoverflow.com/questions/10211470/how-can-i-order-a-liststring">http://stackoverflow.com/questions/10211470/how-can-i-order-a-liststring</a>
+<br />
+<a href="http://stackoverflow.com/questions/17043663/how-to-serialize-a-listt-into-xml">http://stackoverflow.com/questions/17043663/how-to-serialize-a-listt-into-xml</a>
+<br />
+<br />
+ 
+
+<pre>
+ /*
+<a href="http://stackoverflow.com/questions/1542073/xdocument-or-xmldocument">http://stackoverflow.com/questions/1542073/xdocument-or-xmldocument</a>
+<a href="http://stackoverflow.com/questions/747554/populate-xdocument-from-string">http://stackoverflow.com/questions/747554/populate-xdocument-from-string</a>
+<a href="http://stackoverflow.com/questions/956749/how-can-i-transform-xml-into-a-liststring-or-string">http://stackoverflow.com/questions/956749/how-can-i-transform-xml-into-a-liststring-or-string</a>
+<a href="http://stackoverflow.com/questions/19102021/how-to-reverse-a-generic-list-without-changing-the-same-list">http://stackoverflow.com/questions/19102021/how-to-reverse-a-generic-list-without-changing-the-same-list</a>
+<a href="http://stackoverflow.com/questions/17043663/how-to-serialize-a-listt-into-xml">http://stackoverflow.com/questions/17043663/how-to-serialize-a-listt-into-xml</a>
+<a href="http://stackoverflow.com/questions/12956454/how-to-replace-elements-in-one-xdocument-with-elements-from-another-xdocument">http://stackoverflow.com/questions/12956454/how-to-replace-elements-in-one-xdocument-with-elements-from-another-xdocument</a>
+<a href="http://stackoverflow.com/questions/268671/best-way-to-convert-ilist-or-ienumerable-to-array">http://stackoverflow.com/questions/268671/best-way-to-convert-ilist-or-ienumerable-to-array</a>
+<a href="http://stackoverflow.com/questions/4533609/how-to-get-xml-as-string-from-xdocument">http://stackoverflow.com/questions/4533609/how-to-get-xml-as-string-from-xdocument</a>
+*/
+
+using System;
+using System.Xml.Linq; // add System.Xml.Linq.dll to references
+using System.Linq;
+
+class MainClass
+{
+	public static void Main (string[] args)
+	{
+		// 
+		var doc = XDocument.Parse(@&quot;&lt;ul&gt;
+				&lt;li&gt;Coffee&lt;/li&gt;
+				&lt;li&gt;Tea&lt;/li&gt;
+				&lt;li&gt;Milk&lt;/li&gt;
+				&lt;/ul&gt;&quot;);
+		var list = doc.Root.Elements(&quot;li&quot;)
+			.Select(element =&gt; element.Value)
+			.ToList();			
+		var reversed_list = list.AsEnumerable().Reverse();
+		XElement xmlElements = new XElement(&quot;ul&quot;, reversed_list.Select(i =&gt; new XElement(&quot;li&quot;, i)));
+		doc.Root.ReplaceWith(xmlElements);
+		System.Console.Write(doc.ToString());
+	}
+}
+</pre>
+
+</body>
+</html>

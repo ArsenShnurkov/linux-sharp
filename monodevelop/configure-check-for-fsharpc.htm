@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>возможная проблема с fsharpc</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>возможная проблема с fsharpc</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+при выполнении ./configure перед make dist 
+<br />
+может быть выдано сообщение:
+<br />
+<a href="https://github.com/mono/monodevelop/blob/a764973f5564265d478b4e44befe498df011b250/main/configure.in#L32">https://github.com/mono/monodevelop/blob/a764973f5564265d478b4e44befe498df011b250/main/configure.in#L32</a>
+<br />
+checking for fsharpc... no
+<br />
+configure: error: Can't find "fsharpc" in your PATH
+<br />
+<br />
+Нужно установить пакет
+<br />
+<a href="https://github.com/gentoo/dotnet/tree/master/dev-lang/fsharp">dev-lang/fsharp</a>
+<br />
+командой emerge fstarp. USE-флагов у него нет, командой equo i он не устанавливается.
+<br />
+<br />
+мне удалось поставить его при помощи configure && make && makeinstall
+<br />
+но не удалось поставить при помощи ebuild-а.
+<br />
+<br />
+допустим, что fsharpc как-то установлен.
+</body>
+</html>
