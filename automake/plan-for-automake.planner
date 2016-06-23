@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<project name="" company="" manager="" phase="" project-start="20160623T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Working" description="A default working day"/>
+      <day-type id="1" name="Nonworking" description="A default non working day"/>
+      <day-type id="2" name="Use base" description="Use day from base calendar"/>
+    </day-types>
+    <calendar id="1" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="&#x412;&#x43E;&#x439;&#x442;&#x438; &#x432; &#x438;&#x441;&#x442;&#x43E;&#x440;&#x438;&#x44E; GNU &#x438;&#x43B;&#x438; Gentoo &#x444;&#x438;&#x43A;&#x441;&#x43E;&#x43C; automake" note="" work="172800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="[-] &#x43E;&#x446;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x432;&#x44B;&#x433;&#x43E;&#x434;&#x44B; &#x43E;&#x442; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x434;&#x435;&#x43D;&#x438;&#x44F; &#x440;&#x430;&#x431;&#x43E;&#x442; (&#x434;&#x43E;&#x445;&#x43E;&#x434;&#x44B;) &#x438; &#x430;&#x43B;&#x44C;&#x442;&#x435;&#x440;&#x43D;&#x430;&#x442;&#x438;&#x432;&#x44B;" note="&#x432;&#x44B;&#x43F;&#x438;&#x441;&#x430;&#x442;&#x44C; &#x43C;&#x43E;&#x442;&#x438;&#x432;&#x430;&#x446;&#x438;&#x43E;&#x43D;&#x43D;&#x443;&#x44E; &#x447;&#x430;&#x441;&#x442;&#x44C;, &#x44D;&#x442;&#x43E; &#x43A;&#x430;&#x43A; &#x431;&#x438;&#x437;&#x43D;&#x435;&#x441;-&#x43F;&#x43B;&#x430;&#x43D;.&#10;&#x415;&#x441;&#x43B;&#x438; &#x44F; &#x438;&#x43D;&#x432;&#x435;&#x441;&#x442;&#x438;&#x440;&#x443;&#x44E; &#x432;&#x440;&#x435;&#x43C;&#x44F; &#x432; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;, &#x442;&#x43E; &#x43A;&#x430;&#x43A; &#x44F; &#x43F;&#x43B;&#x430;&#x43D;&#x438;&#x440;&#x443;&#x44E; &#x44D;&#x442;&#x438; &#x438;&#x43D;&#x432;&#x435;&#x441;&#x442;&#x438;&#x446;&#x438;&#x438; &#x432;&#x435;&#x440;&#x43D;&#x443;&#x442;&#x44C;?" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="3" name="[*] &#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43F;&#x43B;&#x430;&#x43D; &#x440;&#x430;&#x431;&#x43E;&#x442; (&#x440;&#x430;&#x441;&#x445;&#x43E;&#x434;&#x44B;)" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="4" name="[+] &#x440;&#x430;&#x437;&#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;&#x442;&#x44C; &#x444;&#x438;&#x43A;&#x441;" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="5" name="[*] &#x43E;&#x431;&#x435;&#x441;&#x43F;&#x435;&#x447;&#x438;&#x442;&#x44C; &#x43F;&#x440;&#x438;&#x451;&#x43C; &#x444;&#x438;&#x43A;&#x441;&#x430; &#x430;&#x43F;&#x441;&#x442;&#x440;&#x438;&#x43C;&#x430;&#x43C;&#x438;" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="6" name="[-] &#x43E;&#x440;&#x433;&#x430;&#x43D;&#x438;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x44C; &#x432;&#x43D;&#x435;&#x434;&#x440;&#x435;&#x43D;&#x438;&#x435; &#x444;&#x438;&#x43A;&#x441;&#x430;" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="7" name="[-] &#x43F;&#x43E;&#x434;&#x433;&#x43E;&#x442;&#x43E;&#x432;&#x438;&#x442;&#x44C; &#x43E;&#x442;&#x447;&#x451;&#x442; &#x43E; &#x43F;&#x440;&#x43E;&#x435;&#x43A;&#x442;&#x435; &#x438; &#x435;&#x433;&#x43E; &#x44D;&#x444;&#x444;&#x435;&#x43A;&#x442;&#x438;&#x432;&#x43D;&#x43E;&#x441;&#x442;&#x438;" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="8" name="&#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x438; &#x43E;&#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x43E;&#x432;&#x430;&#x442;&#x44C; &#x43F;&#x43B;&#x430;&#x43D; &#x440;&#x430;&#x431;&#x43E;&#x442;" note="" work="39600" duration="39600" start="20160623T000000Z" end="20160624T110000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="9" name="&#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x434;&#x43B;&#x44F; &#x444;&#x438;&#x43A;&#x441;&#x430; &#x431;&#x430;&#x433;&#x438; automake" note="&#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442; - &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442;,&#10;&#x43E;&#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x43E;&#x432;&#x430;&#x43D;&#x43D;&#x44B;&#x439; &#x43D;&#x430; web &#x432; &#x432;&#x438;&#x434;&#x435; HTML&#10;&#10;&#x43F;&#x43E;&#x431;&#x43E;&#x447;&#x43D;&#x44B;&#x439; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442; - &#10;&#x442;&#x435;&#x445;&#x43D;&#x43E;&#x43B;&#x43E;&#x433;&#x438;&#x44F; &#x43F;&#x440;&#x435;&#x43E;&#x431;&#x440;&#x430;&#x437;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F; &#10;&#x444;&#x430;&#x439;&#x43B;&#x430; planner &#x432; web-&#x441;&#x442;&#x440;&#x430;&#x43D;&#x438;&#x446;&#x443;&#10;(&#x43C;&#x43E;&#x436;&#x435;&#x442; &#x435;&#x441;&#x442;&#x44C; &#x444;&#x443;&#x43D;&#x43A;&#x446;&#x438;&#x44F; &#x44D;&#x43A;&#x441;&#x43F;&#x43E;&#x440;&#x442;&#x430; &#x432; &#x441;&#x430;&#x43C;&#x43E;&#x43C; planner?&#10;&#x434;&#x430;, &#x435;&#x441;&#x442;&#x44C;)" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="42" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="10" name="&#x437;&#x430;&#x43A;&#x43E;&#x43C;&#x43C;&#x438;&#x442;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x432; gh-pages" note="&#x434;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x432; &#x432;&#x438;&#x434;&#x435; xml &#x447;&#x442;&#x43E;&#x431;&#x44B; &#x432;&#x438;&#x434;&#x435;&#x442;&#x44C; &#x43A;&#x430;&#x43A; &#x444;&#x430;&#x439;&#x43B; &#x434;&#x43E;&#x440;&#x430;&#x431;&#x430;&#x442;&#x44B;&#x432;&#x430;&#x435;&#x442;&#x441;&#x44F;&#10;&#x434;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x432; &#x432;&#x438;&#x434;&#x435; html, &#x447;&#x442;&#x43E;&#x431;&#x44B; &#x441;&#x441;&#x44B;&#x43B;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x441; web &#x43D;&#x430; &#x43F;&#x443;&#x43D;&#x43A;&#x442;&#x44B;&#10;" work="3600" duration="3600" start="20160623T170000Z" end="20160624T090000Z" work-start="20160624T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="9" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="11" name="[&#x410;] &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x432; &#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442;&#x435; XML" note="&#x421;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x434;&#x43E;&#x43B;&#x436;&#x435;&#x43D;:&#10;1) &#x431;&#x44B;&#x442;&#x44C; &#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x43B;&#x435;&#x43D; &#x432; XML&#10;(&#x43F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x430; planner 0.14.6 &#x43A;&#x430;&#x43A; &#x440;&#x430;&#x437; &#x445;&#x440;&#x430;&#x43D;&#x438;&#x442; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x432; &#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442;&#x435; XML)&#10;2) &#x431;&#x44B;&#x442;&#x44C; &#x434;&#x43E;&#x431;&#x430;&#x432;&#x43B;&#x435;&#x43D; &#x432; gh-pages" work="0" duration="0" start="20160624T090000Z" end="20160624T090000Z" work-start="20160624T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="10" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="12" name="&#x44D;&#x43A;&#x441;&#x43F;&#x43E;&#x440;&#x442;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x442;&#x430;&#x441;&#x43A;&#x43E;&#x432; &#x432; HTML" note="" work="3600" duration="3600" start="20160624T090000Z" end="20160624T100000Z" work-start="20160624T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="11" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="13" name="&#x437;&#x430;&#x43A;&#x43E;&#x43C;&#x43C;&#x438;&#x442;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x442;&#x430;&#x441;&#x43A;&#x43E;&#x432; &#x432; gh-pages" note="" work="3600" duration="3600" start="20160624T100000Z" end="20160624T110000Z" work-start="20160624T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="12" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="14" name="[&#x410;] &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x442;&#x430;&#x441;&#x43A;&#x43E;&#x432; &#x432; HTML" note="" work="0" duration="0" start="20160624T110000Z" end="20160624T110000Z" work-start="20160624T110000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="13" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="15" name="&#x443;&#x43B;&#x443;&#x447;&#x448;&#x438;&#x442;&#x44C; &#x434;&#x43E;&#x43A;&#x443;&#x43C;&#x435;&#x43D;&#x442;&#x430;&#x446;&#x438;&#x44E; &#x43F;&#x43E; &#x431;&#x430;&#x433;&#x435;" note="" work="72000" duration="43200" start="20160623T000000Z" end="20160624T120000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="16" name="&#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x438;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x44E; &#x43F;&#x43E; &#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x430;&#x446;&#x438;&#x438; &#x43D;&#x430; apphb.com" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="17" name="&#x437;&#x430;&#x43A;&#x43E;&#x43C;&#x43C;&#x438;&#x442;&#x438;&#x442;&#x44C; &#x438;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x44E; &#x432; gh-pages" note="" work="3600" duration="3600" start="20160623T170000Z" end="20160624T090000Z" work-start="20160624T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="16" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="18" name="[&#x410;] &#x438;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x44F; &#x43F;&#x43E; &#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x430;&#x446;&#x438;&#x438; &#x43D;&#x430; apphb.com &#x432; HTML" note="" work="0" duration="0" start="20160624T090000Z" end="20160624T090000Z" work-start="20160624T090000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="17" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="19" name="&#x440;&#x430;&#x437;&#x43E;&#x431;&#x440;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x43A;&#x430;&#x43A; github &#x43F;&#x43E;&#x434;&#x441;&#x432;&#x435;&#x447;&#x438;&#x432;&#x430;&#x435;&#x442; &#x43D;&#x435;&#x441;&#x43A;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x441;&#x442;&#x440;&#x43E;&#x43A;" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="20" name="&#x43E;&#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x43E;&#x432;&#x430;&#x442;&#x44C; Makefile &#x43E;&#x442; monodevelop &#x43D;&#x430; apphb.com" note="&#x44D;&#x442;&#x43E; &#x43D;&#x443;&#x436;&#x43D;&#x43E;, &#x447;&#x442;&#x43E;&#x431;&#x44B; &#x441;&#x43E;&#x441;&#x43B;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x43D;&#x430; &#x43E;&#x434;&#x43D;&#x443; &#x441;&#x442;&#x440;&#x43E;&#x43A;&#x443; &#x438;&#x43B;&#x438; &#x43D;&#x430; &#x434;&#x438;&#x430;&#x43F;&#x430;&#x437;&#x43E;&#x43D; &#x441;&#x442;&#x440;&#x43E;&#x43A; &#x438;&#x437; &#x437;&#x430;&#x43F;&#x438;&#x441;&#x438; &#x432; &#x431;&#x43B;&#x43E;&#x433;&#x435; &#x441; github.io" work="7200" duration="7200" start="20160624T090000Z" end="20160624T110000Z" work-start="20160624T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="18" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="21" name="&#x434;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x441;&#x44B;&#x43B;&#x43A;&#x443; &#x438;&#x437; gh-pages &#x43D;&#x430; &#x441;&#x442;&#x440;&#x43E;&#x447;&#x43A;&#x438; makefile" note="" work="3600" duration="3600" start="20160624T110000Z" end="20160624T120000Z" work-start="20160624T110000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="20" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="22" name="&#x432;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x44C; &#x442;&#x435;&#x441;&#x442; &#x43F;&#x43E; &#x437;&#x430;&#x43C;&#x435;&#x43D;&#x435; &#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x430; distdir" note="" work="104400" duration="64800" start="20160623T000000Z" end="20160627T100000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="23" name="&#x441;&#x434;&#x435;&#x43B;&#x430;&#x442;&#x44C; &#x43A;&#x43E;&#x43F;&#x438;&#x44E; makefile" note="" work="3600" duration="3600" start="20160623T000000Z" end="20160623T090000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="24" name="&#x43D;&#x430;&#x43F;&#x438;&#x441;&#x430;&#x442;&#x44C; &#x440;&#x435;&#x446;&#x435;&#x43D;&#x437;&#x438;&#x44E; &#x43D;&#x430; &#x440;&#x435;&#x430;&#x43B;&#x438;&#x437;&#x430;&#x446;&#x438;&#x44E; &#x440;&#x435;&#x446;&#x435;&#x43F;&#x442;&#x430; distdir" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="25" name="[&#x410;] &#x440;&#x435;&#x446;&#x435;&#x43D;&#x437;&#x438;&#x44F; &#x43D;&#x430; &#x440;&#x435;&#x446;&#x435;&#x43F;&#x442; distdir" note="&#x432; html&#10;&#x432; gh-pages&#10;" work="0" duration="0" start="20160623T170000Z" end="20160623T170000Z" work-start="20160623T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="24" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="26" name="&#x441;&#x43A;&#x43E;&#x43F;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x442;&#x44C; &#x444;&#x440;&#x430;&#x433;&#x43C;&#x435;&#x43D;&#x442; &#x438;&#x437; Automake &#x432; Makefile.am" note="" work="3600" duration="3600" start="20160623T000000Z" end="20160623T090000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="27" name="&#x43D;&#x430;&#x439;&#x442;&#x438; &#x441;&#x441;&#x44B;&#x43B;&#x43A;&#x443; &#x43D;&#x430; &#x438;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x44E; &#x43F;&#x43E; &#x433;&#x435;&#x43D;&#x435;&#x440;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44E; makefile" note="" work="3600" duration="3600" start="20160623T000000Z" end="20160623T090000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="28" name="&#x43F;&#x435;&#x440;&#x435;&#x433;&#x435;&#x43D;&#x435;&#x440;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x442;&#x44C; Makefil&#x435; &#x43F;&#x43E; &#x438;&#x43D;&#x441;&#x442;&#x440;&#x443;&#x43A;&#x446;&#x438;&#x438; &#x438;&#x437; gh-pages" note="" work="3600" duration="3600" start="20160623T090000Z" end="20160623T100000Z" work-start="20160623T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="26" type="FS"/>
+          <predecessor id="1" predecessor-id="27" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="29" name="&#x43F;&#x43E;&#x43B;&#x443;&#x447;&#x438;&#x442;&#x44C; &#x444;&#x430;&#x43A;&#x442; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x43E;&#x441;&#x43F;&#x43E;&#x441;&#x43E;&#x431;&#x43D;&#x43E;&#x441;&#x442;&#x438; &#x441;&#x43A;&#x43E;&#x43F;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x43D;&#x43D;&#x43E;&#x433;&#x43E; &#x444;&#x440;&#x430;&#x433;&#x43C;&#x435;&#x43D;&#x442;&#x430;" note="" work="3600" duration="3600" start="20160623T100000Z" end="20160623T110000Z" work-start="20160623T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="28" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="30" name="&#x441;&#x440;&#x430;&#x432;&#x43D;&#x438;&#x442;&#x44C; &#x43E;&#x440;&#x438;&#x433;&#x438;&#x43D;&#x430;&#x43B;&#x44C;&#x43D;&#x44B;&#x439; &#x438; &#x43D;&#x43E;&#x432;&#x44B;&#x439; Makefile" note="" work="28800" duration="28800" start="20160623T100000Z" end="20160624T100000Z" work-start="20160623T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="28" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="31" name="&#x43D;&#x430;&#x43F;&#x438;&#x441;&#x430;&#x442;&#x44C; &#x43E;&#x442;&#x447;&#x451;&#x442; &#x43F;&#x43E; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x430;&#x43C; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x434;&#x435;&#x43D;&#x438;&#x44F; &#x442;&#x435;&#x441;&#x442;&#x430;" note="" work="28800" duration="28800" start="20160624T100000Z" end="20160627T100000Z" work-start="20160624T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="30" type="FS"/>
+          <predecessor id="1" predecessor-id="29" type="FS"/>
+          <predecessor id="1" predecessor-id="25" type="FS"/>
+          <predecessor id="1" predecessor-id="23" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="32" name="[&#x410;] &#x43E;&#x442;&#x447;&#x451;&#x442; &#x43F;&#x43E; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x430;&#x43C; &#x442;&#x435;&#x441;&#x442;&#x430; &#x437;&#x430;&#x43C;&#x435;&#x43D;&#x44B; &#x440;&#x435;&#x446;&#x435;&#x43F;&#x442;&#x430;" note="&#x415;&#x441;&#x43B;&#x438; &#x442;&#x435;&#x441;&#x442; &#x434;&#x430;&#x43B; &#x43E;&#x442;&#x440;&#x438;&#x446;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x44B;&#x435; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x44B;,&#10;&#x442;&#x43E; &#x43E;&#x442;&#x447;&#x451;&#x442; &#x434;&#x43E;&#x43B;&#x436;&#x435;&#x43D; &#x441;&#x43E;&#x434;&#x435;&#x440;&#x436;&#x430;&#x442;&#x44C; &#x43F;&#x43B;&#x430;&#x43D; &#x440;&#x430;&#x431;&#x43E;&#x442; &#x43F;&#x43E; &#x434;&#x430;&#x43B;&#x44C;&#x43D;&#x435;&#x439;&#x448;&#x435;&#x43C;&#x443;&#10;&#x438;&#x441;&#x441;&#x43B;&#x435;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44E; &#x43F;&#x440;&#x438;&#x447;&#x438;&#x43D; &#x43E;&#x431;&#x440;&#x430;&#x437;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F; &#x43E;&#x442;&#x440;&#x438;&#x446;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x43D;&#x44B;&#x445; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x43E;&#x432;" work="0" duration="0" start="20160627T100000Z" end="20160627T100000Z" work-start="20160627T100000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="31" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="33" name="&#x432;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x44C; &#x442;&#x435;&#x441;&#x442; &#x43F;&#x43E; &#x43F;&#x435;&#x440;&#x435;&#x43D;&#x43E;&#x441;&#x443; foreach &#x438;&#x437; bash &#x432; gmake" note="" work="86400" duration="86400" start="20160623T000000Z" end="20160627T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="34" name="&#x441;&#x43A;&#x43E;&#x43F;&#x438;&#x440;&#x43E;&#x432;&#x430;&#x442;&#x44C; &#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x43E; &#x432; Makefile.am &#x438;&#x437; Makefile" note="" work="28800" duration="28800" start="20160623T000000Z" end="20160623T170000Z" work-start="20160623T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="35" name="&#x43F;&#x435;&#x440;&#x435;&#x43D;&#x435;&#x441;&#x442;&#x438; &#x446;&#x438;&#x43A;&#x43B;" note="" work="28800" duration="28800" start="20160623T170000Z" end="20160624T170000Z" work-start="20160624T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="34" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="36" name="&#x43F;&#x440;&#x43E;&#x433;&#x43D;&#x430;&#x442;&#x44C; &#x43D;&#x43E;&#x432;&#x44B;&#x439; &#x441;&#x43A;&#x440;&#x438;&#x43F;&#x442;" note="" work="28800" duration="28800" start="20160624T170000Z" end="20160627T170000Z" work-start="20160627T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="35" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="37" name="[&#x410;] &#x43E;&#x442;&#x447;&#x451;&#x442; &#x43F;&#x43E; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x430;&#x43C; &#x442;&#x435;&#x441;&#x442;&#x430; &#x43F;&#x435;&#x440;&#x435;&#x43D;&#x43E;&#x441;&#x430; foreach" note="&#x415;&#x441;&#x43B;&#x438; &#x442;&#x435;&#x441;&#x442; &#x43D;&#x435; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;&#x435;&#x442;, &#10;&#x442;&#x43E; &#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43F;&#x43B;&#x430;&#x43D; &#x434;&#x435;&#x439;&#x441;&#x442;&#x432;&#x438;&#x439; &#x43F;&#x43E; &#x434;&#x430;&#x43B;&#x44C;&#x43D;&#x435;&#x439;&#x448;&#x435;&#x43C;&#x443; &#x438;&#x441;&#x441;&#x43B;&#x435;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44E;&#10;(&#x43D;&#x43E; &#x43F;&#x43E; &#x434;&#x43E;&#x43A;&#x443;&#x43C;&#x435;&#x43D;&#x442;&#x430;&#x446;&#x438;&#x438;-&#x442;&#x43E; &#x43E;&#x43D; &#x434;&#x43E;&#x43B;&#x436;&#x435;&#x43D; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;&#x442;&#x44C;)&#10;&#10;&#x432;&#x440;&#x435;&#x43C;&#x44F; &#x43D;&#x430; &#x432;&#x43E;&#x437;&#x43C;&#x43E;&#x436;&#x43D;&#x44B;&#x435; &#x43F;&#x440;&#x43E;&#x431;&#x43B;&#x435;&#x43C;&#x44B; &#x43D;&#x443;&#x436;&#x43D;&#x43E; &#x437;&#x430;&#x43B;&#x43E;&#x436;&#x438;&#x442;&#x44C; &#x432; &#x43F;&#x443;&#x43D;&#x43A;&#x442; &quot;&#x43F;&#x435;&#x440;&#x435;&#x43D;&#x435;&#x441;&#x442;&#x438; &#x446;&#x438;&#x43A;&#x43B;&quot;" work="0" duration="0" start="20160627T170000Z" end="20160627T170000Z" work-start="20160627T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="36" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="38" name="&#x43F;&#x435;&#x440;&#x435;&#x43F;&#x438;&#x441;&#x430;&#x442;&#x44C; recipe &#x434;&#x43B;&#x44F; distdir" note="" work="93600" duration="93600" start="20160627T170000Z" end="20160701T100000Z" work-start="20160628T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="39" name="&#x432;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x438;&#x442;&#x44C; &#x43F;&#x435;&#x440;&#x435;&#x43F;&#x438;&#x441;&#x44B;&#x432;&#x430;&#x43D;&#x438;&#x435;" note="" work="86400" duration="86400" start="20160627T170000Z" end="20160630T170000Z" work-start="20160628T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="37" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="40" name="&#x43F;&#x440;&#x43E;&#x432;&#x435;&#x441;&#x442;&#x438; &#x441;&#x431;&#x43E;&#x440;&#x43A;&#x443; make distdir" note="" work="7200" duration="7200" start="20160630T170000Z" end="20160701T100000Z" work-start="20160701T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="39" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="41" name="[&#x410;] &#x441;&#x43E;&#x441;&#x442;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43E;&#x442;&#x447;&#x451;&#x442;-&#x43E;&#x431;&#x44A;&#x44F;&#x441;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x43F;&#x43E; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x434;&#x451;&#x43D;&#x43D;&#x44B;&#x43C; &#x437;&#x430;&#x43C;&#x435;&#x43D;&#x430;&#x43C;" note="" work="0" duration="0" start="20160701T100000Z" end="20160701T100000Z" work-start="20160701T100000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="40" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="42" name="&#x43E;&#x431;&#x435;&#x441;&#x43F;&#x435;&#x447;&#x438;&#x442;&#x44C; &#x43F;&#x440;&#x438;&#x451;&#x43C; &#x444;&#x438;&#x43A;&#x441;&#x430; &#x430;&#x43F;&#x441;&#x442;&#x440;&#x438;&#x43C;&#x430;&#x43C;&#x438;" note="" work="288000" duration="115200" start="20160701T100000Z" end="20160707T100000Z" work-start="20160701T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="41" type="FS"/>
+      </predecessors>
+      <task id="43" name="gentoo/dotnet" note="" work="86400" duration="86400" start="20160701T100000Z" end="20160706T100000Z" work-start="20160701T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="44" name="Xamarin MonoDevelop" note="" work="86400" duration="86400" start="20160701T100000Z" end="20160706T100000Z" work-start="20160701T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="45" name="GNU automake" note="" work="115200" duration="115200" start="20160701T100000Z" end="20160707T100000Z" work-start="20160701T100000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources/>
+  <allocations/>
+</project>

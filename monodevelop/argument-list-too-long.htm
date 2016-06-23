@@ -11,7 +11,7 @@
 </td><td style="vertical-align:top;">
 <a href="index.htm">Как собирать monodevelop</a>
 <br />
-&nbsp;
+<a href="../automake/plan-for-automake.html">План</a>
 </td></tr></table>
 
 Если выполнить make dist, то может быть выдана ошибка:
@@ -30,6 +30,15 @@ make[5]: *** [distdir] Error 127
 cd /var/tmp/tarballs/dotnet/dev-util/monodevelop/main/src/core/MonoDevelop.Ide
 <br />
 make distdir
+
+
+<h2>Куда зарепорчена</h2>
+В багтрекере дистрибутива: пока нет
+<br />
+в багтрекере monodevelop: <a href="https://bugzilla.xamarin.com/show_bug.cgi?id=39191">https://bugzilla.xamarin.com/show_bug.cgi?id=39191</a>
+<br />
+в багтрекере automake: искал, не нашел
+
 
 <h2>причина ошибки</h2>
 $ find /usr -iname "binfmts.h" | xargs grep MAX_ARG_STRLEN
@@ -100,6 +109,9 @@ hm, xargs is in posix as of 2004 ..
 можно кстати поискать готовые примеры на github, вдруг кто-нибудь такое уже делал?
 <br />
 во всех файлах makefile.am найти строку distdir и вывести URL где смотреть
+<br />
+<br />
+<a href="../automake/plan-for-automake.html">План работ по фиксу баги в automake</a>
 
 <h2>На что заменять</h2>
 <a href="http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments">http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments</a>
