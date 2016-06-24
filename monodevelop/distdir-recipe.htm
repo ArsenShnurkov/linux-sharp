@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Описание рецепта distdir</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Описание рецепта distdir</h1>
+</td><td style="vertical-align:top;">
+<a href="argument-list-too-long.htm">Argument list too long</a>,
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<pre>
+distdir: $(DISTFILES)
+        @srcdirstrip=`echo &quot;$(srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+        topsrcdirstrip=`echo &quot;$(top_srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+        list='$(DISTFILES)'; \
+          dist_files=`for file in $$list; do echo $$file; done | \
+          sed -e &quot;s|^$$srcdirstrip/||;t&quot; \
+              -e &quot;s|^$$topsrcdirstrip/|$(top_builddir)/|;t&quot;`; \
+        case $$dist_files in \
+          */*) $(MKDIR_P) `echo &quot;$$dist_files&quot; | \
+                           sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
+                           sort -u` ;; \
+        esac; \
+        for file in $$dist_files; do \
+          if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+          if test -d $$d/$$file; then \
+            dir=`echo &quot;/$$file&quot; | sed -e 's,/[^/]*$$,,'`; \
+            if test -d &quot;$(distdir)/$$file&quot;; then \
+              find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+            fi; \
+            if test -d $(srcdir)/$$file &amp;&amp; test $$d != $(srcdir); then \
+              cp -fpR $(srcdir)/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
+              find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+            fi; \
+            cp -fpR $$d/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
+          else \
+            test -f &quot;$(distdir)/$$file&quot; \
+            || cp -p $$d/$$file &quot;$(distdir)/$$file&quot; \
+            || exit 1; \
+          fi; \
+        done
+</pre>
+@ перед длинной bash-командой, много строк которой соединены символами \ + конец строки
+<br />
+означает, что не надо распечатывать текст этой команды.
+<br />
+It means "don't echo this command on the output." So this rule is saying "execute the shell command and don't echo the output.
+<br />
+<br />
+srcdir
+<br />
+The distinction between ./ (the build directory) and $(srcdir)/ (the source directory) is important because users can build in a separate directory using the ‘--srcdir’ option to configure.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;это из файла <a href="https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html">https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html</a>
+<br />
+top_srcdir
+<br />
+— Variable: top_srcdir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;The name of the top-level source code directory for the package. In the top-level directory, this is the same as srcdir. 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;цитата из файла <a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/Preset-Output-Variables.html#index-top_005fsrcdir-134">https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/Preset-Output-Variables.html#index-top_005fsrcdir-134</a>
+<br />
+<br />
+Зачем используется команда t в sed?
+<br />
+t label
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;If a s/// has done a successful substitution since the last input line was read and since the last t or T command, then branch to label; if label is omitted, branch to end of script. 
+<br />
+<br />
+nothing changes without that last t that's why their comment in line 150 is wrong
+<br />
+<br />
+sed 's/[].[^$$\\*]/\\\\&/g'
+<br />
+вставляет перед любым из символов ] . [ ^ $ \ * два обратных слеша
+<br />
+в строке sed \\ заменяется на \ самим sed (неясно почему, вероятно из-за потребностей синтаксиса регэкспов sed)
+<br />
+$$ - передаётся в sed как один $ (это фишка gmake)
+<br />
+what this command from  gmake Makefile replaces? sed 's/[].[^$$\\*]/\\\\&/g'
+<br />
+It (likely) inserts "\\" in front of any of the characters: ] . [ ^ $ \ *
+<br />
+# echo 'foo ^ $ bar.[] baz' | sed 's/[].[^$$\\*]/\\\\&/g'
+<br />
+foo \\^ \\$ bar\\.\\[\\] baz
+<br />
+I don't understood, why character set is not closed by first ]
+<br />
+it is a special case, "]" does not terminate class specification if it is the first character
+<br />
+& - denotes the substitution
+<br />
+<br />
+как в bash работает case/esac ?
+<br />
+<a href="http://ss64.com/bash/case.html">http://ss64.com/bash/case.html</a>
+<br />
+<br />
+Зачем он здесь?
+<br />
+the variable $dist_files contain list of files and directories. case checks if it contain at least one directory, and if it does, then mkdir is called
+<br />
+whatever dist_files contains, case treats it as a single string, and runs the $(MKDIR_P) if that string contains at least one / character
+
+<br />
+<br />
+Зачем здесь два цикла for, почему нельзя было обойтись одним общим?
+<br />
+ну, сначала создаются директории, а потом туда копируются файлы
+<br />
+почему нельзя делать в один проход пока непонятно.
+<br />
+<br />
+<br />
+
+эта строчка, похоже, заменяет все файлы (то, что не оканчивается на символ '/') на пустые строки
+<br />
+sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,'
+<br />
+d = Delete pattern space. Start next cycle.
+<br />
+sed '/\//!d' - удалить строки в которых нет /
+<br />
+<br />
+man sort
+<br />
+ -u, --unique
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;with -c, check for strict ordering; without -c, output only the first of an equal run
+<br />
+<br />
+Конструкция if test condition-true является точным эквивалентом конструкции if [ condition-true ], 
+где левая квадратная скобка [ выполняет те же действия, что и команда test. 
+Закрывающая правая квадратная скобка ] не является абсолютно необходимой, однако, более новые версии Bash требуют ее наличие.
+<br />
+Команда test -- это встроенная команда Bash, которая выполняет проверки файлов и производит сравнение строк. 
+Таким образом, в Bash-скриптах, команда test не вызывает внешнюю (/usr/bin/test) утилиту, которая является частью пакета sh-utils. 
+Аналогично, [ не производит вызов утилиты /usr/bin/[, которая является символической ссылкой на /usr/bin/test.
+<br />
+-d FILE
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FILE exists and is a directory
+<br />
+-f FILE
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FILE exists and is a regular file
+
+<br />
+<br />
+|| exit 1;
+<br />
+это хитрая проверка типа || die, мол если команда cp выполнилась с ошибкой, то надо выйти из цикла и завершить работу
+
+
+<h2>как переписать?</h2>
+ну вот вроде бы всё понятно, что здесь происходит за исключением некоторых моментов (например неясно как работает $(MKDIR_P) )
+<br />
+но как теперь это переписать из bash в gmake?
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/7039811/how-do-i-process-extremely-long-lists-of-files-in-a-make-recipe">http://stackoverflow.com/questions/7039811/how-do-i-process-extremely-long-lists-of-files-in-a-make-recipe</a>
+<br />
+попробуем заменить for из bash на $(foreach ...) из gmake
+<br />
+переменную можно держать в памяти длинную, если склеивать её средствами gmake, а не средствами bash.
+<br />
+держать её длинную надо между циклами, потому что так сделать проще, чем объяснить, как будет работать один общий цикл
+<br />
+<br />
+Общая идея такова:
+<br />
+1) взять сразу дедуплицированный список ^@
+<br />
+2) отсортировать его средствами gmake
+<br />
+3) для каждой записи в списке:
+<br />
+3.1) провести замены srcdir и всего такого
+<br />
+3.2) если там есть / то подумать, не надо ли создать директорию
+<br />
+3.3) если директория не такая как предыдущая, то создать её при помощи mkdir -p (сравнение нужно для дедупликации директорий)
+<br />
+3.4) выполнить все прочие проверки и копирования из остатка кода (с ними надо разобраться по-подробнее)
+
+</body>
+</html>
