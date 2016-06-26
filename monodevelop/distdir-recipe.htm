@@ -12,7 +12,7 @@
 <a href="argument-list-too-long.htm">Argument list too long</a>,
 <a href="index.htm">Как собирать monodevelop</a>
 <br />
-&nbsp;
+<a href="test-commad-of-sed.htm">test commad of sed</a>
 </td></tr></table>
 
 <pre>
@@ -79,7 +79,7 @@ t label
 nothing changes without that last t that's why their comment in line 150 is wrong
 <br />
 <br />
-sed 's/[].[^$$\\*]/\\\\&/g'
+sed 's/[].[^$$\\*]/\\\\&amp;/g'
 <br />
 вставляет перед любым из символов ] . [ ^ $ \ * два обратных слеша
 <br />
@@ -87,11 +87,11 @@ sed 's/[].[^$$\\*]/\\\\&/g'
 <br />
 $$ - передаётся в sed как один $ (это фишка gmake)
 <br />
-what this command from  gmake Makefile replaces? sed 's/[].[^$$\\*]/\\\\&/g'
+what this command from  gmake Makefile replaces? sed 's/[].[^$$\\*]/\\\\&amp;/g'
 <br />
 It (likely) inserts "\\" in front of any of the characters: ] . [ ^ $ \ *
 <br />
-# echo 'foo ^ $ bar.[] baz' | sed 's/[].[^$$\\*]/\\\\&/g'
+# echo 'foo ^ $ bar.[] baz' | sed 's/[].[^$$\\*]/\\\\&amp;/g'
 <br />
 foo \\^ \\$ bar\\.\\[\\] baz
 <br />
@@ -99,7 +99,7 @@ I don't understood, why character set is not closed by first ]
 <br />
 it is a special case, "]" does not terminate class specification if it is the first character
 <br />
-& - denotes the substitution
+&amp; - denotes the substitution
 <br />
 <br />
 как в bash работает case/esac ?
@@ -122,15 +122,27 @@ whatever dist_files contains, case treats it as a single string, and runs the $(
 почему нельзя делать в один проход пока непонятно.
 <br />
 <br />
-<br />
-
-эта строчка, похоже, заменяет все файлы (то, что не оканчивается на символ '/') на пустые строки
-<br />
 sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,'
+<br />
+sed '/\//!d' - удалить строки в которых нет /
 <br />
 d = Delete pattern space. Start next cycle.
 <br />
-sed '/\//!d' - удалить строки в которых нет /
+s|^|$(distdir)/|
+<br />
+в каждое начало строки дописывается значение переменной $(distdir)/, которое передано из gmake в bash уже в виде заменённого текста
+<br />
+s,/[^/]*$$,,
+<br />
+эта команда, заменяет имена файлов (то, что не оканчивается на символ '/') на пустые строки, то есть остаются только имена директорий (дублирующиеся от разных файлов)
+<br />
+/path/to/file/filename1
+<br />
+/path/to/file/filename1
+<br />
+здесь заменяется "/filename1" на пустую строку и "/filename2" на пустую строку
+<br />
+и остаётся два имени /path/to/file /path/to/file
 <br />
 <br />
 man sort
@@ -193,6 +205,14 @@ man sort
 3.3) если директория не такая как предыдущая, то создать её при помощи mkdir -p (сравнение нужно для дедупликации директорий)
 <br />
 3.4) выполнить все прочие проверки и копирования из остатка кода (с ними надо разобраться по-подробнее)
+<br />
+<br />
+не надо сортировать повторно после замен srcdir, потому что исходный код тоже этого не делает.
+<br />
+в исходном коде сортировка есть только при создании директорий
+<br />
+<br />
+Проверка на то, с багой sed или без, должна выполняться на стадии configure (хотя вообще сомнительно, что она нужна в наше время)
 
 </body>
 </html>

@@ -14,6 +14,8 @@
 <a href="../automake/plan-for-automake.html">План</a>
 <br />
 <a href="distdir-recipe.htm">Описание рецепта distdir</a>
+<br />
+<a href="deduplication-in-bash.htm">замена uniq -c на if != prev_line</a>
 </td></tr></table>
 
 Если выполнить make dist, то может быть выдана ошибка:
@@ -43,6 +45,9 @@ make distdir
 
 
 <h2>причина ошибки</h2>
+<a href="http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments">http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments</a>
+<br />
+<br />
 $ find /usr -iname "binfmts.h" | xargs grep MAX_ARG_STRLEN
 <br />
 /usr/src/linux-4.3.0-sabayon/include/uapi/linux/binfmts.h:#define MAX_ARG_STRLEN (PAGE_SIZE * 32)
@@ -116,10 +121,9 @@ hm, xargs is in posix as of 2004 ..
 <a href="../automake/plan-for-automake.html">План работ по фиксу баги в automake</a>
 
 <h2>На что заменять</h2>
-<a href="http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments">http://stackoverflow.com/questions/11475221/why-do-i-get-bin-sh-argument-list-too-long-when-passing-quoted-arguments</a>
+$(sort list of words) - сортировка в gmake:
 <br />
-<br />
-
+<a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions</a>
 <h2>Как проверять</h2>
 Можно сделать патч только для dev-lang/monodevelop
 <br />
@@ -141,6 +145,20 @@ bugtracker
 <a href="http://debbugs.gnu.org/automake ( redirects to">http://debbugs.gnu.org/automake</a> ( redirects to
 <a href="http://debbugs.gnu.org/cgi/pkgreport.cgi?pkg=automake">http://debbugs.gnu.org/cgi/pkgreport.cgi?pkg=automake</a> )
 
+
+<h2>Сколько времени займёт фикс?</h2>
+Для того, чтобы это определить, нужно составить список возможных активностей (PERT), найти критический путь (чтобы отбросить второстепенные задачи)
+<br />
+оценить время необходимое для выполнения задач
+<br />
+выписать необходимые для фикса скиллы
+<br />
+<br />
+Список возможных активностей нужно зафиксировать в виде документа
+<br />
+(то есть какую-то версию этого списка на дату),
+<br />
+чтобы иметь возможность ссылаться на какую-то определённую версию.
 
 
 </body>

@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>замена uniq -c на if != prev_line</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>замена uniq -c на if != prev_line</h1>
+</td><td style="vertical-align:top;">
+<a href="argument-list-too-long.htm">Argument list too long</a>,
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+<a href="https://www.gnu.org/software/make/manual/html_node/Call-Function.html">https://www.gnu.org/software/make/manual/html_node/Call-Function.html</a>
+<br />
+<a href="https://www.gnu.org/software/make/manual/html_node/Eval-Function.html">https://www.gnu.org/software/make/manual/html_node/Eval-Function.html</a>
+<br />
+<a href="https://www.gnu.org/software/make/manual/html_node/Foreach-Function.html">https://www.gnu.org/software/make/manual/html_node/Foreach-Function.html</a>
+<br />
+<a href="https://www.gnu.org/software/make/manual/html_node/Using-Variables.html">https://www.gnu.org/software/make/manual/html_node/Using-Variables.html</a>
+<br />
+<br />
+проблема:
+<br />
+мне непонятно, как вписать большую bash команду в foreach-цикл Makefile.
+<br />
+мне это непонятно потому что я не знаю, как gmake обрабатывает makefile-ы.
+<br />
+похоже, что берется строка, в ней обрабатываются макросы gmake, в результате может получиться несколько строк.
+<br />
+затем эти строки передаются в bash (все сразу или по отдельности?
+<br />
+если все сразу, то не влезет по длине...
+<br />
+<br />
+допустим, что по отдельности
+<br />
+(это можно проверить, если завести переменную окружения, выводить и менять её в каждой строке.
+<br />
+Если переменная будет одинаковая, то строки обрабатываются независимо, если разная - то все сразу)
+<br />
+но мне не обязательно это проверять, потому что я всё равно столкнусь с этой проверкой на деле,
+<br />
+если так как общая длина нескольких строк будет превышать лимит
+<br />
+<br />
+<pre>
+DISTFILES := /dir2/dir3/dir4 /dir2 /dir1 /dir1/file1 /dir1/dir2/file2 /dir1/dir2/file3 /dir1/file4
+
+.PHONY: default_target
+
+# EOL definition is taken from http://stackoverflow.com/questions/12528637/how-do-i-execute-each-command-in-a-list
+define EOL
+
+
+endef
+	
+define PROCESS_DISTDIR_FILE_OR_DIRECTORY
+	@srcdirstrip=`echo &quot;$(srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+        topsrcdirstrip=`echo &quot;$(top_srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
+	file = `echo ${1} | sed -e &quot;s|^$$srcdirstrip/||;t&quot; -e &quot;s|^$$topsrcdirstrip/|$(top_builddir)/|;t&quot;`; \
+	if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+	if test -d $$d/$$file; then \
+	dir=`echo &quot;/$$file&quot; | sed -e 's,/[^/]*$$,,'`; \
+	if test -d &quot;$(distdir)/$$file&quot;; then \
+	find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	fi; \
+	if test -d $(srcdir)/$$file &amp;&amp; test $$d != $(srcdir); then \
+	cp -fpR $(srcdir)/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
+	find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	fi; \
+	cp -fpR $$d/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
+	else \
+	test -f &quot;$(distdir)/$$file&quot; \
+	|| cp -p $$d/$$file &quot;$(distdir)/$$file&quot; \
+	|| exit 1; \
+	fi;
+endef
+
+default_target:
+	$(foreach dir_name,$(sort ${DISTFILES}),$(call PROCESS_DISTDIR_FILE_OR_DIRECTORY,${dir_name}))
+</pre>
+
+
+</body>
+</html>

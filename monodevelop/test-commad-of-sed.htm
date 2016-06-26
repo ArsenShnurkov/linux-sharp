@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>test commad of sed</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>test commad of sed</h1>
+</td><td style="vertical-align:top;">
+<a href="distdir-recipe.htm">Описание рецепта distdir</a>,
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Unix powerfull tools
+<br />
+By Jerry Peek, Tim O'Reilly & Mike Loukides; ISBN 1-56592-260-3, 1120 pages.
+<br />
+Second Edition Edition, August 1997.
+<br />
+<br />
+<a href="http://docstore.mik.ua/orelly/unix/upt/ch34_20.htm">http://docstore.mik.ua/orelly/unix/upt/ch34_20.htm</a>
+<br />
+
+The test command, <em class="emphasis">
+t</em>
+, branches to a label (or the end of the script) if a
+successful substitution has been made on the currently
+addressed line.
+It implies a conditional branch.
+Its syntax is as follows:</p>
+<blockquote class="blockquote">
+<p class="para">
+[<code class="replaceable">
+<i>
+address</i>
+</code>
+]<code class="literal">
+t</code>
+[<code class="replaceable">
+<i>
+label</i>
+</code>
+]</p>
+</blockquote>
+<p class="para">
+If no <code class="replaceable">
+<i>
+label</i>
+</code>
+ is supplied, control falls through
+to the end of the script.
+If <code class="replaceable">
+<i>
+label</i>
+</code>
+ is supplied,
+then execution resumes at the line following the label.</p>
+<p class="para">
+Let's look at a spelling corrector written by Greg Ubben.
+The script fixes common (in this example, silly) spelling goofs;
+the <em class="emphasis">
+t</em>
+ command tells about corrections that were made:</p>
+<p class="para">
+</p><blockquote class="screen">
+<pre class="screen">h
+s/seperate/separate/g
+s/compooter/computer/g
+s/said editor/sed editor/g
+s/lable/label/g
+t changed
+b
+: changed
+p
+g
+s/.*/[WAS: &amp;]/
+t</pre>
+</blockquote>
+<p></p>
+<p class="para">
+First,
+<span class="link">
+<code class="literal">
+h</code>
+ </span>
+
+holds a copy of the current input line.
+Then, if any of the four substitutions succeed, the command
+<code class="literal">
+t&nbsp;changed</code>
+ branches to the corresponding label (<code class="literal">
+:&nbsp;changed</code>
+)
+at the end of the script.
+Otherwise, if no <code class="literal">
+s</code>
+ succeeded, the <code class="literal">
+b</code>
+ command restarts the
+script on the next line (as always in <em class="emphasis">
+sed</em>
+, the input line is printed
+before the script re-starts).
+</p>
+<p class="para">
+After the label, the script prints the current input line (the line with
+a spelling error&nbsp;- which, by now, has been corrected).
+Then
+<span class="link">
+<code class="literal">
+g</code>
+</span>
+
+gets the original uncorrected line.
+An <code class="literal">
+s</code>
+ command brackets that line <code class="literal">
+[WAS:&nbsp;</code>
+<code class="replaceable">
+<i>
+xxx</i>
+</code>
+<code class="literal">
+]</code>
+.
+Here's some sample output:</p>
+<p class="para">
+</p><blockquote class="screen">
+<pre class="screen">$ <code class="userinput">
+<b>
+sed -f sedscr afile</b>
+</code>
+
+This is a separate test.
+[WAS: This is a seperate test.]
+I put a label on my computer!
+[WAS: I put a lable on my compooter!]
+That's all for now.</pre>
+</blockquote>
+<p></p>
+<p class="para">
+The final <code class="literal">
+t</code>
+ in the script is a work-around for a bug in some versions
+of <em class="emphasis">
+sed</em>
+.
+Greg says "The <em class="emphasis">
+t</em>
+ flag is supposed to be reset after either the
+<em class="emphasis">
+t</em>
+ command is executed or a new line of input is read, but some versions
+of <em class="emphasis">
+sed</em>
+ don't reset it on a new line of input.
+So I added a do-nothing <code class="literal">
+t</code>
+ to make sure it's reset after the previous
+always-true <code class="literal">
+s///</code>
+."
+Try the script without the extra <code class="literal">
+t</code>
+; if adding it makes the
+script work right, your <em class="emphasis">
+sed</em>
+ has the bug and you might try a new
+version, like GNU <em class="emphasis">
+gsed</em>
+.</p>
+
+</body>
+</html>
