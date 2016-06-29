@@ -84,6 +84,36 @@ default_target:
 	$(foreach dir_name,$(sort ${DISTFILES}),$(call PROCESS_DISTDIR_FILE_OR_DIRECTORY,${dir_name}))
 </pre>
 
+<br />
+<br />
+"since sort removes duplicate words, you can use it for this purpose" - from https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
+<br />
+that completely solves this problem with prev value.
+<br />
+<br />
+<pre>
+#DISTFILES := /file1 /file2 /file1
+
+DISTFILES := $(shell sed ':a;N;$!ba;s/\n/ /g' /usr/share/dict/words)
+
+# EOL definition is taken from http://stackoverflow.com/questions/12528637/how-do-i-execute-each-command-in-a-list
+define EOL
+
+
+endef
+
+.PHONY: default_target
+
+define my_macros
+echo ${1}
+endef
+
+include gmsl
+
+default_target:
+	$(call uniq,1 1 2 2)
+	@$(foreach w,$(call uniq,$(sort $(DISTFILES))),$(call my_macros,${w})${EOL})
+</pre>
 
 </body>
 </html>
