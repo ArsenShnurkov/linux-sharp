@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как написать цикл</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как написать цикл</h1>
+</td><td style="vertical-align:top;">
+<a href="how-to-roll-the-tarball.htm">Как зароллить monodevelop</a>,
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Нужно разобраться, как писать циклы, обрабатывающие длинные переменные makefile.
+
+<h2>Длинная переменная</h2>
+для тестирования нужно как-нибудь создать длинную переменную, содержащую много слов.
+<br />
+возьмём словарь и добавим слова из него в переменную
+<br />
+<br />
+DISTFILES := $(shell sed ':a;N;$!ba;s/\n/ /g' /usr/share/dict/words)
+<br />
+<br />
+<a href="https://www.gnu.org/software/make/manual/html_node/Shell-Function.html">https://www.gnu.org/software/make/manual/html_node/Shell-Function.html</a>
+<br />
+функция shell сама превращает переводы строки в пробелы, достаточно такого кода (новый код проще объяснять, не нужно знать sed)
+<br />
+DISTFILES := $(shell cat /usr/share/dict/words)
+
+<h2>обработать слова циклом</h2>
+<pre>DISTFILES := $(shell cat /usr/share/dict/words)
+
+.PHONY: default_target
+
+define my_macros
+@echo ${1}
+endef
+
+default_target:
+	$(foreach w,$(DISTFILES),$(call my_macros,${w})${EOL})</pre>
+<br />
+<br />
+<a href="https://www.gnu.org/software/make/manual/html_node/Foreach-Function.html">https://www.gnu.org/software/make/manual/html_node/Foreach-Function.html</a>
+<br />
+$(foreach var,list,text)
+<br />
+<br />
+1) The first two arguments, var and list, are expanded before anything else is done;
+<br />
+<br />
+2) piece of text is used repeatedly, each time with a different substitution performed on it
+<br />
+text is expanded as many times as there are whitespace-separated words in list.
+<br />
+for each word of the expanded value of list, the variable named by the expanded value of var is set to that word, and text is expanded.
+<br />
+Presumably text contains references to that variable, so its expansion will be different each time. 
+<br />
+<br />
+3) The multiple expansions of text are concatenated, with spaces between them, to make the result of foreach. 
+
+<h2>сгруппировать слова</h2>
+Пробуем сгруппировать слова для команды echo небольшими группами
+<br />
+тут не очень ясно, как отлаживать. Может вывести при помощи $(info ...)?
+<br />
+или заменить пробелы на подчёркивания, затем выполнить печать по строкам (переводы строк не будут заменены и останутся разделителями слов, так как они являются whitespace), 
+а потом подчёркивания заменить обратно на пробелы (надо подумать насчёт escape-инга подчёркиваний, иначе при обратной замене пострадают исходные подчёркивания)
+<br />
+есть вообще
+<br />
+$(subst from,to,text)
+<br />
+Performs a textual replacement on the text text: each occurrence of from is replaced by to
+<br />
+но это неспортивно, будем вызывать sed.
+<br />
+<pre>
+DISTFILES := $(shell cat /usr/share/dict/words)
+
+define EOL
+
+
+endef
+
+define run_shell_command
+EDITED_DISTFILES+=$(shell echo ${1}|sed 's/./\L&/g'|sed 's-b-B-g')
+endef
+
+define split_to_groups
+$(eval _args:=)
+$(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call run_shell_command,$(_args))$(EOL)$(eval _args:=)))
+$(if $(_args),$(call run_shell_command,$(_args)))
+endef
+
+EDITED_DISTFILES:=
+$(eval $(call split_to_groups,${DISTFILES},10000))
+
+.PHONY: default_target
+
+define my_macros
+@echo ${1}
+endef
+
+default_target:
+	$(foreach w,$(EDITED_DISTFILES),$(call my_macros,${w})${EOL})
+</pre>
+
+<br />
+Если задать слишком много слов за раз, будет выдано сообщение:
+<br />
+make: execvp: echo: Argument list too long
+<br />
+Makefile:37: recipe for target 'default_target' failed
+<br />
+make: *** [default_target] Error 127
+
+</body>
+</html>

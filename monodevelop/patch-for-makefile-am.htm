@@ -12,12 +12,9 @@
 <a href="argument-list-too-long.htm">Argument list too long</a>,
 <a href="index.htm">Как собирать monodevelop</a>
 <br />
-&nbsp;
+<a href="../howto-roll-tarballs.htm">как роллить тарболы</a>
 </td></tr></table>
 
-патчи обычно лежат в поддиректории ./files относительно скрипта сборки/роллинга
-<br />
-<br />
 mkdir -p /var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/files
 <br />
 <br />
@@ -29,7 +26,12 @@ ${WORKDIR}/main/Makefile.am
 <br />
 ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am
 <br />
-Дифф сделаем командой
+Оба этих файла лежат в рабочей директории ${WORKDIR}, а рабочая директория не сохраняется (по крайней мере так происходит в portage при выключенной FEATURE="keepwork")
+<br />
+<br />
+Поэтому скопируем main/src/core/MonoDevelop.Ide/Makefile.am в директорию скриптов роллинга (переименовав в Makefile.am.orig). Новую версию положим рядом и назовём Makefile.am.new
+<br />
+Дифф будем делать командой
 <br />
 diff -u Makefile.am.orig Makefile.am.new >files/main-src-core-Monodevelop.Ide-Makefile.am.patch
 <br />
@@ -79,7 +81,7 @@ diff -u Makefile.am.orig Makefile.am.new >files/main-src-core-Monodevelop.Ide-Ma
 <br />
 patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}/main-src-core-Monodevelop.Ide-Makefile.am.patch
 <br />
-как задокументировано в
+такой вариант запуска утилиты patch задокументирован в man patch:
 <br />
 <a href="http://linux.die.net/man/1/patch">http://linux.die.net/man/1/patch</a>
 <br />
