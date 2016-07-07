@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как зароллить monodevelop</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как зароллить monodevelop</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+<a href="../howto-roll-tarballs.htm">как роллить тарболы</a>
+</td></tr></table>
+
+запустить скрипт
+<br />
+/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/monodevelop-6.1_p2016062206.eroll
+
+<pre>
+#!/bin/bash
+
+DISTDIR=/var/calculate/remote/distfiles
+
+# Path to directory, for example: "${PORTDIR}/${CATEGORY}/${PN}/files"
+FILESDIR=/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/files
+
+#WORKDIR=/var/tmp/tarballs/dotnet/dev-util/monodevelop
+WORKDIR=/Z
+
+echo CHECKPOINT 1
+
+if [ ! -d "${WORKDIR}" ]; then
+    mkdir -p "${WORKDIR}"
+    cd "${WORKDIR}"
+    git clone https://github.com/mono/monodevelop.git "${WORKDIR}"
+else
+    cd "${WORKDIR}"
+    git fetch origin
+fi
+
+echo CHECKPOINT 2
+
+git reset --hard 81446f1843f35719f40d766efced30680096a636
+
+echo CHECKPOINT 3
+
+git submodule update --init --recursive
+
+echo CHECKPOINT 4
+
+# cd "${WORKDIR}"
+touch extras/MonoDevelop.Database/ChangeLog
+patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}/main-src-core-Monodevelop.Ide-Makefile.am.patch
+./configure --profile=all
+#make dist
+#cp "${WORKDIR}/*.tar.bz2" "${DISTDIR}/monodevelop-0.0.0_p2016062206.tar.bz2"
+#cd -
+</pre>
+Скрипт накатывает <a href="patch-for-makefile-am.htm">патч для Makefile.am</a> на файл Makefile.am
+<br />
+патчи в gentoo накатывают до выполнения configure, вот и тут тоже так сделано. После выполнения патчинга configure генерирует Makefile.in и Makefile на основе уже нового пропатченного файла.
+<br />
+<br />
+<font style="color:red">Что со скриптом не так?</font>
+<br />
+<a href="patch-for-makefile-am.htm">патч для Makefile.am</a> недоделан
+<br />
+что с ним не так?
+<br />
+1) Я не воспользовался кодом для группировки вызовов к bash, и из-за этого echo и sed вызываются столько раз, сколько есть слов в строке.
+<br />
+на тестовом словаре процесс первичной замены занимает 10 минут из-за многочисленности этих вызовов.
+<br />
+2) Я не достиг результата - заролленого тарболла, даже при расходе времени в 10 минут, так как не сконвертировал оставшуюся часть скрипта bash
+<br />
+<br />
+вызовы можно сгруппировать и за один вызов обрабатывать несколько слов.
+<br />
+Для того, чтобы сгруппировать слова:
+<br />
+1) заведем временную переменную (в Makefile);
+<br />
+2) будем добавлять слова в эту переменную, пока не будет добавлено N штук. Мы узнаем, что N-ое слово добавлено, если функция <strong>$(word N)</strong> вернёт непустое значение.
+<br />
+3) обработаем временную переменную путём передачи её в bash и обнулим её после этого. После обнуления переменной в неё начнёт накапливаться новая группа слов
+<br />
+4) обработаем последнюю, недостаточно длинную, группу слов (если группа непустая)
+<br />
+<br />
+Этот алгоритм приведен на странице <a href="https://blog.melski.net/2012/01/03/makefile-hacks-automatically-split-long-command-lines/">https://blog.melski.net/2012/01/03/makefile-hacks-automatically-split-long-command-lines/</a>
+<br />
+<br />
+Если бы можно было использовать библиотеку GMSL (GNU Make Standart Library), то там была бы функция для определения длины строки.
+<br />
+Но эта библиотека является отдельным пакетом, который в Sabayon не установлен по-умолчанию.
+
+</body>
+</html>

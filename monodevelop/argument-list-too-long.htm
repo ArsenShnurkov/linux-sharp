@@ -15,10 +15,13 @@
 <br />
 <a href="distdir-recipe.htm">Описание рецепта distdir</a>
 <br />
+<a href="new-version.htm">На что заменять</a>
+<br />
+<br />
 <a href="deduplication-in-bash.htm">замена uniq -c на if != prev_line</a>,
 <a href="deduplication-in-guile.htm">deduplication in guile</a>
 <br />
-<a href="make-dist.htm">как устроен make dist</a>
+<a href="make-dist.htm">как устроен make dist в mono (не в monodevelop)</a>
 </td></tr></table>
 
 Если выполнить make dist, то может быть выдана ошибка:
@@ -100,15 +103,15 @@ distdir: в файле Makefile.in
 <br />
 проверить сборку make dist
 
-<h2>Как работает исходный код</h2>
+
+<h2>Как обойти ограничение ядра на длину команды?</h2>
 why is this parsed via a 'for file in $list ; do echo $file ; done' to pipe the results to sed?  is it just because xargs isn't posix?
 <br />
 hm, xargs is in posix as of 2004 ..
-<br />
-<br />
-
 
 <h2>Как заменить неработающий код</h2>
+Можно сделать патч только для dev-lang/monodevelop
+<br />
 можно (я проверял) локально в файле
 <br />
 <a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/Makefile.am">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/Makefile.am</a>
@@ -116,24 +119,32 @@ hm, xargs is in posix as of 2004 ..
 скопировать код из шаблона, затем поменять на foreach-и
 <br />
 <br />
+Ещё можно сделать ebuild для automake с патчем для сборки любых пакетов использующих automake
+<br />
+это позволит протестировать патч локально при сборке многих пакетов (потому что autotools используются много где)
+<br />
+<br />
 можно кстати поискать готовые примеры на github, вдруг кто-нибудь такое уже делал?
 <br />
 во всех файлах makefile.am найти строку distdir и вывести URL где смотреть
-<br />
-<br />
-<a href="../automake/plan-for-automake.html">План работ по фиксу баги в automake</a>
 
 <h2>На что заменять</h2>
 $(sort list of words) - сортировка в gmake:
 <br />
 <a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions</a>
+
+<h2>Что писать внутрь новой версии правила?</h2>
+Патч накатить можно, и это было проверено:
+<br />
+<a href="patch-for-makefile-am.htm">патч для Makefile.am</a>
+<br />
+<br />
+А вот что писать внутрь - это до сих пор не продумано...
+
 <h2>Как проверять</h2>
-Можно сделать патч только для dev-lang/monodevelop
+Допустим, что был получен некий комплект архивов. Чтобы проверить, можно составить список файлов в архиве 
 <br />
-<br />
-Ну, можно сделать ebuild для automake с патчем для сборки любых пакетов использующих automake
-<br />
-это позволит протестировать патч локально при сборке многих пакетов (потому что autotools используются много где)
+и сравнить со списокм файлов в оригинальном архиве, предварительно отсортировав списки (аналогично тому, как я это провёл такое сравнение для smuxi)
 
 <h2>Как отправить патч</h2>
 Нуу, тщательно всё проверив, надо отправить патч на специальный email
@@ -162,6 +173,9 @@ bugtracker
 (то есть какую-то версию этого списка на дату),
 <br />
 чтобы иметь возможность ссылаться на какую-то определённую версию.
+<br />
+<br />
+<a href="../automake/plan-for-automake.html">План работ по фиксу баги в automake</a>
 
 
 </body>
