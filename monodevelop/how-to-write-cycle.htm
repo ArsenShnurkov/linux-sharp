@@ -12,7 +12,7 @@
 <a href="how-to-roll-the-tarball.htm">Как зароллить monodevelop</a>,
 <a href="index.htm">Как собирать monodevelop</a>
 <br />
-&nbsp;
+<a href="distdir-recipe.htm">Описание рецепта distdir</a>
 </td></tr></table>
 
 Нужно разобраться, как писать циклы, обрабатывающие длинные переменные makefile.
@@ -63,23 +63,14 @@ Presumably text contains references to that variable, so its expansion will be d
 <br />
 <br />
 3) The multiple expansions of text are concatenated, with spaces between them, to make the result of foreach. 
+<br />
+<br />
+можно было бы провести замены функций $(subst from,to,list)
+<br />
+но это более трудное для понимания изменение, лучше будем вызывать sed как в исходном коде, такое преобразование вызовет меньше вопросов
 
 <h2>сгруппировать слова</h2>
 Пробуем сгруппировать слова для команды echo небольшими группами
-<br />
-тут не очень ясно, как отлаживать. Может вывести при помощи $(info ...)?
-<br />
-или заменить пробелы на подчёркивания, затем выполнить печать по строкам (переводы строк не будут заменены и останутся разделителями слов, так как они являются whitespace), 
-а потом подчёркивания заменить обратно на пробелы (надо подумать насчёт escape-инга подчёркиваний, иначе при обратной замене пострадают исходные подчёркивания)
-<br />
-есть вообще
-<br />
-$(subst from,to,text)
-<br />
-Performs a textual replacement on the text text: each occurrence of from is replaced by to
-<br />
-но это неспортивно, будем вызывать sed.
-<br />
 <pre>
 DISTFILES := $(shell cat /usr/share/dict/words)
 
@@ -119,6 +110,18 @@ make: execvp: echo: Argument list too long
 Makefile:37: recipe for target 'default_target' failed
 <br />
 make: *** [default_target] Error 127
+
+<br />
+тут не очень ясно, как отлаживать. Может вывести при помощи $(info ...)?
+<br />
+или заменить пробелы на подчёркивания, затем выполнить печать по строкам (переводы строк не будут заменены и останутся разделителями слов, так как они являются whitespace), 
+а потом подчёркивания заменить обратно на пробелы (надо подумать насчёт escape-инга подчёркиваний, иначе при обратной замене пострадают исходные подчёркивания)
+<br />
+есть вообще
+<br />
+$(subst from,to,text)
+<br />
+Performs a textual replacement on the text text: each occurrence of from is replaced by to
 
 </body>
 </html>
