@@ -15,6 +15,10 @@
 <a href="../howto-roll-tarballs.htm">как роллить тарболы</a>
 </td></tr></table>
 
+<a href="https://raw.githubusercontent.com/ArsenShnurkov/shnurise-tarballs-automation/master/dev-util/monodevelop/files/main-src-core-Monodevelop.Ide-Makefile.am.patch">https://raw.githubusercontent.com/ArsenShnurkov/shnurise-tarballs-automation/master/dev-util/monodevelop/files/main-src-core-Monodevelop.Ide-Makefile.am.patch</a>
+<br />
+<br />
+
 mkdir -p /var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/files
 <br />
 <br />
@@ -35,47 +39,6 @@ ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am
 <br />
 diff -u Makefile.am.orig Makefile.am.new >files/main-src-core-Monodevelop.Ide-Makefile.am.patch
 <br />
-будет он выглядеть так:
-<br />
-<pre>
---- Makefile.am.orig	2016-07-03 05:46:33.000000000 +0300
-+++ Makefile.am.new	2016-07-03 06:04:28.706330787 +0300
-@@ -6,3 +6,34 @@
- 	gtkrc.mac-dark \
- 	gtkrc.win32 \
- 	gtkrc.win32-dark
-+
-+distdir: $(DISTFILES)
-+	@srcdirstrip=`echo &quot;$(srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
-+	topsrcdirstrip=`echo &quot;$(top_srcdir)&quot; | sed 's/[].[^$$\\*]/\\\\&amp;/g'`; \
-+	list='$(DISTFILES)'; \
-+	  dist_files=`for file in $$list; do echo $$file; done | \
-+	  sed -e &quot;s|^$$srcdirstrip/||;t&quot; \
-+	      -e &quot;s|^$$topsrcdirstrip/|$(top_builddir)/|;t&quot;`; \
-+	case $$dist_files in \
-+	  */*) $(MKDIR_P) `echo &quot;$$dist_files&quot; | \
-+			   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
-+			   sort -u` ;; \
-+	esac; \
-+	for file in $$dist_files; do \
-+	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
-+	  if test -d $$d/$$file; then \
-+	    dir=`echo &quot;/$$file&quot; | sed -e 's,/[^/]*$$,,'`; \
-+	    if test -d &quot;$(distdir)/$$file&quot;; then \
-+	      find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-+	    fi; \
-+	    if test -d $(srcdir)/$$file &amp;&amp; test $$d != $(srcdir); then \
-+	      cp -fpR $(srcdir)/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
-+	      find &quot;$(distdir)/$$file&quot; -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-+	    fi; \
-+	    cp -fpR $$d/$$file &quot;$(distdir)$$dir&quot; || exit 1; \
-+	  else \
-+	    test -f &quot;$(distdir)/$$file&quot; \
-+	    || cp -p $$d/$$file &quot;$(distdir)/$$file&quot; \
-+	    || exit 1; \
-+	  fi; \
-+	done
-</pre>
 <br />
 Накатывать патч будем командой
 <br />
