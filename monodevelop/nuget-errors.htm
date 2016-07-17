@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>ошибки установки пакетов</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>ошибки установки пакетов</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+При установке <a href="http://pastehtml.com/view/gm293tiwl.html">выдаются ошибки</a>:
+<br />
+<pre>
+Unable to find version '6.0.8' of package 'Newtonsoft.Json'.
+Unable to find version '2.6.4' of package 'NUnit.Runners'.
+Unable to find version '5.2.3' of package 'Microsoft.AspNet.Mvc'.
+Unable to find version '3.2.3' of package 'Microsoft.AspNet.Razor'.
+Unable to find version '3.2.3' of package 'Microsoft.AspNet.WebPages'.
+Unable to find version '1.0.0.0' of package 'Microsoft.Web.Infrastructure'.
+Unable to find version '5.5.1' of package 'ICSharpCode.NRefactory'.
+Unable to find version '0.9.5.4' of package 'Mono.Cecil'.
+Unable to find version '1.0.81' of package 'LibGit2Sharp.NativeBinaries'.
+Unable to find version '3.0.1' of package 'NUnit.Engine'.
+Makefile:1123: recipe for target 'restore-packages' failed
+</pre>
+
+<h2>NUnit.Runners</h2>
+Unable to find version '2.6.4' of package 'NUnit.Runners'.
+
+
+<h2>NewtonsoftJson</h2>
+есть в репозитории, в версиях 7.0.1 и 8.0.1. Возможно, если наложить патч и использовать более новую версию, то всё соберется.
+<br />
+<br />
+Какой Makefile тут имеется в виду?
+<br />
+/var/tmp/portage/dev-util/monodevelop-6.1_p2016062206/work/monodevelop-6.1/Makefile
+<br />
+<br />
+По-хорошему тут надо бы разобраться, как добавлять в командную строку при вызове nuget ключ -verbose
+<br />
+о, ну там прямо команда написана:
+<pre>restore-packages:
+	nuget restore</pre>
+<br />
+<br />
+pstree -s $BASHPID
+<br />
+rm -rf /var/tmp/portage/dev-util/monodevelop-6.1_p2016062206 && emerge -v =monodevelop-6.1_p2016062206
+<br />
+<br />
+${S} grep -R "Newtonsoft.Json" * | grep 6.0.8
+<pre>
+src/core/MonoDevelop.Core/MonoDevelop.Core.csproj:      &lt;HintPath&gt;..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll&lt;/HintPath&gt;
+src/core/MonoDevelop.Core/packages.config:  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; targetFramework=&quot;net45&quot; /&gt;
+src/addins/MonoDevelop.PackageManagement/MonoDevelop.PackageManagement.csproj:      &lt;HintPath&gt;..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll&lt;/HintPath&gt;
+src/addins/MonoDevelop.PackageManagement/MonoDevelop.PackageManagement.Tests/MonoDevelop.PackageManagement.Tests.csproj:      &lt;HintPath&gt;..\..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll&lt;/HintPath&gt;
+src/addins/MonoDevelop.PackageManagement/MonoDevelop.PackageManagement.Tests/packages.config:  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; targetFramework=&quot;net45&quot; /&gt;
+src/addins/MonoDevelop.PackageManagement/packages.config:  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; targetFramework=&quot;net45&quot; /&gt;
+src/addins/AspNet/Templates/Projects/WebFormsProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; if=&quot;UsesAspNetWebApi&quot; /&gt;
+src/addins/AspNet/Templates/Projects/WebFormsProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; if=&quot; &quot; /&gt;
+src/addins/AspNet/Templates/Projects/MvcProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot;  if=&quot;UsesAspNetWebApi&quot; /&gt;
+src/addins/AspNet/Templates/Projects/MvcProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot;  if=&quot;UsesAspNetWebApi&quot; /&gt;
+src/addins/AspNet/Templates/Projects/EmptyProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; if=&quot;UsesAspNetWebApi&quot; /&gt;
+src/addins/AspNet/Templates/Projects/EmptyProject.xpt.xml:				&lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; if=&quot;UsesAspNetWebApi&quot; /&gt;
+tests/UserInterfaceTests/UserInterfaceTests.csproj:      &lt;HintPath&gt;..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll&lt;/HintPath&gt;
+tests/UserInterfaceTests/packages.config:  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.8&quot; targetFramework=&quot;net45&quot; /&gt;
+</pre>
+<br />
+<pre>
+  var p = new OptionSet () {
+    { "h|?|help", v => ShowHelp () },
+  };
+  p.Parse(args);
+</pre>
+
+
+</body>
+</html>

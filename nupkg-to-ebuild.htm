@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как сгенерировать .ebuild-файл из .nupkg-пакета</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как сгенерировать .ebuild-файл из .nupkg-пакета</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+1) Зная имя пакета, пакет можно скачать с сайта-репозитория Microsoft
+<br />
+2) Распаковать nupkg (<a href="how-to-read-file-from-zip-archive.htm">Как распаковать один файл из zip-архива в памяти?</a>)
+<br />
+3) Распарсить XML-файл (<a href="xml/how-to-read.htm">как считать данные в формате XML из файла в память на C#</a>)
+<br />
+4) Использовать какой-нибудь template-engine для генерации результата. Варианты: XML+XSLT (только он стандартизован, я предполагаю), T4, Razor
+<br />
+2007-01-23, W3C Recommendation, XSL Transformations (XSLT) Version 2.0
+<br />
+5) ну, ещё можно считать настройки Nuget установенного в системе (чтобы узнать, из каких репозиториев скачиваются пакеты)
+<br />
+6) а чтобы определить где он установлен - считать настройки пакетного менеджера
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как распаковать один файл из zip-архива в памяти?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как распаковать один файл из zip-архива в памяти?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/system.io.compression.ziparchive.aspx">class ZipArchive, from System.IO.Compression.dll</a>
+</td></tr></table>
+
+<a href="http://stackoverflow.com/questions/27508822/read-the-content-of-an-xml-file-within-a-zip-package">http://stackoverflow.com/questions/27508822/read-the-content-of-an-xml-file-within-a-zip-package</a>
+<br />
+<br />
+
+
+System.IO.Compression
+<br />
+<pre>
+using (ZipArchive archive = new ZipArchive(postedZipStream))
+{
+    foreach (ZipArchiveEntry entry in archive.Entries)
+    {
+         var stream = entry.Open();
+         //Do awesome stream stuff!!
+    }
+}
+</pre>
+<br />
+.Net 4.5
+<br />
+.Net 4.0
+<br />
+/usr/lib64/mono/gac/System.IO.Compression/4.0.0.0__b77a5c561934e089/System.IO.Compression.dll
+<br />
+/usr/lib64/mono/4.5-api/System.IO.Compression.dll
+<br />
+for 3.5:
+<br />
+ <a href="http://stackoverflow.com/questions/184309/how-to-use-system-io-compression-to-read-write-zip-files">http://stackoverflow.com/questions/184309/how-to-use-system-io-compression-to-read-write-zip-files</a>
+ <br />
+for 2.0:
+<br />
+ <a href="https://github.com/yallie/unzip">https://github.com/yallie/unzip</a>
+<br />
+<br />
+Packages:
+<br />
+<a href="https://www.nuget.org/packages/Microsoft.Bcl.Compression/">Microsoft.Bcl.Compression</a>
+<br />
+<br />
+<pre>
+string metaDataContents;
+using (var zipStream = new FileStream(@"C:\OB10LinuxShare\TEST1\Temp" + "\\"+zipFileName+".zip", FileMode.Open))
+using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+{
+    foreach (var entry in archive.Entries)
+    {
+        if (entry.Name.EndsWith(".xml"))
+        {
+            FileInfo metadataFileInfo = new FileInfo(entry.Name);
+            string metadataFileName = metadataFileInfo.Name.Replace(metadataFileInfo.Extension, String.Empty);
+            if (String.Compare(zipFileName, metadataFileName, true) == 0)
+            {
+                using (var stream = entry.Open())
+                using (var reader = new StreamReader(stream))
+                {
+                    metaDataContents = reader.ReadToEnd();
+                    clientProcessLogWriter.WriteToLog(LogWriter.LogLevel.DEBUG, "metaDataContents : " + metaDataContents);
+                }
+            }
+        }
+    }
+}
+</pre>
+
+</body>
+</html>
