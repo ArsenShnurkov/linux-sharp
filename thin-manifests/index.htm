@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>что такое thin-manifests</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>что такое thin-manifests</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="https://dev.gentoo.org/~zmedico/portage/doc/man/portage.5.html">man portage</a>
+<br />
+/usr/portage/metadata/
+<br />
+layout.conf
+<br />
+<br />
+thin-manifests = [true|<strong>false</strong>]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Boolean value whether Manifest files contain only DIST entries. 
+<br />
+<br />
+<a href="https://github.com/gentoo/gentoo/blob/master/metadata/layout.conf#L35-L36">https://github.com/gentoo/gentoo/blob/master/metadata/layout.conf#L35-L36</a>
+<br />
+# Use thin Manifests for Git
+<br />
+thin-manifests = true
+<br />
+<br />
+if you set thin-manifests; then the ebuild won't be recorded in the Manifest    
+
+</body>
+</html>

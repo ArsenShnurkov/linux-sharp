@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как сгенерировать что-нибудь при помощи XSLT</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как сгенерировать что-нибудь при помощи XSLT</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="https://www.w3.org/TR/xml">https://www.w3.org/TR/xml</a>
+</td></tr></table>
+
+Пример на mono:
+<br />
+<a href="https://github.com/ArsenShnurkov/githubtests/commit/d3c1609f962eb9b41af1a6a92b492a39e4a25ca4">https://github.com/ArsenShnurkov/githubtests/commit/d3c1609f962eb9b41af1a6a92b492a39e4a25ca4</a>
+<br />
+<br />
+
+
+MSDN предлагает такой пример:
+<pre><xmp>
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/hello-world">
+    <HTML>
+      <HEAD>
+        <TITLE></TITLE>
+      </HEAD>
+      <BODY>
+        <H1>
+          <xsl:value-of select="greeting"/>
+        </H1>
+        <xsl:apply-templates select="greeter"/>
+      </BODY>
+    </HTML>
+  </xsl:template>
+  <xsl:template match="greeter">
+    <DIV>from <I><xsl:value-of select="."/></I></DIV>
+  </xsl:template>
+</xsl:stylesheet>
+</xmp></pre>
+
+Что тут не очень ясно:
+<br />
+если надо сгенерировать произвольный синтаксис, то как он будет переплетаться с синтаксисом XML-документа, которым является XSLT-файл?
+<br />
+XSLT is XML so of course you can use a CDATA section in XSLT code, as you have done. 
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/223652/is-there-a-way-to-escape-a-cdata-end-token-in-xml/223782#223782">http://stackoverflow.com/questions/223652/is-there-a-way-to-escape-a-cdata-end-token-in-xml/223782#223782</a>
+<br />
+<br />
+<a href="http://stackoverflow.com/a/14800805/6017919">http://stackoverflow.com/a/14800805/6017919</a>
+<br />
+<br />
+Можно на месте каждой переменной понавставлять
+<pre><xmp>
+<xsl:value-of
+  select = Expression
+  disable-output-escaping = "yes" | "no" 
+</xsl:value-of>
+<xmp></pre>
+можно делать циклы и проверки:
+<br />
+<a href="http://stackoverflow.com/questions/14121498/xslt-for-each-as-for-cycle-with-parameter-in-attribute">http://stackoverflow.com/questions/14121498/xslt-for-each-as-for-cycle-with-parameter-in-attribute</a>
+
+<h2>Minimal XML</h2>
+<pre><xmp>
+<?xml version="1.0"?><_/>
+</xmp></pre>
+<a href="https://www.w3.org/TR/REC-xml/#NT-NameStartChar">https://www.w3.org/TR/REC-xml/#NT-NameStartChar</a>
+<br />
+space is optional, but xml declaration is mandatory (SHOULD be present) - <a href="http://stackoverflow.com/questions/4679136/is-the-xml-declaration-node-mandatory">http://stackoverflow.com/questions/4679136/is-the-xml-declaration-node-mandatory</a>
+<br />
+if the declaration is absent, that automatically implies the document is an XML 1.0 document.
+<br />
+<a href="http://stackoverflow.com/a/7007781/6017919">http://stackoverflow.com/a/7007781/6017919</a>
+
+
+<pre><xmp>
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/">
+    <xsl:text disable-output-escaping="yes">здесь &lt;-&gt; текст</xsl:text>
+  </xsl:template>
+</xsl:stylesheet>
+</xmp></pre>
+Как запустить XSLT-файл просто так (с пустым XML-документом) ?
+<br />
+<br />
+XSL FAQ <a href="https://www.dpawson.co.uk/xsl/sect2/sect21.html">www.dpawson.co.uk/xsl/sect2/sect21.html</a>
+<br />
+XSLT Standard Library <a href="https://xsltsl.sourceforge.net/#id1954924">xsltsl.sourceforge.net/#id1954924</a>
+
+<h2>Как запустить в .Net</h2>
+<a href="http://stackoverflow.com/questions/34093/how-to-apply-an-xslt-stylesheet-in-c-sharp">http://stackoverflow.com/questions/34093/how-to-apply-an-xslt-stylesheet-in-c-sharp</a>
+
+<pre><xmp>
+XPathDocument myXPathDoc = new XPathDocument(myXmlFile) ;
+XslCompiledTransform myXslTrans = new XslCompiledTransform();
+myXslTrans.Load(myStyleSheet);
+XmlTextWriter myWriter = new XmlTextWriter("result.html",null);
+myXslTrans.Transform(myXPathDoc,null,myWriter);
+</xmp></pre>
+
+Если сразу писать в файл
+<pre><xmp>
+var myXslTrans = new XslCompiledTransform(); 
+myXslTrans.Load("stylesheet.xsl"); 
+myXslTrans.Transform("source.xml", "result.html");
+</xmp></pre>
+
+<h3>mono-xmltool</h3>
+<a href="http://linux.die.net/man/1/mono-xmltool">http://linux.die.net/man/1/mono-xmltool</a>
+<pre>
+mono-xmltool
+
+Usage: mono-xmltool [options]
+
+options:
+
+	--validate [*.rng | *.rnc | *.nvdl | *.xsd] [instances]
+	--validate-rng relax-ng-grammar-xml [instances]
+	--validate-rnc relax-ng-compact-grammar-file [instances]
+	--validate-nvdl nvdl-script-xml [instances]
+	--validate-xsd xml-schema [instances]
+	--validate-xsd2 xml-schema [instances] (in .NET 2.0 validator)
+	--validate-dtd instances
+	--transform stylesheet instance-xml [output-xml]
+	--prettyprint [source] [result]
+
+environment variable that affects behavior:
+
+	MONO_XMLTOOL_ERROR_DETAILS = yes : to get exception details.
+</pre>
+<a href="http://www.mono-project.com/docs/tools+libraries/libraries/xml/">http://www.mono-project.com/docs/tools libraries/libraries/xml/</a>
+
+<h3>Xalan</h3>
+java org.apache.xalan.xslt.Process -in greeting.xml -xsl greeting.xsl -out greeting.html
+<h3>Saxon-B</h3>
+java -jar saxon9.jar -o:hello-from-saxon.html data.xml hello.xslt
+<h3>AltovaXML</h3>
+AltovaXML.exe -xslt1 hello.xslt /in data.xml /out hello-from-altova.html
+
+</body>
+</html>

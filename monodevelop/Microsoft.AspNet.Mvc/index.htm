@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Microsoft.AspNet.Mvc</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Microsoft.AspNet.Mvc</h1>
+</td><td style="vertical-align:top;">
+<a href="../dependencies.htm">Зависимости monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<br />
+пишем в SRC_URI
+<br />
+https://www.nuget.org/api/v2/package/Microsoft.AspNet.Mvc/5.2.3 -&gt; Microsoft.AspNet.Mvc.5.2.3.zip
+<br />
+скачается он в директорию
+<br />
+${DISTDIR} 	Contains the path to the directory where all the files fetched for the package are stored. 
+<br />
+откуда можно будет скопировать его в локальный репозиторий nuget на фазе инсталляции
+<br />
+<br />
+Если можно прописывать в SRC_URI, то зачем тогда нужна функция enuget_download_rogue_binary ?
+<br />
+<a href="https://github.com/gentoo/dotnet/blob/master/eclass/nupkg.eclass#L57-L73">https://github.com/gentoo/dotnet/blob/master/eclass/nupkg.eclass#L57-L73</a>
+<br />
+ну, она не использует (не захламляет) зеркало gentoo враждебными пакетами из репозитория Microsoft
+
+<h2>ошибка при сборке</h2>
+Следующий текст:
+<br />
+Unable to find version '5.2.3' of package 'Microsoft.AspNet.Mvc'
+
+<h2>Как делал в прошлый раз</h2>
+<a href="https://github.com/gentoo/dotnet/blob/db1dbda18cc2cd74432cd3ec4050468e964d1857/dev-dotnet/x-pagedlist/x-pagedlist-1.24.0.23549-r201512120.ebuild#L52-L59">https://github.com/gentoo/dotnet/blob/db1dbda18cc2cd74432cd3ec4050468e964d1857/dev-dotnet/x-pagedlist/x-pagedlist-1.24.0.23549-r201512120.ebuild#L52-L59</a>
+
+<pre>src_unpack()
+{
+	default
+	enuget_download_rogue_binary "Microsoft.Web.Infrastructure" "1.0.0.0"
+	enuget_download_rogue_binary "Microsoft.AspNet.WebPages" "3.2.3"
+	enuget_download_rogue_binary "Microsoft.AspNet.Razor" "3.2.3"
+	enuget_download_rogue_binary "Microsoft.AspNet.Mvc" "5.2.3"
+}</pre>
+
+<h2>Поменять eclass</h2>
+Надо разделить функцию на две - отдельно скачивание в ${T}, отдельно распаковка/установка в указанную директорию из данной директории (A-&gt;B)
+<br />
+потому что 
+<br />
+во-первых, скачивать можно через SRC_URI (хотя это и не особо хорошо)
+<br />
+во-вторых, установка не всегда нужна
+
+<h2>Сделать ebuild</h2>
+Сделать отдельный ебилд с функцией  enuget_download_rogue_binary можно,
+но тогда локальный репозиторий уже не будет содержать только пакеты, собранные из исходников
+<br />
+устанавливать надо будет копированием из ${T} в директорию-репозиторий NuGet
+<br />
+это несложно:
+<br />
+<a href="https://github.com/gentoo/dotnet/blob/db1dbda18cc2cd74432cd3ec4050468e964d1857/eclass/nupkg.eclass#L97-L98">https://github.com/gentoo/dotnet/blob/db1dbda18cc2cd74432cd3ec4050468e964d1857/eclass/nupkg.eclass#L97-L98</a>
+<br />
+insinto $(get_nuget_trusted_archives_location)
+<br />
+doins "$@"
+<br />
+<br />
+можно воспользоваться именно функцией enupkg "${T}/{$P}.nupkg", а у пакета прописать USE="+nupkg"
+<br />
+<br />
+cd /var/lib/layman/shnurise
+<br />
+mkdir -p dev-dotnet/Microsoft.AspNet.Mvc
+<br />
+cd dev-dotnet/Microsoft.AspNet.Mvc
+<br />
+leafpad Microsoft.AspNet.Mvc-5.2.3.ebuild
+
+<h2>Зависимости в .nuspec</h2>
+ну, в принципе всё ок, только надо ещё что-то сделать с зависимостями:
+<br />
+Attempting to resolve dependency 'Microsoft.AspNet.WebPages (≥ 3.2.3 &amp;&amp; &lt; 3.3.0)'.
+<br />
+Unable to resolve dependency 'Microsoft.AspNet.WebPages (≥ 3.2.3 &amp;&amp; &lt; 3.3.0)'.
+
+<pre><xmp>
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.Mvc</id>
+    <version>5.2.3</version>
+    <title>Microsoft ASP.NET MVC</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft,aspnet</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm</licenseUrl>
+    <projectUrl>http://www.asp.net/mvc</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This package contains the runtime assemblies for ASP.NET MVC. ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that enables a clean separation of concerns and that gives you full control over markup.</description>
+    <summary>This package contains the runtime assemblies for ASP.NET MVC.</summary>
+    <releaseNotes>Please visit http://go.microsoft.com/fwlink/?LinkID=403009 to view the release notes.</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>en-US</language>
+    <tags>Microsoft AspNet Mvc AspNetMvc</tags>
+    <dependencies>
+      <dependency id="Microsoft.AspNet.WebPages" version="[3.2.3, 3.3.0)" />
+      <dependency id="Microsoft.AspNet.Razor" version="[3.2.3, 3.3.0)" />
+    </dependencies>
+  </metadata>
+</package>
+</xmp></pre>
+
+<pre><xmp>
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.WebPages</id>
+    <version>3.2.3</version>
+    <title>Microsoft ASP.NET Web Pages</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft,aspnet</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm</licenseUrl>
+    <projectUrl>http://www.asp.net/web-pages</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This package contains core runtime assemblies shared between ASP.NET MVC and ASP.NET Web Pages.</description>
+    <summary>This package contains core runtime assemblies shared between ASP.NET MVC and ASP.NET Web Pages.</summary>
+    <releaseNotes>Please visit http://go.microsoft.com/fwlink/?LinkID=403011 to view the release notes.</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>en-US</language>
+    <tags>Microsoft AspNet WebPages AspNetWebPages</tags>
+    <dependencies>
+      <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
+      <dependency id="Microsoft.AspNet.Razor" version="[3.2.3, 3.3.0)" />
+    </dependencies>
+  </metadata>
+</package>
+</xmp></pre>
+
+<br />
+<br />
+Unable to find version '5.5.1' of package 'ICSharpCode.NRefactory'.
+<br />
+Unable to find version '0.9.5.4' of package 'Mono.Cecil'.
+<br />
+Unable to find version '1.0.81' of package 'LibGit2Sharp.NativeBinaries'.
+<br />
+Unable to find version '3.0.1' of package 'NUnit.Engine'.
+
+
+</body>
+</html>

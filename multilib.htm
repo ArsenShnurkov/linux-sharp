@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Что такое multilib и как с ним работать</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Что такое multilib и как с ним работать</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="https://wiki.gentoo.org/wiki/Project:Multilib">https://wiki.gentoo.org/wiki/Project:Multilib</a>
+<br />
+<a href="https://wiki.gentoo.org/wiki/Multilib">https://wiki.gentoo.org/wiki/Multilib</a>
+<br />
+<a href="https://wiki.gentoo.org/wiki/Multilib/gx86-multilib">https://wiki.gentoo.org/wiki/Multilib/gx86-multilib</a>
+</td></tr></table>
+
+<a href="https://github.com/gentoo/gentoo/blob/master/eclass/multilib-build.eclass">multilib-build.eclass</a> (<a href="https://wiki.gentoo.org/wiki/Project:Multilib/multilib-build">docs</a>) adds support for building regular ebuilds for multiple ABIs.
+<br />
+multilib-build eclass is seldom inherited directly. Instead, its API is exposed via other eclasses such as multilib-minimal.
+<br />
+<a href="https://github.com/gentoo/gentoo/blob/master/eclass/multilib-minimal.eclass">multilib-minimal.eclass</a> (docs)
+<br />
+<br />
+multilib.eclass: <a href="https://github.com/gentoo/gentoo/blob/master/eclass/multilib.eclass">source</a>
+
+<h2>Разработка mva</h2>
+<a href="http://paste.pirate-party.ru/msWCJ5fd.txt">http://paste.pirate-party.ru/msWCJ5fd.txt</a>
+<br />
+The problem was in that thing: if just call econf with 
+<br />
+ECONF_SOURCE=${S} in multilib_src_configure, 
+<br />
+then it was fail as above. 
+<br />
+But if keep ECONF_SOURCE=".", but do multilib_copy_sources in prepare instead — all works fine. 
+<br />
+It looks like buildsystem artifact, but as it works with multilib_copy_sources — let it be :) 
+<br />
+!meta -v mono
+<br />
+user: dev-lang/mono; maintainers: dotnet
+<br />
+user: (dotnet@gentoo.org) angelos, cynede
+<br />
+<br />
+другие операционные системы тоже имеют нерешенные проблемы с организацией сборки Mono для режима multilib:
+<br />
+<a href="https://ask.fedoraproject.org/en/question/66853/unresolved-dependecies-with-mono/">https://ask.fedoraproject.org/en/question/66853/unresolved-dependecies-with-mono/</a>
+<br />
+и решенные проблемы, которые всё равно являются проблемами, так как плохо (никак) задокументированы:
+<br />
+<a href="http://askubuntu.com/questions/453681/gcc-wont-link-with-m32">http://askubuntu.com/questions/453681/gcc-wont-link-with-m32</a>
+<br />
+<br />
+gcc man page directed me to the ‘-m32’ and ‘-m64’ options. These options generate code for 32-bit or 64-bit environments, respectively.
+<br />
+The 32-bit environment sets int, long and pointer to 32 bits and generates code that runs on any i386 system.
+<br />
+The 64-bit environment sets int to 32 bits and long and pointer to 64 bits and generates code for AMD’s x86-64 architecture.
+<br />
+<br />
+Зачем вообще собирать mono для 32-битного окружения? Ну кто-то как-то может создавать 32-битные программы, которые захотят использовать Mono. А у mono есть подводная часть, написанная на C/C++, 
+вот она должна быть собрана в двух вариантах - 64-х битном и 32-х битном.
+<br />
+<font style="color:red">Что в эту часть входит конкретно?</font>
+
+<h2>multilib</h2>
+Любой процессор архитектуры AMD64 может запускать 32-битный код, так же как и 64-битный.
+<br />
+<font style="color:red">(а в чём разница кроме опкодов? загрузчик делает что-нибудь особенное? отличаются ли в памяти 32-х битные процессы от 64-битных? есть ли в бинарнике какие-нибудь флаги в заголовке?)</font>
+<br />
+Но нельзя запустить 32-битное приложение с 64-битными библиотеками или наоборот.
+Можно, однако, «нативно» (без эмуляции) запустить 32-битное приложение,
+если все нужные ему разделяемые библиотеки доступны в 32-битном виде.
+<br />
+Взято из <a href="https://wiki.gentoo.org/wiki/AMD64/FAQ/ru#.D0.A7.D1.82.D0.BE_.D1.82.D0.B0.D0.BA.D0.BE.D0.B5_multilib.2C_.D0.B8_.D0.BA.D0.B0.D0.BA_.D0.B5.D0.B3.D0.BE_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D1.8C.3F">Что такое multilib, и как его использовать?</a>
+
+<h3>Сценарии</h3>
+Зачем вообще может понадобиться такой сценарий использования?
+<br />
+нуу, можно сделать 32-х битный chroot.
+<br />
+и компилировать 32-х битный код, который вроде бы как компактнее (но насколько это полезно - не ясно) и за счёт компактности лучше влезает на всякие raspberry pi
+<br />
+и для хостинга может быть полезно (опять не ясно в какой мере - сколько в процентах)
+
+<h3>грабли</h3>
+бинарные файлы, созданные на x86-системе, часто не могут быть прочитаны приложениями в системе с архитектурой AMD64.
+В частности, файлы баз данных, таких как MySQL, innoDB, Berkeley DB, SQLite, OpenLDAP и т. п., нельзя скопировать как есть.
+Нужно сделать дамп в независимый от архитектуры формат (например, текстовый файл), а затем восстановить базу из него на AMD64-системе. 
+
+<h2>ECONF_SOURCE</h2>
+<a href="https://devmanual.gentoo.org/ebuild-writing/eapi/">https://devmanual.gentoo.org/ebuild-writing/eapi/</a>
+
+</body>
+</html>

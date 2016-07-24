@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как быстро описать пакет .nupkg для gentoo?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как быстро описать пакет .nupkg для gentoo?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+сначала нужно скачать архив,
+<br />
+из архива извлечь .nuspec
+<br />
+из nuspec выписать зависимости и обработать их
+<br />
+создать файл ebuild с правильным именем (которое включает в себя версию)
+<br />
+вписать в ebuild имя пакета
+<br />
+со страницы взять DESCRIPTION и вписать его в ebuild
+<br />
+исправить файл metadata.xml
+<br />
+выполнить ebuild digest (потому что название иконки - как у пакета, то есть эти названия разные)
+
+
+</body>
+</html>
