@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как обработать файлы рекурсивно на bash?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как обработать файлы рекурсивно на bash?</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="http://stackoverflow.com/a/22267544/6017919">http://stackoverflow.com/a/22267544/6017919</a>
+<br />
+<pre>
+# loop &amp; print a folder recusively,
+print_folder_recurse() {
+    for i in &quot;$1&quot;/*;do
+        if [ -d &quot;$i&quot; ];then
+            echo &quot;dir: $i&quot;
+            print_folder_recurse &quot;$i&quot;
+        elif [ -f &quot;$i&quot; ]; then
+            echo &quot;file: $i&quot;
+        fi
+    done
+}
+</pre>
+
+</body>
+</html>
