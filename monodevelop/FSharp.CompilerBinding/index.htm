@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>FSharp.CompilerBinding</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>FSharp.CompilerBinding</h1>
+</td><td style="vertical-align:top;">
+<a href="../dependencies.htm">Зависимости monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<pre>
+1. Setup an alternate mono environment by creating a bash script named something like ~/mono-dev-env. 
+Its contents should be similar to the following:
+
+#!/bin/bash
+MONO_PREFIX=/opt/mono
+GNOME_PREFIX=/opt/gnome
+export DYLD_FALLBACK_LIBRARY_PATH=$MONO_PREFIX/lib:$DYLD_LIBRARY_FALLBACK_PATH
+export LD_LIBRARY_PATH=$MONO_PREFIX/lib:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=$MONO_PREFIX/include:$GNOME_PREFIX/include
+export ACLOCAL_PATH=$MONO_PREFIX/share/aclocal
+export PKG_CONFIG_PATH=$MONO_PREFIX/lib/pkgconfig:$GNOME_PREFIX/lib/pkgconfig
+export PATH=$MONO_PREFIX/bin:$PATH
+PS1="[mono] \w @ "
+
+http://ahumblegeek.blogspot.ru/2013/10/how-to-install-monodevelop-4-with-f.html
+
+-----------------------------------------------------------------------------------------
+
+2. Install F# from sources:
+
+http://fsharp.org/use/linux/
+https://www.reddit.com/r/fsharp/comments/3ibr5i/f_on_linux/
+
+su
+yum install autoconf libtool pkg-config make git
+git clone https://github.com/fsharp/fsharp
+cd fsharp
+./autogen.sh --prefix=/opt/mono/
+make
+make install
+
+https://fsharp.github.io/FSharp.Compiler.Service/fsharp-readme.html
+
+Uses bootstrapping libraries, tools and F# compiler.
+The lib/bootstrap/X.0 directories contain mono-built libraries, compiler and tools
+that can be used to bootstrap a build.
+You can also supply your own via the --with-bootstrap option.
+
+-----------------------------------------------------------------------------------------
+
+3. Build binding.
+
+The core component is the FSharp.CompilerBinding.dll.
+This is used by both fsautocomplete.exe, a command-line utility to sit behind Emacs, Vim
+and other editing environments, an the MonoDevelop components.
+
+If Monodevelop recognizes fsharpbinding correctly,
+you will see
+F# solution in the list of solutions and
+F# binding installed in add-in manager.
+
+\AddIns\BackendBindings\
+
+./configure.sh
+make
+This produces bin/FSharp.CompilerBinding.dll and bin/fsautocomplete.exe. To understand how to use these components, see the other projects.
+
+http://www.pythonhackers.com/p/xamarin/fsharpbinding
+
+-----------------------------------------------------------------------------------------
+
+The addin gets released to http://addins.monodevelop.com 
+under project 'FSharp' (project index 48). 
+Contact @sega, @tpetricek or @funnelweb to make an update.
+
+4. Install F# Monodevelop addin:
+- open Monodevelop
+- go to Tools -> Addin Manager -> Gallery -> Language Bindings
+- install F# language binding
+
+Sources:
+http://mono-project.com/Parallel_Mono_Environments
+http://fsharp.org/use/linux/
+</pre>
+
+</body>
+</html>
