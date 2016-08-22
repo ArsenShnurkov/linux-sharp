@@ -11,8 +11,15 @@
 </td><td valign="top">
 <a href="index.htm">Разработка на C# под linux</a>
 <br />
-&nbsp;
+<a href="https://fsharpforfunandprofit.com/posts/pattern-matching-command-line/">https://fsharpforfunandprofit.com/posts/pattern-matching-command-line/</a>
+<br />
+<a href="http://rsdn.org/forum/alg/6516758.all">EBNF и Reflection</a>
 </td></tr></table>
+
+<a href="https://github.com/gsscoder/commandline">https://github.com/gsscoder/commandline</a>
+<br />
+<br />
+
 Mono.Options -&gt; NDesk.Options -&gt; ManyConsole
 <br />
 <a href="https://github.com/fschwiet/ManyConsole">https://github.com/fschwiet/ManyConsole</a>
@@ -23,7 +30,42 @@ Mono.Options -&gt; NDesk.Options -&gt; ManyConsole
 <br />
 <a href="http://dgondotnet.blogspot.dk/2013/08/my-last-console-application-manyconsole.html">http://dgondotnet.blogspot.dk/2013/08/my-last-console-application-manyconsole.html</a>
 
-<h2>Desk.Options</h2>
+<h2>Mono.Options</h2>
+
+<a href="https://github.com/mono/mono/blob/master/mcs/class/Mono.Options/Mono.Options/Options.cs">https://github.com/mono/mono/blob/master/mcs/class/Mono.Options/Mono.Options/Options.cs</a>
+<br />
+<a href="http://tirania.org/blog/archive/2008/Oct-14.html">http://tirania.org/blog/archive/2008/Oct-14.html</a>
+<br />
+<a href="https://www.nuget.org/packages/Mono.Options/">https://www.nuget.org/packages/Mono.Options/</a>
+<br />
+<a href="https://components.xamarin.com/gettingstarted/mono.options?version=4.2.2.0">https://components.xamarin.com/gettingstarted/mono.options?version=4.2.2.0</a>
+<br />
+<br />
+в репозитории
+<br />
+<a href="https://github.com/mono/mono/tree/master/mcs/class/Mono.Options">https://github.com/mono/mono/tree/master/mcs/class/Mono.Options</a>
+<br />
+есть:
+<br />
+- файл проекта с опциями сборки
+<br />
+- документация (которую непонятно как обрабатывать)
+<br />
+- тесты
+<br />
+<br />
+<a href="https://devmanual.gentoo.org/ebuild-writing/variables/index.html#src_uri">https://devmanual.gentoo.org/ebuild-writing/variables/index.html#src_uri</a>
+
+<h3>Как работает Mono.Options</h3>
+И как его использовать.
+<br />
+Основная закавыка - я вижу, как указать параметру, является ли он обязательным (=) необязательным (:) или просто параметром без значения
+<br />
+я не вижу, как указать программе, чтобы параметр встерчался только один раз (и такая ошибка вероятно не выводится как ошибка)
+
+<h2>NDesk.Options</h2>
+<a href="http://www.ndesk.org/doc/ndesk-options/NDesk.Options/OptionSet.html">http://www.ndesk.org/doc/ndesk-options/NDesk.Options/OptionSet.html</a>
+<br />
 If you are not familiar with NDesk.Options, you should start by using that: http://www.ndesk.org/Options
 <br />
 the main downside in Mono.Options (the lack of the concept of ǌommand”) has been addressed.
@@ -64,6 +106,52 @@ but the delegate will be executed multiple times, so adding the values to a list
 
 <h2>Interactivity</h2>
 ability to interpret interactive commands ļonsole-mode commands
+
+
+<h2>docopt</h2>
+<a href="http://stackoverflow.com/questions/491595/best-way-to-parse-command-line-arguments-in-c">http://stackoverflow.com/questions/491595/best-way-to-parse-command-line-arguments-in-c</a>
+
+
+
+<h2>Другие проекты</h2>
+Вообще говоря, проектов на github очень много
+<br />
+C++-ники рекомендуют boost program options.
+<br />
+умеет кучу всякого: и параметры, и через переменные окружения, и через response-файлы
+
+
+<h2>Как вообще парсят параметры?</h2>
+Ну, если параметры описаны как-то (например есть специальный язык <a href="https://docopt.org/">docopt.org</a>)
+<br />
+и программа описывается как-то (при помощи reflection)
+<br />
+то между двумя этими описаниями можно задать связи (откуда брать, куда класть)
+<br />
+эти связи могут быть описаны с помощью некоего синтаксиса. Многие предпочитают использовать синтаксис языка и разбирать его стандартным компилятором языка,
+<br />
+для того, чтобы программист, использующий библиотеку был в своей тарелке.
+<br />
+<br />
+Какие бывают фичи:
+<br />
+синглтон, чтобы не создавать объект "var par = new Parameters();"
+<br />
+остаётся только вызвать Singleton.Parser.Parse(argv) вместо par.Parse(argv);
+<br />
+остальной код можно разметить например аттрибутами и тогда Parse разложит распарсенное куда надо и ошибки отработает и отрепортит и справку выведет...
+<br />
+<br />
+Если есть связка между описанием артефакта из входных данных и описанием программного кода, который этот артефакт будет хранить,
+<br />
+то можно сократить описание артефакта и перестать указывать тип артефакта, так как этот тип можно извлечь из описания программного кода
+<br />
+это относится в частности к boolean типам
+<br />
+<br />
+Куда в таком подходе укладывать EBNF? В глобальный атрибут?
+<br />
+Как будет происходить локализация текстов сообщений? (очевидно ресурсами, эти ресурсы должны быть упомянуты в том глобальном атрибуте?)
 
 </body>
 </html>

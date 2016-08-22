@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Какие бывают зависимости и как с ними бороться</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Какие бывают зависимости и как с ними бороться</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+<a href="why-to-build-from-sources.htm">Зачем упаковывать пакеты самостоятельно</a>
+<br />
+<a href="csharp-code-download.htm">Идея: скачать все репозитории с C#-кодом</a>
+</td></tr></table>
+
+У меня новая мегаидея. А что если разделить все ебилды на два? Один будет nekiy.ebuild, а другой будет dev-dotnet/nekiy.ebuild
+<br />
+соответственно, первый будет заниматься сборкой из исходников, а второй - по обстоятельствам. Может вызовет первый и упакует в nupkg, а может готовый nupkg скачает с интернета
+<br />
+или можно категорию завести, например emerge -av =nuget-org/nunit-nupkg-3.6.4 для билдов, которые качают с интернета. Тогда можно будет на выбор ставить местной сборки или с nuget.otg
+<br />
+dev-dotnet/nekiy.ebuild, dev-dotnet/nekiy-nupkg.ebuild и nuget-org/nekiy-nupkg.ebuild
+<br />
+Зачем это нужно? Можно будет прописывать зависимости только от пакетов без суффакса -nupkg
+<br />
+сейчас если что, то прийдётся ставить пакет два раза - первый раз без USE=nupkg, а второй раз с ним
+<br />
+<br />
+я предлагаю перестать использовать USE=nupkg, а сделать вместо этого дополниетльные пакеты с суффиксом -nupkg
+<br />
+<br />
+почему надо сейчас два раза собирать?
+<br />
+честно говоря флаг то выглядит лучше, в чём бенефит отдельного пакета ну если представить, что за один раз соберётся вместе с nupkg?
+<br />
+<br />
+ок. ты меня уговоил :) бенефит есть только для пакетов, которые собираются до сборки nuget и mono-packaging-tools. Нет смысла из-за этого малого количества пакетов разбивать вообще все пакеты в системе
+
+<h2>PublicKeyToken</h2>
+Он одинаковый для поставщика сборок или для сборки разной бинарно - тоже меняется?
+
+<h2>HintPath и как с ним работать</h2>
+<a href="https://github.com/jstangroome/NuGetReferenceHintPathRewrite">https://github.com/jstangroome/NuGetReferenceHintPathRewrite</a>
+<br />
+<a href="https://github.com/d-aguilera/ProjectReferencesConverter/issues/1">https://github.com/d-aguilera/ProjectReferencesConverter</a>
+<br />
+<a href="https://github.com/RoryBecker/CR_ProjectReferenceDefaults">https://github.com/RoryBecker/CR_ProjectReferenceDefaults</a>
+
+<h2>Reference item in .csproj msbuild script</h2>
+<a href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">https://msdn.microsoft.com/en-us/library/bb629388.aspx</a>
+<br />
+<font style="color:red">Что такое FusionName?</font>
+<br />
+<font style="color:red">Для чего нужно FusionName?</font>
+<br />
+By default, when a new (non GAC) reference is added to a VS Project, it's Copy Local property is set to true and it's Specific Version property is set to false.
+
+<h2>ProjectReference item in .csproj msbuild script</h2>
+<pre>&lt;ProjectReference Include=&quot;..\CRM.Business\CRM.Business.csproj&quot;&gt;
+&nbsp;&nbsp;&lt;Project&gt;{4E950B82-167B-4A42-8ECA-2F7607A9746D}&lt;/Project&gt;
+&nbsp;&nbsp;&lt;Name&gt;CRM.Business&lt;/Name&gt;
+&lt;/ProjectReference&gt;</pre>
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">https://msdn.microsoft.com/en-us/library/bb629388.aspx</a>
+<br />
+<font style="color:red">зачем нужно и как применяется <strong>Package</strong>?</font>
+<br />
+Optional string. The path of the project file that is being referenced.
+<br />
+Project
+<br />
+Optional string. A GUID for the reference, in the form {12345678-1234-1234-1234-1234567891234}.
+<br />
+Name
+<br />
+Optional string. The display name of the reference.
+
+<h2>NativeReference</h2>
+<a href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">https://msdn.microsoft.com/en-us/library/bb629388.aspx</a>
+<br />
+Про них важно знать, чтобы пропатчить HintPath при обработке .gitmodules
+<br />
+<br />
+<a href="http://stackoverflow.com/a/8723823/6017919">if I add a ProjectReference Element to link to a native library, that I build errors deep inside of the MSBuild scripts.</a>
+
+<br />
+<br />
+Put this in the project just inside the &lt;/Project&gt; tag
+<pre>
+&lt;Target Name=&quot;MyProjectReference&quot;&gt;
+&nbsp;&nbsp;&lt;ItemGroup&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ProjectReference Include=&quot;…what you had here…&quot;/&gt;
+&nbsp;&nbsp;&lt;/ItemGroup&gt;
+&lt;/Target&gt;
+</pre>
+Then, edit the root &lt;Project&gt; tag to add an attribute InitialTargets="MyProjectReference"
+<br />
+This makes it still work, but hides it from VS.
+
+<h2>reference in Manifest</h2>
+
+<h2>Build-time only dependency</h2>
+<a href="https://blogs.msdn.microsoft.com/kirillosenkov/2015/04/04/how-to-have-a-project-reference-without-referencing-the-actual-binary/">https://blogs.msdn.microsoft.com/kirillosenkov/2015/04/04/how-to-have-a-project-reference-without-referencing-the-actual-binary/</a>
+<br />
+<br />
+Sometimes you want a project reference from project B to project A to indicate a build-time dependency, 
+<br />
+but you don’t actually want assembly B to reference assembly A (maybe because it’s a runtime-only dependency or loaded using reflection).
+<br />
+<br />
+set the ReferenceOutputAssembly metadata:
+<br />
+<pre style="font-family: consolas;"><span style="color: blue;">    &lt;</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;"> </span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">..\ProjectA\ProjectA.csproj</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>{b402782f-de0a-41fa-b364-60612a786fb2}<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>ProjectA<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>false<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">    &lt;/</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;">&gt;</span>
+</pre>
+This will indicate a dependency between projects to MSBuild, but won’t pass the output assembly of ProjectA as a reference to the compiler when compiling ProjectB.
+<br />
+<br />
+If you set ReferenceOutputAssembly to false you will notice that MSBuild stops copying the assembly A into the output directory for assembly B. If you would still like to copy assembly A to the output of assembly B (without referencing it), use this:
+<br />
+<pre style="font-family: consolas;"><span style="color: blue;">    &lt;</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;"> </span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">..\ProjectA\ProjectA.csproj</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>{b402782f-de0a-41fa-b364-60612a786fb2}<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>ProjectA<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>false<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>
+<strong><span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">OutputItemType</span><span style="color: blue;">&gt;</span>Content<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">OutputItemType</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">CopyToOutputDirectory</span><span style="color: blue;">&gt;</span>PreserveNewest<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">CopyToOutputDirectory</span><span style="color: blue;">&gt;</span></strong>
+<span style="color: blue;">    &lt;/</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;">&gt;</span>
+</pre>
+This will produce an item of type Content in project B that includes the output assembly of project A, and the CopyToOutputDirectory metadata on that item will be set to Copy If Newer.
+<br />
+<br />
+many people have asked how to also copy the .pdb file in addition to the .exe/.dll. 
+<br />
+<pre style="font-family: consolas;"><span style="color: blue;">    &lt;</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;"> </span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">..\ProjectA\ProjectA.csproj</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>{b402782f-de0a-41fa-b364-60612a786fb2}<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Project</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>ProjectA<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Name</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>false<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">ReferenceOutputAssembly</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">OutputItemType</span><span style="color: blue;">&gt;</span>Content<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">OutputItemType</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">CopyToOutputDirectory</span><span style="color: blue;">&gt;</span>PreserveNewest<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">CopyToOutputDirectory</span><span style="color: blue;">&gt;</span>
+<strong><span style="color: blue;">      &lt;</span><span style="color: rgb(163, 21, 21);">Targets</span><span style="color: blue;">&gt;</span>Build;DebugSymbolsProjectOutputGroup<span style="color: blue;">&lt;/</span><span style="color: rgb(163, 21, 21);">Targets</span><span style="color: blue;">&gt;</span></strong>
+<span style="color: blue;">    &lt;/</span><span style="color: rgb(163, 21, 21);">ProjectReference</span><span style="color: blue;">&gt;</span></pre>
+<br />
+Need to check if this work on linux with .mdb instead of .pdb
+
+<h2>Solution-level reference</h2>
+You could use Visual Studio Configuration Manager dialog to declare the dependency between projects in the .sln file, but don’t.
+<br />
+<pre>
+Project("{C4ABA494-43D0-400A-9917-20E167A12CFD}") = "Foo", "...\Foo.vcxproj", "{5A42640E-9E0A-442B-8A40-AA91AD5444AC}"
+    ProjectSection(ProjectDependencies) = postProject
+        ...
+        {2CE32AE0-B129-40BA-B06E-A628FA149AB3} = {2CE32AE0-B129-40BA-B06E-A628FA149AB3}
+    EndProjectSection
+EndProject
+...
+Project("{C4ABA494-43D0-400A-9917-20E167A12CFD}") = "baz", "...\baz.csproj", "{2CE32AE0-B129-40BA-B06E-A628FA149AB3}"
+    ProjectSection(ProjectDependencies) = postProject
+        ...
+    EndProjectSection
+EndProject
+</pre>
+MsBuild is NOT using solution file dependencies.
+<br />
+Configuration Manager is a foreign concept in MSBuild, it’s a legacy feature that shouldn’t exist.
+<br />
+<a href="http://blogs.msdn.com/b/visualstudio/archive/2010/12/21/incorrect-solution-build-ordering-when-using-msbuild-exe.aspx">http://blogs.msdn.com/b/visualstudio/archive/2010/12/21/incorrect-solution-build-ordering-when-using-msbuild-exe.aspx</a>
+<br />
+MsBuild is using project references inside the project files to create build order. 
+<br />
+<br />
+I do recommend project references in general, on the principle of “express the dependency in the place it applies” – you can look at the project and see that the dependency is correct, and you can include the projects in more than one solution easily.
+<br />
+<br />
+when you build a solution with Visual Studio what it actually does internally is convert the solution file to an msbuild script that contains a line to build the projects:
+<br />
+<pre>&lt;MSBuild Projects=&quot;my_project.csproj&quot; Targets=&quot;Build&quot; /&gt;</pre>
+
+<h2>Circular References</h2>
+In .Net framework class library there are some cases where such circular references exist
+<br />
+<a href="http://stackoverflow.com/questions/1316518/how-did-microsoft-create-assemblies-that-have-circular-references">http://stackoverflow.com/questions/1316518/how-did-microsoft-create-assemblies-that-have-circular-references</a>
+<br />
+AFAIK, Microsoft uses a special build system in order to create such circular references. 
+<br />
+I've heard it can be done with something called "temporary metadata only" assemblies.
+<br />
+Microsoft uses internal tool which uses ILDASM to disassemble assemblies, strip all internal/private stuff and method bodies 
+and recompile IL again (using ILASM) into what is called 'dehydrated assembly' or <strong>metadata assembly</strong>.
+This is done every time public interface of assembly is changed.
+<br />
+During the build, metadata assemblies are used instead of real ones. That way cycle is broken.
+<br />
+They are not strongly signed until after build (they are delay signed), so dehydrated assemblies are not signed.
+<br />
+<a href="http://stackoverflow.com/a/1316587/6017919">"In my knowledge, this is not documented publicly."</a>
+<br />
+<br />
+but Visual Studio refuse to add (project) reference in such case. 
+<br />
+Its pretty easy to do in Visual Studio as long as you don't use project references...
+<br />
+<br />
+One possible approach is to use conditional compilation (#if) to first compile a System.dll that doesn't depend on those other assemblies, 
+then compile the other assemblies, and at last recompile System.dll to include the parts depending on Xml and Configuration.
+<br />
+Conditional references can be easily done by editing the .csproj file. Just add a Condition attribute to the &lt;Reference&gt; element. 
+<br />
+<br />
+as part of the cleanup of .NET Core, there will be no more circular references.
+
+<h2>Conditional references</h2>
+<a href="https://whathecode.wordpress.com/2012/10/07/conditional-project-or-library-reference-in-visual-studio/">https://whathecode.wordpress.com/2012/10/07/conditional-project-or-library-reference-in-visual-studio/</a>
+<br />
+<h2 class="title">Conditional project or library reference in Visual&nbsp;Studio</h2>
+
+			<div class="entry">
+				<div class="postbody entry clearfix">
+
+<p>project uses two of my other open source libraries, located in separate repositories. 
+Adding these projects to the solution and <strong>referencing them as project references</strong> has the advantage of easier debugging and facilitates making changes to them. 
+However, I do not want to force anyone interested in making changes to the main project to having to download the other repositories as well.
+Therefore I opted to use&nbsp;<strong>DLL references</strong>.&nbsp;This has one major downside.
+Whenever I do make changes to one of the dependent libraries, I need to manually copy the newly compiled DLLs to the main project.
+<br />
+<br />
+Wouldn’t it be easy to use <strong>two separate solution files</strong>, one with project references, and one with DLL references?
+<br />
+(почему бы второй solution не создавать автоматически во время роллинга? Патчить .csproj-файлы всё равно прийдётся. Но можно патчить просто, а можно вставлять эти условные блоки. Тогда работоспособность локальных ссылок сохранится, но не ясно, в каком сценарии такая способность нужна...)
+<br />
+<br />
+You’ll encounter is project references aren’t stored in the <em>.sln</em> file but in the <em>.csproj</em> file, which makes sense really.
+<br />
+Since the <em>.csproj</em> file is shared by both solutions, we’ll have to <strong>conditionally reference either our DLLs or our projects</strong>, 
+depending on which solution the project is opened in. <a href="http://stackoverflow.com/a/6523223/590790">This is possible using </a><strong><a href="http://stackoverflow.com/a/6523223/590790">MSBuild</a></strong>,
+but you will need to <strong>create a new project configuration</strong>.
+Setting the configuration of the project differently in one solution from the other allows you to differentiate between the two of them.
+The following is part of a <em>.csproj</em> file which conditionally loads a reference by checking whether the project configuration is set to ‘<em>Debug With Project References’.</em></p>
+<pre class="brush: xml; title: ; notranslate" title="">  &lt;Choose&gt;
+    &lt;When Condition="'$(Configuration)' == 'Debug With Project References'"&gt;
+      &lt;ItemGroup&gt;
+        &lt;ProjectReference Include="..\SomeProject\SomeProject.csproj"&gt;
+          &lt;Project&gt;{6CA7AB2C-2D8D-422A-9FD4-2992BE62720A}&lt;/Project&gt;
+          &lt;Name&gt;SomeProject&lt;/Name&gt;
+        &lt;/ProjectReference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;Otherwise&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include="SomeProject"&gt;
+          &lt;HintPath&gt;..\Libraries\SomeProject.dll&lt;/HintPath&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/Otherwise&gt;
+  &lt;/Choose&gt;
+</pre>
+<p>You could very well stop here, but I wanted to resolve another issue as well. Unless you follow a really strict folder structure, and force everyone else who wants to open your solution to do the same, <strong>the path used to reference the project can vary</strong> between people. Remember we are using <strong>separate repositories</strong> here, and the referenced projects aren’t included in the repository of the main solution, so relative paths don’t necessarily work. It is possible to specify the paths in <strong>an external ‘configuration’ file</strong>, and importing it into the <em>.csproj</em> file. Additionally, as a <strong>fallback when the project can’t be found</strong> at the given path, it is also useful to load the DLL instead. This way you can choose to load one or more, but not necessarily all references as a project reference.</p>
+<p>The configuration file (<em>ProjectReferences.txt</em>):</p>
+<pre class="brush: xml; title: ; notranslate" title="">&lt;Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;PropertyGroup Condition="$(Configuration) == 'Debug With Project References'"&gt;
+	&lt;SomeProject&gt;..\SomeProject&lt;/SomeProject&gt;
+  &lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+</pre>
+<p>Segment from the <em>.csproj</em> file:</p>
+<pre class="brush: xml; title: ; notranslate" title="">  &lt;Import Project="..\ProjectReferences.txt" /&gt;
+  &lt;Choose&gt;
+    &lt;When Condition="Exists($(SomeProject))"&gt;
+      &lt;ItemGroup&gt;
+        &lt;ProjectReference Include="$(SomeProject)\SomeProject.csproj"&gt;
+          &lt;Project&gt;{6CA7AB2C-2D8D-422A-9FD4-2992BE62720A}&lt;/Project&gt;
+          &lt;Name&gt;SomeProject&lt;/Name&gt;
+        &lt;/ProjectReference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;Otherwise&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include="SomeProject"&gt;
+          &lt;HintPath&gt;..\Libraries\SomeProject.dll&lt;/HintPath&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/Otherwise&gt;
+  &lt;/Choose&gt;
+</pre>
+<p>Notice the project configuration check now occurs in the configuration file. The ‘<em>$(SomeProject)’</em> property&nbsp;is only set when using the ‘<em>Debug With Project References’</em> configuration, thus in all other scenarios the DLL will be loaded instead since the ‘<a href="http://msdn.microsoft.com/en-us/library/7szfhaft.aspx"><em>Exists()</em></a>‘ check will fail.</p>
+<p>One last issue remains. We still need to <strong>manually copy the latest compiled DLLs</strong> to the ‘<em>Libraries’</em> folder when changes were made for the solution which uses them to work as expected. We can exploit the fact that we now have the relevant project paths available in the configuration file. Using a post build event you can call a script which parses the XML data, and copies the DLLs to the correct location. This script should be called conditionally, only for the solution which includes the project references, and ideally also only for a <em>Release</em> build. I used <a href="https://bitbucket.org/Whathecode/laevo/src/feb478bfe324/Laevo/UpdateLibraryDlls.rb">a small Ruby script</a> which offers a lot more flexibility than a Batch script.</p>
+<p>The post build event:</p>
+<pre class="brush: plain; title: ; notranslate" title="">if "$(SolutionName)" == "SomeSolution With Project References" if "$(ConfigurationName)" == "Release" ruby $(SolutionDir)UpdateLibraryDlls.rb $(SolutionDir)
+</pre>
+		
+</body>
+</html>

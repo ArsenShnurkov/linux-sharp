@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>mono-packaging-tools</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>mono-packaging-tools</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+cd /var/calculate/remote/distfiles/egit-src/mono-packaginf-tools.git
+
+<h2>mpt-csproj</h2>
+проект
+<br />
+mpt-csproj/mpt-csproj.csproj
+<br />
+зависит от сборки
+<br />
+mpt-core/mpt-core.csproj
+<br />
+<br />
+Внутри сборки <strong>mpt-core</strong> классы для работы с версиями (SemanticVersioning), но они пока не используются.
+<br />
+<br />
+mpt-csproj.csproj ссылается на Mono.Options.dll для того, чтобы можно было анализировать аргументы командной строки
+<br />
+<br />
+Что я хочу сделать в mpt-csroj?
+<br />
+1) сделать разбор параметров командной строки для управления функциями
+<br />
+2) сделать функцию печати Reference использованных в указанном .csproj-файле
+<br />
+одной этой функции достаточно, чтобы зарелизить новую минорную версию пакета и опакетить её (тем более, что старый пакет неработоспособен)
+<br />
+3) сделать функцию замены Reference в некотором .csproj-файле с ProjectReference на GAC Reference.
+<br />
+ну, csproj это такой XML, можно найти секцию где находятся ProjectReferences, можно найти секцию где находятся References,
+<br />
+ну и ссылку удалить/создать по-новому
+<br />
+<br />
+<font style="color:red">Будет ли забираться версия сборки из GAC, если не указано, какая версия нужна?</font>
+<br />
+Для ответа на этот вопрос надо найти спецификацию по местам поиска сборок в mono или прочитать код mono.
+<br />
+Но можно просто проверить практически - сделать и посмотреть, вдруг заработает? Тогда на грабли будут наступать другие, а я победно кричать УМВР!
+
+<h3>функция печати Reference в указанном .csproj-файле</h3>
+mpt-csproj --refs filename
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;здесь "refs" требует один параметр (то есть не один, а список). Если надо обработать несколько проектов - пишем несколько refs
+<br />
+Затем надо позвать функцию из mpt-core,
+<br />
+пусть эта функция будет иметь интерфейс
+<br />
+void DumpRefs(string csproj, IndentedTextWriter out)
+<br />
+mpt-csproj пусть занимается 
+<br />
+анализом параметров, циклом по файлам, соединением с выводом на консоль, отступами (созданием IndentedTextWriter)
+
+<h3>Новый пакет</h3>
+2016-08-18, 13a6c4524e2f3a7e70604fc8f68fd7aba72efc4c
+<br />
+cd /var/lib/layman/dotnet
+<br />
+git add *
+<br />
+git commit -m "bump for commandlineparser fix"
+<br />
+git push
+
+<h3>Использование ветки и URL для layman</h3>
+Как перенастроить репозиторий лайман, чтобы использовлся другой URL для скачивания контента?
+<br />
+потому что вокфлоу такой - форкнул, отбранчил, наменял, запушил, (вот тут я хочу эту ветку потестить), создал PR для ветки, дождался мержа, удалил ветку, догнал master
+<br />
+потому что это другая машина, хочу чтобы она скачивала с гитхаба
+<br />
+<br />
+Как я пытался разрешить проблему:
+<br />
+читал <code>man layman</code>
+<br />
+<br />
+man на layman - в нём же нет примера секции для файла /etc/portage/repos.conf/layman.conf   
+<br />
+а на странице <a href="https://wiki.gentoo.org/wiki//etc/portage/repos.conf">https://wiki.gentoo.org/wiki//etc/portage/repos.conf</a> не написано, как выбрать ветку в репозитории
+
+<br />
+how to configure layman's overlay to fetch ebuilds from git branch other than "master" ?
+<br />
+grknight: portage's sync, and i believe layman does as well, assumes the current branch selected by the user is what should be updated
+<br />
+grknight: oh, thanks. I changed url with "git remote set-url origin" by hands, and /etc/portage/repos.conf/layman.conf too, but looks like "layman -i" output wrong information
+<br />
+&lt;iamben&gt; beyond the initial repos.conf file generation, layman isnt too useful
+<br />
+&lt;grknight&gt; yes, layman is on it's way to being an &quot;add from known sources" tool.  rest should be done by portage
+<br />
+<br />
+<a href="https://wiki.gentoo.org/wiki/Project:Portage/Sync">https://wiki.gentoo.org/wiki/Project:Portage/Sync</a>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как выглядит сообщение об ошибке</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как выглядит сообщение об ошибке</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">gnome-sharp-2.0</a>
+<br />
+<a href="config.log.htm">/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/config.log</a>
+</td></tr></table>
+
+<pre>
+# rm -rf /var/tmp/portage/dev-util/monodevelop-* &amp;&amp; USE=&quot;gnome&quot; emerge -v =monodevelop-6.0.0.4761
+!!! Repository 'dotnet' has sync-uri attribute, but is missing sync-type attribute
+ * WARNING: The FEATURES variable contains one or more values that
+ * should be disabled under normal circumstances: keepwork
+
+These are the packages that would be merged, in order:
+
+Calculating dependencies... done!
+[ebuild     U ~] dev-util/monodevelop-6.0.0.4761::dotnet [5.9.5.9-r1::gentoo] USE=&quot;git gnome* subversion -debug% -developer% -doc% -qtcurve&quot; 0 KiB
+
+Total: 1 package (1 upgrade), Size of downloads: 0 KiB
+
+!!! The following installed packages are masked:
+- dev-java/oracle-jdk-bin-1.8.0.77::gentoo (masked by: Oracle-BCLA-JavaSE license(s))
+A copy of the 'Oracle-BCLA-JavaSE' license is located at '/usr/portage/licenses/Oracle-BCLA-JavaSE'.
+
+- www-client/google-chrome-51.0.2704.106::gentoo (masked by: google-chrome license(s))
+A copy of the 'google-chrome' license is located at '/usr/portage/licenses/google-chrome'.
+
+- app-emulation/virtualbox-bin-5.0.20.106931::gentoo (masked by: PUEL license(s))
+A copy of the 'PUEL' license is located at '/usr/portage/licenses/PUEL'.
+
+- dev-lang/perl-5.20.2::gentoo (masked by: package.mask)
+For more information, see the MASKED PACKAGES section in the emerge
+man page or refer to the Gentoo Handbook.
+
+
+
+&gt;&gt;&gt; Verifying ebuild manifests
+
+&gt;&gt;&gt; Emerging (1 of 1) dev-util/monodevelop-6.0.0.4761::dotnet
+ * monodevelop-6.0.0.4761.tar.bz2 SHA256 SHA512 WHIRLPOOL size ;-) ...                                                                    [ ok ]
+ * roslyn-16e117c2400d0ab930e7d89512f9894a169a0e6e.zip SHA256 SHA512 WHIRLPOOL size ;-) ...                                               [ ok ]
+ * NUnit-2.5.10.11092.zip SHA256 SHA512 WHIRLPOOL size ;-) ...                                                                            [ ok ]
+ * Ebuild doesn't contain USE_DOTNET=
+ *  -- USING .NET 4.0 FRAMEWORK -- 
+&gt;&gt;&gt; Unpacking source...
+&gt;&gt;&gt; Unpacking NUnit-2.5.10.11092.zip to /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp
+&gt;&gt;&gt; Unpacking monodevelop-6.0.0.4761.tar.bz2 to /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work
+&gt;&gt;&gt; Unpacking roslyn-16e117c2400d0ab930e7d89512f9894a169a0e6e.zip to /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/external
+&gt;&gt;&gt; Source unpacked in /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work
+&gt;&gt;&gt; Preparing source in /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0 ...
+ * Applying 6.0-aspnet-template-references-fix.patch ...                                                                                  [ ok ]
+&gt;&gt;&gt; Source prepared.
+&gt;&gt;&gt; Configuring source in /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0 ...
+./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --disable-silent-rules --libdir=/usr/lib64 --disable-update-mimedb --disable-update-desktopdb --enable-monoextensions --enable-gnomeplatform --enable-subversion --enable-git
+checking for a BSD-compatible install... /usr/lib/portage/python3.4/ebuild-helpers/xattr/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether UID '250' is supported by ustar format... yes
+checking whether GID '250' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for mono... /usr/bin/mono
+checking for mcs... /usr/bin/dmcs
+checking for pkg-config... /usr/bin/pkg-config
+checking for msgfmt... /usr/bin/msgfmt
+checking for msgmerge... /usr/bin/msgmerge
+checking for x86_64-pc-linux-gnu-pkg-config... (cached) /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for UNMANAGED_DEPENDENCIES_MONO... yes
+checking for mono... /usr/bin/mono
+checking for dmcs... /usr/bin/dmcs
+checking for GLIB_SHARP... yes
+checking for GTK_SHARP... yes
+checking for GLADE_SHARP... yes
+checking for MONODOC... yes
+checking for GNOME_SHARP... no
+checking for GNOME_VFS_SHARP... yes
+checking for GCONF_SHARP... yes
+configure: error: Cannot enable GNOME platform without gnome-sharp-2.0
+
+!!! Please attach the following file when seeking support:
+!!! /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/config.log
+ * ERROR: dev-util/monodevelop-6.0.0.4761::dotnet failed (configure phase):
+ *   econf failed
+ * 
+ * Call stack:
+ *               ebuild.sh, line  115:  Called src_configure
+ *             environment, line 2623:  Called econf '--disable-update-mimedb' '--disable-update-desktopdb' '--enable-monoextensions' '--enable-gnomeplatform' '--enable-subversion' '--enable-git'
+ *        phase-helpers.sh, line  662:  Called __helpers_die 'econf failed'
+ *   isolated-functions.sh, line  117:  Called die
+ * The specific snippet of code:
+ *   		die &quot;$@&quot;
+ * 
+ * If you need support, post the output of `emerge --info '=dev-util/monodevelop-6.0.0.4761::dotnet'`,
+ * the complete build log and the output of `emerge -pqv '=dev-util/monodevelop-6.0.0.4761::dotnet'`.
+ * The complete build log is located at '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp/build.log'.
+ * The ebuild environment file is located at '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp/environment'.
+ * Working directory: '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0'
+ * S: '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0'
+
+&gt;&gt;&gt; Failed to emerge dev-util/monodevelop-6.0.0.4761, Log file:
+
+&gt;&gt;&gt;  '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp/build.log'
+
+ * Messages for package dev-util/monodevelop-6.0.0.4761:
+
+ * Ebuild doesn't contain USE_DOTNET=
+ * ERROR: dev-util/monodevelop-6.0.0.4761::dotnet failed (configure phase):
+ *   econf failed
+ * 
+ * Call stack:
+ *               ebuild.sh, line  115:  Called src_configure
+ *             environment, line 2623:  Called econf '--disable-update-mimedb' '--disable-update-desktopdb' '--enable-monoextensions' '--enable-gnomeplatform' '--enable-subversion' '--enable-git'
+ *        phase-helpers.sh, line  662:  Called __helpers_die 'econf failed'
+ *   isolated-functions.sh, line  117:  Called die
+ * The specific snippet of code:
+ *   		die &quot;$@&quot;
+ * 
+ * If you need support, post the output of `emerge --info '=dev-util/monodevelop-6.0.0.4761::dotnet'`,
+ * the complete build log and the output of `emerge -pqv '=dev-util/monodevelop-6.0.0.4761::dotnet'`.
+ * The complete build log is located at '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp/build.log'.
+ * The ebuild environment file is located at '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/temp/environment'.
+ * Working directory: '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0'
+ * S: '/var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0'
+ </pre>
+ 
+</body>
+</html>

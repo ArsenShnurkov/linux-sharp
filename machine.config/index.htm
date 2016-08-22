@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как отредактировать machine.config</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как отредактировать machine.config</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+
+
+
+<h2>Возможные поисковые запросы</h2>
+how to modify machine.config programmatically
+<br />
+How to modify machine.config file with a C# class?
+
+<h2>Результаты поиска</h2>
+<a href="http://stackoverflow.com/questions/34824445/how-to-create-a-modified-copy-of-machine-config-file">http://stackoverflow.com/questions/34824445/how-to-create-a-modified-copy-of-machine-config-file</a>
+<br />
+<a href="https://forums.iis.net/t/1164506.aspx">https://forums.iis.net/t/1164506.aspx</a>
+
+<h2>Ключевые слова и варианты решений</h2>
+
+	<h3>Plain XML manipulations</h3>
+	write a simple console application which does not use any data provider and parse and fix the configuration file through plain XML manipulation. 
+	<br />
+	<br />
+	the error is not raised by your application, it's raised by the .NET framework which fails to validate the machine.config when it reads it.
+	<br />
+	Because the validation fails and the configuration is not loaded, you can't manipulate it through <strong>any</strong> kind of API.
+	
+
+	<h3>System.Configuration</h3>
+	to read/write machine.config.
+	<br />
+	You can find plenty of samples on MSDN for these.
+	<br />
+	
+	
+	For that you will need to use System.Configuration like:
+	<br />
+	<a href="http://msdn.microsoft.com/en-us/library/ms151439(VS.80).aspx">http://msdn.microsoft.com/en-us/library/ms151439(VS.80).aspx</a>
+
+
+	<h3>Code-Based configuration</h3>
+	features available in Entity Framework 6.
+	<br />
+	<a href="http://msdn.microsoft.com/en-US/data/jj680699">http://msdn.microsoft.com/en-US/data/jj680699</a>
+	
+	<h3>Machine.Web.Administration</h3>
+	If you specifically need to set it in machine.config then Microsoft.Web.Administration is not an option.
+	<br />
+	Currently MWA only allows you to set it in 
+	<br />
+	root web.config or any other web.config, 
+	<br />
+	however there are no API's to modify machine.config.
+	<br />
+	<br />
+	If you can set it in the root web.config then you can use MWA
+	<br />
+	by adding a reference  (to windows\system32\inetsrv\Microsoft.Web.Administration.dll) 
+	<br />
+	and using ServerManager::GetWebConfiguration(null) to set it in root web.config.
+
+<h2>Где он располагается</h2>
+
+new ConfigurationFileMap().MachineConfigFilename;
+<br />
+<pre>
+using System;
+using System.Configuration;
+
+namespace test
+{
+	public class MainClass
+	{
+		public static int Main(string[] args)
+		{
+			var path = new ConfigurationFileMap().MachineConfigFilename;
+			Console.WriteLine(path);
+			return 0;
+		}
+	}
+}
+</pre>
+<br />
+$ mcs -r:System.Configuration main.cs
+<br />
+$ mono main.exe
+<br />
+/etc/mono/4.5/machine.config
+
+
+
+
+<h2>Словарик</h2>
+<dl>
+<dt>machine.config</dt>
+<dt>DbProviderFactories</dt>
+<dt>.Net Data provider</dt>
+</dl>
+
+
+</body>
+</html>

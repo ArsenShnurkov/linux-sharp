@@ -1,0 +1,376 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>gnome-sharp-2.0</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>gnome-sharp-2.0</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Как собирать monodevelop</a>
+<br />
+<a href="configure-help.htm">configure help</a>
+<br />
+<a href="equery-files.htm">equery files</a>
+</td></tr></table>
+
+<a href="error-text.htm">Как выглядит сообщение об ошибке</a>
+<br />
+configure: error: Cannot enable GNOME platform without gnome-sharp-2.0
+<br />
+<br />
+Какое место в скриптах сборки выводит эту ошибку и как его увидеть?
+<br />
+в <a href="config.log.htm">логе</a> по пути /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/config.log
+<br />
+написано, что надо смотреть строку
+<br />
+configure:4118
+<br />
+А написано там вот что:
+<pre># sed -n '4105,4135p' /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/configure
+platform_bindings=""
+
+# Gnome platform addin
+# Check whether --enable-gnomeplatform was given.
+if test "${enable_gnomeplatform+set}" = set; then :
+  enableval=$enable_gnomeplatform; enable_gnomeplatform=${enableval}
+else
+  enable_gnomeplatform=$default_gnomeplatform
+fi
+
+
+if test x$enable_gnomeplatform = xyes; then
+	if test x$gnome_sharp = xno; then
+		as_fn_error $? "Cannot enable GNOME platform without gnome-sharp-2.0" "$LINENO" 5
+	fi
+	if test x$gnome_vfs_sharp = xno; then
+		as_fn_error $? "Cannot enable GNOME platform without gnome-vfs-sharp-2.0" "$LINENO" 5
+	fi
+	if test x$gconf_sharp = xno; then
+		as_fn_error $? "Cannot enable GNOME platform without gconf-sharp-2.0" "$LINENO" 5
+	fi
+	platform_bindings="${platform_bindings}GNOME "
+fi
+
+ if test x$enable_gnomeplatform = xyes; then
+  ENABLE_GNOMEPLATFORM_TRUE=
+  ENABLE_GNOMEPLATFORM_FALSE='#'
+else
+  ENABLE_GNOMEPLATFORM_TRUE='#'
+  ENABLE_GNOMEPLATFORM_FALSE=
+fi
+</pre>
+Что за переменная такая
+<br />
+gnome_sharp
+<br />
+и где она получает значение <strong>no</strong>?
+<pre>
+configure:3696: checking for GNOME_SHARP
+configure:3703: $PKG_CONFIG --exists --print-errors "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION"
+Package gnome-sharp-2.0 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `gnome-sharp-2.0.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'gnome-sharp-2.0' found
+configure:3706: $? = 1
+configure:3720: $PKG_CONFIG --exists --print-errors "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION"
+Package gnome-sharp-2.0 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `gnome-sharp-2.0.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'gnome-sharp-2.0' found
+configure:3723: $? = 1
+configure:3737: result: no
+No package 'gnome-sharp-2.0' found
+</pre>
+Как проводятся эти проверки:
+<br />
+sed -n '3695,3764p' /var/tmp/portage/dev-util/monodevelop-6.0.0.4761/work/monodevelop-6.0/configure
+<br />
+<pre>
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNOME_SHARP" >&5
+$as_echo_n "checking for GNOME_SHARP... " >&6; }
+
+if test -n "$GNOME_SHARP_CFLAGS"; then
+    pkg_cv_GNOME_SHARP_CFLAGS="$GNOME_SHARP_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gnome-sharp-2.0 >= \$GTKSHARP_REQUIRED_VERSION\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GNOME_SHARP_CFLAGS=`$PKG_CONFIG --cflags "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$GNOME_SHARP_LIBS"; then
+    pkg_cv_GNOME_SHARP_LIBS="$GNOME_SHARP_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gnome-sharp-2.0 >= \$GTKSHARP_REQUIRED_VERSION\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GNOME_SHARP_LIBS=`$PKG_CONFIG --libs "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GNOME_SHARP_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION" 2>&1`
+        else
+	        GNOME_SHARP_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gnome-sharp-2.0 >= $GTKSHARP_REQUIRED_VERSION" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GNOME_SHARP_PKG_ERRORS" >&5
+
+	gnome_sharp=no
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	gnome_sharp=no
+else
+	GNOME_SHARP_CFLAGS=$pkg_cv_GNOME_SHARP_CFLAGS
+	GNOME_SHARP_LIBS=$pkg_cv_GNOME_SHARP_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	gnome_sharp=yes
+fi
+</pre>
+<br />
+почему не получается найти файл <strong>gnome-sharp-2.0.pc</strong> ?
+<br />
+ну так этого файла нет в списке устанавливаемых файлов пакета:
+<br />
+<a href="equery-files.htm">equery files</a>
+<br />
+<br />
+Что за библиотека такая gnome-sharp-2.0, это пакет или что вообще имеется в виду?
+<br />
+Какие есть версии пакета gnome-sharp ?
+<br />
+# ls dev-dotnet/gnome-sharp* -1
+<pre>
+gnome-sharp-2.24.2-r2.ebuild
+Manifest
+metadata.xml
+</pre>
+А в дереве?
+<br />
+# ls /usr/portage/dev-dotnet/gnome-sharp -1
+<pre>
+gnome-sharp-2.24.2.ebuild
+gnome-sharp-2.24.2-r1.ebuild
+Manifest
+metadata.xml
+</pre>
+<br />
+Какая версия стоит сейчас?
+<br />
+<pre>
+[ebuild   R   ~] dev-dotnet/gnome-sharp-2.24.2-r2:2::dotnet  USE="-debug -developer" 0 KiB
+</pre>
+В чём разница между этими версиями ?
+<br />
+В версии gnome-sharp-2.24.2-r1 тоже такой файл не устанавливается
+<br />
+Зато в версии gnome-sharp-2.24.2 устанавливается только этот файл 
+<br />
+Будет ли устанавливаться monodevelop с версией 2.24.2?
+<br />
+не будет, там <a href="other-deps.htm">другая ошибка</a>
+<br />
+Как файл gnome-sharp-2.0.pc выглядит:
+<pre>
+# cat /usr/lib64/pkgconfig/gnome-sharp-2.0.pc
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib64
+gapidir=${prefix}/share/gapi-2.0
+
+
+Name: Gnome#
+Description: Gnome# - GNOME .NET Binding
+Version: 2.24.2
+Requires: gtk-sharp-2.0 art-sharp-2.0 gnome-vfs-sharp-2.0
+Cflags: -I:${gapidir}/gnome-api.xml
+Libs: -r:${libdir}/mono/gtk-sharp-2.0/gnome-sharp.dll
+</pre>
+<br />
+Если этот файл gnome-sharp-2.0.pc перестали устанавливать то почему ?
+<br />
+в главной ветке <a href="https://github.com/mono/gnome-sharp/blob/master/gnome/gnome-sharp-2.0.pc.in">он есть</a>
+<br />
+Как жить дальше, имеет ли смысл пропатчить Monodevelop ?
+<br />
+Что такое "gtk-sharp/gnome-sharp split"?
+<br />
+<br />
+checking for LIBART... yes
+<br />
+checking for GNOMEVFS... yes
+<br />
+checking for GNOME... yes
+<pre>
+GNOMECANVAS_REQUIRED_VERSION=2.20.0
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNOME" >&5
+$as_echo_n "checking for GNOME... " >&6; }
+
+if test -n "$GNOME_CFLAGS"; then
+    pkg_cv_GNOME_CFLAGS="$GNOME_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libgnomecanvas-2.0 >= \$GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= \$GNOME_REQUIRED_VERSION gtk+-2.0 >= \$GTK_REQUIRED_VERSION gmodule-2.0 >= \$GTK_REQUIRED_VERSION\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GNOME_CFLAGS=`$PKG_CONFIG --cflags "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$GNOME_LIBS"; then
+    pkg_cv_GNOME_LIBS="$GNOME_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libgnomecanvas-2.0 >= \$GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= \$GNOME_REQUIRED_VERSION gtk+-2.0 >= \$GTK_REQUIRED_VERSION gmodule-2.0 >= \$GTK_REQUIRED_VERSION\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GNOME_LIBS=`$PKG_CONFIG --libs "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GNOME_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION" 2>&1`
+        else
+	        GNOME_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION gtk+-2.0 >= $GTK_REQUIRED_VERSION gmodule-2.0 >= $GTK_REQUIRED_VERSION" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GNOME_PKG_ERRORS" >&5
+
+	enable_gnome=no
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	enable_gnome=no
+else
+	GNOME_CFLAGS=$pkg_cv_GNOME_CFLAGS
+	GNOME_LIBS=$pkg_cv_GNOME_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	enable_gnome=yes
+fi
+</pre>
+
+<h2>Сухой остаток</h2>
+Причина ошибки выявлена не была. Ошибка исчезла в связи с невыясненными обстоятельствами.
+<br />
+пакет gnome-sharp умеет в принципе ставит файл gnome-sharp-2.0.pc в любой версии ebuild-а, включая новые,
+<pre>
+ * Contents of dev-dotnet/gnome-sharp-2.24.2-r3:
+/usr/lib64/pkgconfig/art-sharp-2.0.pc
+/usr/lib64/pkgconfig/gconf-sharp-2.0.pc
+/usr/lib64/pkgconfig/gconf-sharp-peditors-2.0.pc
+/usr/lib64/pkgconfig/gnome-sharp-2.0.pc
+/usr/lib64/pkgconfig/gnome-vfs-sharp-2.0.pc
+</pre>
+но как работает ./configure этого пакета - осталось загадкой
+<br />
+<br />
+можно предположить, что надо собирать gtk+ или какие-то другие пакеты, чтобы собрались библиотеки в условии, но такое предположение надо проверять.
+<br />
+libgnomecanvas-2.0 >= $GNOMECANVAS_REQUIRED_VERSION 
+<br />
+libgnomeui-2.0 >= $GNOME_REQUIRED_VERSION 
+<br />
+gtk+-2.0 >= $GTK_REQUIRED_VERSION 
+<br />
+gmodule-2.0 >= $GTK_REQUIRED_VERSION
+<br />
+<br />
+pkg-config --libs "libgnomecanvas-2.0 > 2  libgnomeui-2.0 > 2 gtk+-2.0 > 2 gmodule-2.0 > 2"
+<br />
+-lgnomeui-2 -lSM -lICE -lbonoboui-2 -lgnome-2 -lpopt -lbonobo-2 -lbonobo-activation -lORBit-2 -lgnomecanvas-2 -lart_lgpl_2 -lgnomevfs-2 -lgconf-2 -lgthread-2.0 -pthread -lgmodule-2.0 -pthread -lgtk-x11-2.0 -lgdk-x11-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lfontconfig -lfreetype -Wl,--export-dynamic -lgmodule-2.0 -pthread -lglib-2.0
+<pre>
+gnomeui-2
+SM
+ICE 
+bonoboui-2
+gnome-2
+popt
+bonobo-2
+bonobo-activation
+ORBit-2
+gnomecanvas-2
+art_lgpl_2
+gnomevfs-2
+gconf-2
+gthread-2.0
+gmodule-2.0
+gtk-x11-2.0
+gdk-x11-2.0
+pangocairo-1.0
+atk-1.0
+cairo
+gdk_pixbuf-2.0
+gio-2.0
+pangoft2-1.0
+pango-1.0
+gobject-2.0
+fontconfig
+freetype
+gmodule-2.0 
+glib-2.0
+</pre>
+выяснить какими пакетами ставится каждая из этих библиотек (ну или хотя бы проверить, что они установлены, если ошибка повторится)
+</body>
+</html>
