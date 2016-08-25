@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>зависимость от nuget</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>зависимость от nuget</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Как собирать monodevelop</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<pre>
+/var/tmp/portage/dev-util/monodevelop-6.1_p2016062206/work/monodevelop-6.1/src/addins/MonoDevelop.PackageManagement/MonoDevelop.PackageManagement.csproj (default targets) ->
+/usr/lib64/mono/4.5/Microsoft.Common.targets (ResolveAssemblyReferences target) ->
+[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Versioning' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.LibraryModel' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Frameworks' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Logging' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Packaging.Core.Types' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Packaging.Core' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Packaging' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Configuration' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Protocol.Core.Types' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Protocol.Core.v3' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Repositories' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.RuntimeModel' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.DependencyResolver.Core' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.ProjectModel' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.ProjectManagement' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.ContentModel' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Client' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.DependencyResolver' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Commands' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Protocol.Core.v2' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Resolver' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.PackageManagement' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Common' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Protocol.VisualStudio' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Indexing' not resolved[0m
+[33m	/usr/lib64/mono/4.5/Microsoft.Common.targets:  warning : Reference 'NuGet.Credentials' not resolved[0m
+</pre>
+
+</body>
+</html>

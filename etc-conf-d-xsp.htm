@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>/etc/conf.d/xsp</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>/etc/conf.d/xsp</h1>
+</td><td style="vertical-align:top;">
+<a href="list-of-files.htm">Список устанавливаемых файлов</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<pre>
+# cat /etc/conf.d/xsp
+# Config file for /etc/init.d/xsp
+# $Id: xsp.confd,v 1.1 2009/01/18 17:44:04 loki_val Exp $
+
+# This is the document root; trailing slash is not necessary
+MonoServerRoot=/usr/lib/xsp/test
+
+# Port for the server to run on
+MonoServerPort=8000
+
+# If you want to host .NET 2.0 applications you have to set this to 2.
+# Otherwise, leave it unchanged
+MonoServerVersion=1
+</pre>
+
+</body>
+</html>

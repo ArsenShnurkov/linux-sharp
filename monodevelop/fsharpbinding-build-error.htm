@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Ошибка при сборке fsharpbinding</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Ошибка при сборке fsharpbinding</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">Как собирать monodevelop</a>
+<br />
+<a href="FSharp.CompilerBinding/index.htm">FSharp.CompilerBinding</a>
+</td></tr></table>
+
+при сборке fsharpbinding не ищется какой-то там бутстраппер для менеджера пакетов paket
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(очень плохо, что это ещё один менеджер пакетов)
+<br />
+<br />
+есть два варианта - либо разбираться, как работает этот бутстраппер,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;либо попробовать вырезать из monodevelop все fsharp binding
+
+<h2>Вариант "вырезать"</h2>
+Во-первых, надо посмотреть пристально на лог ошибки. <font style="color:red">Какой .csproj или .sln файл эту ошибку вызывает?</font>
+<br />
+Project "/var/tmp/portage/dev-util/monodevelop-6.1_p2016062206/work/monodevelop-6.1/<strong>external</strong>/fsharpbinding/MonoDevelop.FSharp.Shared/MonoDevelop.FSharp.Shared.fsproj" (default target(s)):
+<br />
+сборка этого проекта вызывается из 
+<br />
+Project "/var/tmp/portage/dev-util/monodevelop-6.1_p2016062206/work/monodevelop-6.1/Main.sln"
+<br />
+и он там не один такой:
+<br />
+<a href="https://github.com/mono/monodevelop/blob/6fe30da58baccf13174c54dfb55cffea1a48f124/main/Main.sln#L303-L314">https://github.com/mono/monodevelop/blob/6fe30da58baccf13174c54dfb55cffea1a48f124/main/Main.sln#L303-L314</a>
+<br />
+что будет, если я просто все эти проекты удалю патчем из main/Main.sln? приведёт ли это к дальнейшим ошибкам при сборке?
+<br />
+sed -i "303,314d" Main.sln || die
+<br />
+так просто скорее всего не получится, потому что <a href="https://github.com/ArsenShnurkov/shnurise/blob/bfadda939263885a192b76c630a3f319538e902d/dev-util/monodevelop/monodevelop-6.1_p2016062206.ebuild#L109">там в комментарии</a> написано, что Main.sln генерируется. 
+Незнаю, насколько это правда (насколько верен комментарий и действительно ли перегенерируется Main.sln), но если правда, то по файлу закомиченному на Github ориентироваться нельзя.
+<br />
+Значит надо научиться описывать .sln-файлы, пропатчить утилиту mpt-sln и использовать её для исключения проектов из .sln-файла
+<br />
+<br />
+Ок, вот научился - <a href="https://github.com/gentoo/dotnet/pull/224">https://github.com/gentoo/dotnet/pull/224</a>
+
+</body>
+</html>

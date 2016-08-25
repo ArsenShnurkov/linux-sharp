@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>mpt-nuget</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>mpt-nuget</h1>
+</td><td style="vertical-align:top;">
+<a href="mono-packaging-tools.htm">mono-packaging-tools</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+packages.config - это XML-файл со списком пакетов, которые будут восстанавливаться при открытии .sln или .csproj
+<pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;packages&gt;
+  &lt;package id=&quot;log4net&quot; version=&quot;1.2.10&quot; /&gt;
+  &lt;package id=&quot;NLog&quot; version=&quot;1.0.0.505&quot; /&gt;
+  &lt;package id=&quot;Castle.Core&quot; version=&quot;1.2.0&quot; /&gt;
+  &lt;package id=&quot;Castle.DynamicProxy&quot; version=&quot;2.2.0&quot; /&gt;
+&lt;/packages&gt;
+</pre>
+
+<h2>Где этот файл размещается?</h2>
+Most packages will install into a project.
+<br />
+A few will install into a solution since they are solution only packages.
+<br />
+A solution-level package is one that installs a tool or additional commands for the Package Manager console,
+but does not add references, content, or build customizations to any projects in your solution.
+<br />
+One example is a OpenCover which will not install into a project. 
+<br />
+For example, the psake package installs Powershell scripts you can use to automate your build process.
+<br />
+Solution only NuGet packages will update the 
+<br />
+.nuget/packages.config
+<br />
+A package is considered a solution-level package if it does not contain any files in its lib, content, or build directories.
+If the package has dependencies, they also must not have files in their lib, content, or build directories.
+<br />
+When a solution-level package is installed, it is tracked in a packages.config file in the .nuget directory, rather than in a packages.config file in a specific project.
+
+<h2>Где они лежат?</h2>
+
+I see a packages.config file for each of my projects in a solution.
+<br />
+<br />
+Make sure packages.config is included in the visual studio project, otherwise it will not be used.
+
+<h2>Как создать Solution level package?</h2>
+I was mistakenly creating and installing a solution-level package. This was because I was not adding the dll to the lib folder when creating nuget packages
+<br />
+<a href="https://docs.nuget.org/create/creating-and-publishing-a-package">https://docs.nuget.org/create/creating-and-publishing-a-package</a>
+
+<h2>Операции</h2>
+которые может захотется с ним проделать:
+<br />
+1) удалить целиком, потому что сборки можно использовать из GAC
+<br />
+(но в этом случае, наверное, надо поискать этот файл в проекте, он там наверное добавлен как Item, и оттуда его удалить.
+Иначе, наверное, будет выдана ошибка, что этот файл не найден. А может и не будет выдана - надо бы проверить)
+<br />
+2) удалить отдельные строчки
+<br />
+(это когда часть пакетов уже опакечена из исходников, а часть - нет)
+<br />
+Можно развить эту функцию до "заменить все указанные на имеющиеся в наличии локально". Для этого надо уметь просматривать, какие имеются локально - видимо в portage.
+<br />
+3) просто изменить одни версии на другие, которые нужны
+
+<h2>Default Project</h2>
+<div class="post-text" itemprop="text">
+<p>The syntax of installing a package through package manager console is this:</p>
+
+<p><strong>Syntax:</strong></p>
+
+<p><code>Install-Package [-Id] &lt;string&gt; [-IgnoreDependencies] [-ProjectName &lt;string&gt;] [-Version &lt;string&gt;] [-Source &lt;string&gt;] [-IncludePrerelease] [-Force] [-FileConflictAction] [-DependencyVersion &lt;dependencyVersion&gt;] [-WhatIf]</code></p>
+
+<p>To install a package in a particular project you have to use the following command:</p>
+
+<p><code>PM&gt; Install-Package somePackage -Project myProject</code></p>
+
+<p>If you omit the <code>-Project</code> parameter the default project (from the drop-down) is chosen.</p>
+    </div>
+    
+<h2>Как скачать пакеты</h2>
+в Visual Studio
+<br />
+Tools->options->Package Manager->Allow NuGet to download missing packages
+
+    
+</body>
+</html>
