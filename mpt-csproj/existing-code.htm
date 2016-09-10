@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Существующий код для работы с файлами проектов</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Существующий код для работы с файлами проектов</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">mpt-csproj</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<h2>Проект в CWDev.SLNTools</h2>
+<a href="https://github.com/ArsenShnurkov/slntools/blob/master/Main/CWDev.SLNTools.Core.dll/Project.cs">https://github.com/ArsenShnurkov/slntools/blob/master/Main/CWDev.SLNTools.Core.dll/Project.cs</a>
+<br />
+однако эта модель проекта вообще, а не конкретно .csproj
+<br />
+из-за этого нельзя получить список файлов, список ресурсов, список результирующих файлов... Это печально.
+
+
+<h2>Проект в MsBuild</h2>
+To create a project programatically, you can use Microsoft.Build.Evaluation.Project (<a href="http://msdn.microsoft.com/en-us/library/microsoft.build.evaluation.project.aspx">MSDN documentation</a>) 
+<br />
+<a href="https://github.com/Microsoft/msbuild/blob/master/src/XMakeBuildEngine/Definition/Project.cs#L75-L76">https://github.com/Microsoft/msbuild/blob/master/src/XMakeBuildEngine/Definition/Project.cs#L75-L76</a>
+<br />
+The MIT License (MIT)
+<br />
+<br />
+"Represents a project with design time semantics. This class can load project files, edit items and properties and build projects."
+<br />
+<a href="https://github.com/Microsoft/msbuild/blob/c1459f5cbd36f2c33eafc8f4ff087f6ee84c3640/src/XMakeBuildEngine/Evaluation/ProjectParser.cs">https://github.com/Microsoft/msbuild/blob/master/src/XMakeBuildEngine/Evaluation/ProjectParser.cs</a>
+<br />
+<a href="https://github.com/Microsoft/msbuild/blob/master/src/Shared/ProjectWriter.cs">https://github.com/Microsoft/msbuild/blob/master/src/Shared/ProjectWriter.cs</a>
+<br />
+<a href="https://github.com/Microsoft/msbuild/tree/master/src/Framework">https://github.com/Microsoft/msbuild/tree/master/src/Framework</a>
+
+<h2>Проект в Monodevelop</h2>
+Там своя абстракция или они используют наследование от MSBuild? Своя.
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/Project.cs#L57">Project</a> - public class
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/SolutionItem.cs#L55">SolutionItem</a> - public abstract class 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/SolutionFolderItem.cs#L41">SolutionFolderItem</a> - public abstract class
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/WorkspaceObject.cs#L44">WorkspaceObject</a> - public abstract class
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Serialization/IExtendedDataItem.cs#L35">IExtendedDataItem</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDictionary ExtendedProperties { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IFolderItem.cs#L32">IFolderItem</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FilePath BaseDirectory { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDisposable
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects.Policies/IPolicyProvider.cs#L30">IPolicyProvider</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PolicyContainer Policies { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/WorkspaceObject.cs#L602">IWorkspaceFileObject</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IFileItem.cs#L32">IFileItem</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FilePath FileName { get; set; } 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IDisposable
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IEnumerable&lt;FilePath&gt; GetItemFiles (bool includeReferencedFiles);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new FilePath FileName { get; set; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool NeedsReload { get; set; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool ItemFilesChanged { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task SaveAsync (ProgressMonitor monitor);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string Name { get; set; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FilePath BaseDirectory { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FilePath ItemDirectory { get; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IConfigurationTarget.cs#L34">IConfigurationTarget</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IBuildTarget.cs#L35">IBuildTarget</a> - public interface
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IBuildTarget - why to duplicate ???
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IMSBuildFileObject.cs#L31">IMSBuildFileObject</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IWorkspaceFileObject
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Projects/IRunTarget.cs#L35">IRunTarget</a> - public interface
+
+
+<h2>MPFProj = Visual Studio Managed Package Framework for Projects</h2>
+<a href="https://mpfproj.codeplex.com">https://mpfproj.codeplex.com</a> (Ms-PL)
+<br />
+<a href="https://github.com/tunnelvisionlabs/MPFProj10">https://github.com/tunnelvisionlabs/MPFProj10</a>
+<br />
+<br />
+<a href="https://github.com/tunnelvisionlabs/MPFProj10/blob/master/Dev10/Src/CSharp/ProjectNode.cs">ProjectNode</a>
+<br />
+<a href="https://github.com/tunnelvisionlabs/MPFProj10/blob/master/Dev10/Src/CSharp/ProjectReferenceNode.cs">ProjectReferenceNode</a>
+<br />
+есть такое чувство, что это managed-обёртка над unmanaged кодом?
+<br />
+Из доки: "MPF_Proj is a framework that interacts with the traditional Visual Studio COM interfaces (through an interop layer)"
+<br />
+чувства смешаные. Во-первых сказано, что это Managed Framework, во вторых там довольно много managed кода...
+<br />
+<a href="https://github.com/tunnelvisionlabs/MPFProj10/blob/master/Dev10/Src/CSharp/ProjectFactory.cs">ProjectFactory</a>
+<br />
+<a href="https://github.com/tunnelvisionlabs/MPFProj10/blob/master/Dev10/Src/CSharp/VisualStudio.Project.cs">VisualStudio.Project.cs</a> - константы для локализации строк, как в Java
+
+
+<h2>Roslyn Project System</h2>
+
+<a href="https://github.com/dotnet/roslyn/blob/master/src/Workspaces/Core/Portable/Workspace/Solution/Project.cs#L22">Project</a>
+<br />
+<a href="https://github.com/dotnet/roslyn/blob/master/src/Workspaces/Core/Portable/Workspace/Solution/ProjectState.cs">ProjectState</a>
+<br />
+<a href="https://github.com/dotnet/roslyn/blob/master/src/Workspaces/Core/Portable/Workspace/Solution/DocumentState.cs#L18">DocumentState.cs</a>
+<br />
+<a href="https://github.com/dotnet/roslyn/tree/master/src/Workspaces/Core/Desktop/Workspace/MSBuild/CSharp">/src/Workspaces/Core/Desktop/Workspace/MSBuild/CSharp</a>
+<br />
+У меня сложилось впечатление, что сам .csproj они синтаксисом не считают, он там только как контейнер (список) других файлов.
+<br />
+<a href="https://github.com/dotnet/roslyn/blob/master/src/VisualStudio/CSharp/Impl/CodeModel/CSharpProjectCodeModel.cs">CSharpProjectCodeModel</a>
+<br />
+<a href="https://github.com/dotnet/roslyn/blob/466da155f1b4e4a8f97a0f404d63c4ee6495aa5a/src/VisualStudio/Core/Impl/CodeModel/AbstractProjectCodeModel.cs">AbstractProjectCodeModel</a>
+<br />
+<br />
+И тут внезапно репозиторий:
+<br />
+<a href="https://github.com/dotnet/roslyn-project-system">https://github.com/dotnet/roslyn-project-system</a> (Apache 2.0)
+<br />
+иии, судя по описанию - самое то, что надо. Однако как это использовать - неясно. Слишком раздроблены исходники по мелким файлам.
+<br />
+<a href="https://www.infoq.com/news/2016/05/Roslyn-Project-System/">https://www.infoq.com/news/2016/05/Roslyn-Project-System/</a>
+<br />
+The <a href="https://blogs.msdn.microsoft.com/visualstudio/2015/06/02/introducing-the-project-system-extensibility-preview/">Common Project System</a> still exists and the Roslyn Project System will sit on top of it.
+<br />
+
+</body>
+</html>
