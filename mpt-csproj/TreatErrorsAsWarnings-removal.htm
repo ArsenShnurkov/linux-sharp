@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Удаление TreatErrorsAsWarnings</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Удаление TreatErrorsAsWarnings</h1>
+</td><td style="vertical-align:top;">
+<a href="index.htm">mpt-csproj</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+У меня есть директория с исходниками с git (там репозиторий в директории .git)
+<br />
+У меня есть директория с исходниками, распакованными из архива (сложноопределимой версии)
+<br />
+У меня есть директория для файлов с патчами
+<br />
+<br />
+Мне нужна утилита, которая просмотрит все .csproj-файлы в репозитории и поудаляет оттуда
+<br />
+TreatWarningAsError
+<br />
+<br />
+Примеры вызова:
+<br />
+mpt-csproj --remove-warnings-as-errors --in=work/src/my.csproj
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Редактирует один файл
+<br />
+mpt-csproj --remove-warnings-as-errors --dir=work --recursive
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Редактирует файлы на месте
+<br />
+mpt-csproj --remove-warnings-as-errors --dir=work --recursive --as-unified-patch my.patch
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Вместо прямого редактирования создаёт патч
+<br />
+<br />
+сделать mpt.eclass
+<br />
+из .ebuild-а:
+<br />
+inherit mpt
+<br />
+src_prepare() {
+<br />
+remove_treat_warnings_as_errors
+<br />
+}
+
+<h2>Как удалять более правильно</h2>
+регэкспы - это неправильный способ редактирования XML.
+<br />
+тут есть три варианта:
+<br />
+1) оставить как есть
+<br />
+2) переделать на Eto.Parse
+<br />
+3) подключить full-fidelity библиотеку парсинга XML
+
+<h2>Как формировать Unified Diff</h2>
+Идей нет
+<br />
+<a href="http://stackoverflow.com/questions/65199/c-sharp-compare-algorithms">http://stackoverflow.com/questions/65199/c-sharp-compare-algorithms</a>
+<br />
+<a href="http://stackoverflow.com/questions/138331/any-decent-text-diff-merge-engine-for-net">http://stackoverflow.com/questions/138331/any-decent-text-diff-merge-engine-for-net</a>
+<br />
+<a href="http://stackoverflow.com/questions/3764107/c-sharp-diff-algorithm-for-text">http://stackoverflow.com/questions/3764107/c-sharp-diff-algorithm-for-text</a>
+<br />
+<a href="http://stackoverflow.com/questions/5550688/basic-file-version-diff-algorithm">http://stackoverflow.com/questions/5550688/basic-file-version-diff-algorithm</a>
+
+<h2>Как формировать патчи в RFC</h2>
+Идей нет
+
+</body>
+</html>

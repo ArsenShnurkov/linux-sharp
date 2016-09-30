@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>GitExtensions - Проблема с CommandLineBuilder</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>GitExtensions - Проблема с CommandLineBuilder</h1>
+</td><td style="vertical-align:top;">
+<a href="../../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+after <a href="https://github.com/Maximus5/conemu-inside/commit/857eb7c45f0ded41eab214faa36d13fe7c9960d2">making it</a> "internal" GitExtensions build gives the error:
+<br />
+<a href="https://github.com/gitextensions/gitextensions/blob/a9372ea74ebf926c4c2b1e18c0fdb96d7a6df40b/GitUI/UserControls/ConsoleEmulatorOutputControl.cs#L88">UserControls/ConsoleEmulatorOutputControl.cs(88,19)</a>: error CS0122: `Microsoft.Build.Utilities.CommandLineBuilder' is inaccessible due to its protection level
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/lib/mono/gac/ConEmu.WinForms/1.0.0.0__00340228797aafb8/ConEmu.WinForms.dll (Location of the symbol related to previous error)
+<br />
+...
+<br />
+Done building target "CoreCompile" in project "/var/calculate/remote/distfiles/egit-src/gitextensions.git/GitUI/GitUI.csproj".-- FAILED
+<br />
+<br />
+<font style="color:red">Что именно было сделано "internal"?</font>
+<br />
+<br />
+namespace System.Runtime.CompilerServices
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct AsyncTaskMethodBuilder<TResult>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;interface INotifyCompletion
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;interface ICriticalNotifyCompletion : INotifyCompletion
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;interface IAsyncStateMachine
+<br />
+namespace System.Threading.Tasks
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct TaskAwaiter : INotifyCompletion
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct TaskAwaiter<TResult> : INotifyCompletion
+<br />
+<br />
+namespace Microsoft.Build.Utilities
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sealed class CommandLineBuilder
+<br />
+<br />
+Файлы:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/INotifyCompletion.cs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/ICriticalNotifyCompletion.cs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/IAsyncStateMachine.cs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/CommandLineBuilder.cs (<a href="https://github.com/Microsoft/msbuild/blob/37bc7c797f2af1fbb61fbdc72cc5b748ab86aaf5/src/Utilities/CommandLineBuilder.cs">в msbuild</a>)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/TaskAwaiter.cs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConEmuWinForms/Util/TaskAwaiter!1.cs
+<br />
+<br />
+Проблема заключается в том, что пакет Microsoft.Build.Utilities.Core <a href="https://github.com/Microsoft/msbuild/blob/7992abc02c44260f374c1a8cd781a1d13fba17c4/src/nuget/Microsoft.Build.Utilities.Core.nuspec#L25">собран для .Net Framweork 4.6</a>
+<br />
+а GitExtensions - для .Net 4.0, поэтому нельзя просто взять и установить этот пакет.
+<br />
+Идея заключается в том, чтобы собрать новый другой пакет специально под .NetFramework 4.0
+<br />
+<br />
+<font style="color:red">Если поискать исходные файлы в исходниках msbuild И сравнить с этими - они одинаковые?</font>
+<br />
+Внутри msbuild есть только CommandLineBuilder, но проект содержит reference на <a href="https://github.com/Microsoft/msbuild/blob/37bc7c797f2af1fbb61fbdc72cc5b748ab86aaf5/src/Framework/Microsoft.Build.Framework.csproj">Microsoft.Build.Framework.csproj</a>
+<pre>
+    &lt;ProjectReference Include=&quot;..\Framework\Microsoft.Build.Framework.csproj&quot;&gt;
+      &lt;Project&gt;{571F09DB-A81A-4444-945C-6F7B530054CD}&lt;/Project&gt;
+      &lt;Name&gt;Microsoft.Build.Framework&lt;/Name&gt;
+    &lt;/ProjectReference&gt;
+</pre>
+Там этих TaskAwaiter тоже нет, так что концов не нашлось. Кстати, неясно, нужны ли все классы сделанные Internal или только CommandLineBuilder.
+И соберётся ли CommandLineBuilder если будет один в проекте.
+<br />
+глядя на текст класса можно увидеть, что он манипулирует строками и интерфейсами типа ITaskItem (<a href="https://msdn.microsoft.com/en-us/library/microsoft.build.framework.itaskitem.aspx">msdn</a>)
+<br />
+Namespace:   Microsoft.Build.Framework
+<br />
+Assembly:  Microsoft.Build.Framework (in Microsoft.Build.Framework.dll)
+<br />
+<br />
+<a href="https://github.com/Microsoft/msbuild/blob/c1459f5cbd36f2c33eafc8f4ff087f6ee84c3640/src/Framework/ITaskItem.cs#L15">ITaskItem.cs</a> - в общем и целом ни от чего такого не зависит.
+<br />
+(но странно, что его нет в коде ConEmu)
+<br />
+Это потому, что код класса CommandLineBuilder из ConEmu не содержит методов, работающих с ITaskItem
+<br />
+(то есть, получается, что класс CommandLineBuilder из ConEmu полностью независим и может быть скомпилирован отдельно)
+
+</body>
+</html>
