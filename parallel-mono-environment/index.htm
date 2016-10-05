@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Parallel mono environment</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Parallel mono environment</h1>
+</td><td style="vertical-align:top;">
+<a href="../arsenshnurkov.github.io_linux-sharp.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Может сложится впечатление, что это какой-то готовый продукт с таким названием, который позволяет устанавливать и управлять несколькими версиями окружения.
+<br />
+Это неверное предположение.
+<br />
+<br />
+Всё что есть - это рекомендация добавлять ключ --prefix=/opt/mono при сборке пакетов из списка:
+<br />
+libgdiplus
+<br />
+gtk-sharp
+<br />
+gtk-sharp-2
+<br />
+mono-tools
+<br />
+monodevelop
+<br />
+(и по всей видимости <strong>xsp</strong> и mod_mono)
+<br />
+<br />
+Как добавлять этот ключ в Gentoo и что общего у него и переменной PREFIX из <a href="https://wiki.gentoo.org/wiki/Project:Prefix">проекта Gentoo Prefix</a> - неясно
+<br />
+в <a href="https://devmanual.gentoo.org/ebuild-writing/variables/">списке переменных gentoo</a>, кстати, переменной PREFIX нет
+
+<h2>Какие есть статьи</h2>
+<a href="http://www.mono-project.com/docs/compiling-mono/parallel-mono-environments/">http://www.mono-project.com/docs/compiling-mono/parallel-mono-environments/</a>
+<br />
+<a href="http://stackoverflow.com/questions/35445344/running-xsp-in-a-parallel-mono-environment">http://stackoverflow.com/questions/35445344/running-xsp-in-a-parallel-mono-environment</a>
+<br />
+<a href="http://mono.1490590.n4.nabble.com/Distribute-Parallel-Mono-Environment-td4668521.html">http://mono.1490590.n4.nabble.com/Distribute-Parallel-Mono-Environment-td4668521.html</a>
+<br />
+<a href="https://inorton.wordpress.com/pmono-parallel-mono-debian-pacakges/">https://inorton.wordpress.com/pmono-parallel-mono-debian-pacakges/</a>
+<br />
+<br />
+<a href="https://github.com/dragan/mope">https://github.com/dragan/mope</a>
+<br />
+<a href="https://github.com/louissalin/mopem">https://github.com/louissalin/mopem</a>
+<br />
+
+<h2>eselect</h2>
+Можно было бы, наверное, сделать утилиту (точнее модуль) интегрированную в eselect, по аналогии с 
+<a href="https://github.com/dragan/mope">https://github.com/dragan/mope</a>
+<br />
+но зачем?
+
+<h2>pkgconfig</h2>
+Наверное, его тоже надо пропатчить и сделать параллельным
+<br />
+If you intend to leave your MONO_GAC_PREFIX empty to use a local GAC,
+<br />
+beware about the fallback behaviour of pkgconfig when it doesn’t find things in your local env:
+it will search in /usr/ and /usr/local/ in a hardcoded way.
+
+<h2>Что сделать в генте</h2>
+Чего вообще хотелось бы добится?
+<br />
+Чтобы была некая установленная версия monodevelop, которая бы не ломалась при разных пересборках, а была автономна.
+<br />
+чтобы не было пересборок, она не должна быть включена в /var/lib/portage/world и в /var/db/pkg/
+<br />
+а чтобы можно было при необходимости переустановить, должна быть где-то другая подобная база (/var/db/pkg2/ ?).
+<br />
+это подволит к мысли о необходимости установки полной версии Gentoo Prefix (чего не хотелось бы, но в принципе не сильно пугает)
+<br />
+<br />
+можно было бы написать пакеты mono-parallel, monodevelop-parallel, libgdiplus-parallel и так далее. Однако они тоже будут подвержены пересборке при пересборке мира.
+И может случиться так, что у gcc будет новая версия ABI или ешё что-нибудь сломается и параллельная версия Mono при такой пересборке тоже будет сломана.
+<br />
+Gentoo Prefix должна решить этот вопрос надёжнее
+
+<h2>Установка mono в Gentoo Prefix</h2>
+Можно предположить, что как-то это можно сделать, раз уж и gentoo и mono поддерживают PREFIX.
+<br />
+Однако статьи на эту тему не находятся...
+
+</body>
+</html>
