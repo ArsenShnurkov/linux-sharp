@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как MonoDevelop считывает .pc-файлы?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как MonoDevelop считывает .pc-файлы?</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Хорошо бы тайти тот код, где monodevelop считывает .pc-файлы.
+<br />
+Ну, есть диалог добавления references, оттуда где-то что-то как-то вызвается, чтобы составить список на вкладке packages
+<br />
+<img src="packages.png" alt="packages.png" />
+<br />
+можно разобраться как работает тот код (сколько на это уйдёт времени?)
+<br />
+Как monodevelop заполняет эту кладку, когда monodevelop заполняет эту вкладку - при каждом открытии или при старте IDE ?
+<br />
+cd /var/calculate/remote/distfiles/egit-src/monodevelop.git
+<br />
+grep -R -n "Edit References"
+<br />
+main/src/core/MonoDevelop.Ide/ExtensionModel/Commands.addin.xml, line 238
+<br />
+main/src/core/MonoDevelop.Ide/gtk-gui/MonoDevelop.Ide.Projects.SelectReferenceDialog.cs, line 44
+<br />
+this.Title = global::Mono.Unix.Catalog.GetString ("Edit References");
+<br />
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide/ProjectOperations.cs:73
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide/ProjectOperations.cs:859
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/SelectReferenceDialog.cs:1
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/<strong>PackageReferencePanel</strong>.cs:55
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/ProjectReferencePanel.cs:201
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/AssemblyReferencePanel.cs:49
+<br />
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/AssemblyReferencePanel.cs">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects/AssemblyReferencePanel.cs</a>
+<br />
+<br />
+<pre>class AssemblyInfo
+{
+	public AssemblyInfo (FilePath file)
+	{
+		this.File = file.CanonicalPath;
+		try {
+			Version = new AssemblyName (SystemAssemblyService.GetAssemblyName (file)).Version.ToString ();
+		} catch {
+			Version = &quot;&quot;;
+		}
+	}
+	
+	public FilePath File;
+	public string Version;
+	public bool Selected;
+}
+
+List&lt;AssemblyInfo&gt; assemblies = new List&lt;AssemblyInfo&gt; ();
+</pre>
+Тут мы не видим, откуда берутся имена файлов (берутся они из проекта, списка недавно использованных файлов и из диалога открытия файла)
+<br />
+<br />
+Но нам нужна не эта вкладка диалога
+<br />
+<br />
+ListStore store = new ListStore (typeof (string), typeof (string), typeof (SystemAssembly), typeof (bool), typeof (string), typeof (string), typeof(IconId), typeof(int), typeof(ReferenceType));
+<br />
+treeView = new TreeView (store);
+<br />
+store.InsertWithValues (-1,
+<br />
+name,
+<br />
+version,
+<br />
+systemAssembly,
+<br />
+selected,
+<br />
+systemAssembly.FullName,
+<br />
+pkg,
+<br />
+MonoDevelop.Ide.Gui.Stock.Package,
+<br />
+matchRank,
+<br />
+ReferenceType.Package);
+<br />
+(казалось бы, зачем TreeView, если нужен список с галочками?)
+<br />
+<br />
+foreach (SystemAssembly systemAssembly in targetContext.GetAssemblies (targetVersion))
+<br />
+IAssemblyContext targetContext
+<br />
+SetTargetFramework (netProject.AssemblyContext, netProject.TargetFramework);
+<br />
+<br />
+Итак, где-то в объекте проекта (который .csproj) хранится список сборок для фреймворка этого проекта.
+<br />
+И если посмотреть, где устанавливается фреймворк проекта, наверное с того места можно найти где заполняется список сборок.
+<br />
+Смущает то, что сборки должны быть привязаны к какому-то фреймворку (раньше так не было?)
+<br />
+<img src="framework.png" alt="framework.png" />
+<br />
+В принципе, то что сборка может требовать какую-то определённую платформу - это нормально.
+У неё для этого есть манифест, в котором прописаны все требуемые версии.
+<br />
+grep -R -n "Use MSBuild build engine" | grep -v "\.po"
+<br />
+main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects.OptionPanels/CombineMSBuildOptions.cs:55
+<br />
+main/src/addins/CSharpBinding/MonoDevelop.CSharp.Project/CSharpCompilerParameters.cs:180
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects.OptionPanels/RuntimeOptionsPanel.cs#L76">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Ide/MonoDevelop.Ide.Projects.OptionPanels/RuntimeOptionsPanel.cs#L76</a>
+<pre>
+readonly List&lt;TargetFramework&gt; frameworks;
+frameworks = Runtime.SystemAssemblyService.GetTargetFrameworks ()
+	.Where (fx =&gt; !fx.Hidden &amp;&amp; project.TargetRuntime.IsInstalled (fx) &amp;&amp; project.SupportsFramework (fx))
+	.ToList ();
+...
+project.TargetFramework = frameworks [runtimeVersionCombo.Active];
+</pre>
+<h2>SystemAssemblyService</h2>
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/SystemAssemblyService.cs">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/SystemAssemblyService.cs</a>
+<br />
+<br />
+Dictionary<TargetFrameworkMoniker,TargetFramework> frameworks;
+<br />
+public IEnumerable<TargetFramework> GetTargetFrameworks ()
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return frameworks.Values;
+<br />
+}
+<br />
+<br />
+foreach (TargetFrameworkNode node in AddinManager.GetExtensionNodes ("/MonoDevelop/Core/Frameworks")) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TargetFramework fx = node.CreateFramework ();
+<br />
+<br />
+В общем, знание фреймворка тут как-то сбоку. Над осмотреть где считывается AssemblyContext
+
+<h2>AssemblyContext</h2>
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/AssemblyContext.cs">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/AssemblyContext.cs</a>
+<br />
+Есть пять классов - SystemPackage, SystemAssembly, SystemPackageInfo, PackageAssemblyInfo, LibraryPackageInfo
+<br />
+В SystemPackage есть коллекция Assemblies (это говорит нам о том, что Package это что-то такое, внутри чего есть несколько сборок)
+<br />
+У класса AssemblyContext есть метод RegisterPackage
+<br />
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/DirectoryAssemblyContext.cs#L100-L107">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/DirectoryAssemblyContext.cs#L100-L107</a>
+<pre>void RegisterPcFile (string file)
+{
+	LibraryPackageInfo pinfo = MonoTargetRuntime.PcFileCache.GetPackageInfo (file);
+	if (pinfo.IsValidPackage) {
+		SystemPackage sp = RegisterPackage (pinfo, true);
+		packages.Add (sp);
+	}
+}</pre>
+<br />
+<br />
+Список директорий, откуда считывать .pc-файлы берется из переменной окружения ${PKG_CONFIG_PATH}
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/MonoTargetRuntime.cs#L208-L222">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/MonoTargetRuntime.cs#L208-L222</a>
+<pre>
+private void ParsePCFile (string pcfile)
+{
+	// Don't register the package twice
+	string pname = Path.GetFileNameWithoutExtension (pcfile);
+	if (RuntimeAssemblyContext.GetPackageInternal (pname) != null || IsCorePackage (pname))
+		return;
+
+	LibraryPackageInfo pinfo = PcFileCache.GetPackageInfo (pcfile);
+	if (pinfo.IsValidPackage)
+		RuntimeAssemblyContext.RegisterPackage (pinfo, false);
+}
+</pre>
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/PcFileCache.cs#L143-L175">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/PcFileCache.cs#L143-L175</a>
+<br />
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/PcFileCache.cs#L143-L175">https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/PcFileCache.cs#L143-L175</a>
+<br />
+<pre>TP ParsePackageInfo (string pcfile)
+{
+    PcFile file = new PcFile ();
+    file.Load (pcfile);
+    ...
+</pre>
+<a href="https://github.com/mono/monodevelop/blob/master/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Assemblies/PcFileCache.cs#L499">public void PcFile.Load (string pcfile)</a>
+<br />
+такой же код как в monodevelop есть и в самом mono
+<br />
+<a href="https://github.com/mono/mono/blob/master/mcs/class/Mono.XBuild.Tasks/Mono.XBuild.Tasks/PcFileCache.cs">https://github.com/mono/mono/blob/master/mcs/class/Mono.XBuild.Tasks/Mono.XBuild.Tasks/PcFileCache.cs</a>
+<br />
+Вопрос - почему его не вынесли в отдельный проект? Ну возьми и вынеси...
+
+</body>
+</html>
