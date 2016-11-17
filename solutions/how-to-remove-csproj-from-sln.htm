@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как удалить проект из .sln-файла?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как удалить проект из .sln-файла?</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>,
+<a href="index.htm">Как работать с .sln</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<a href="https://github.com/ArsenShnurkov/mono-packaging-tools/blob/master/mpt-sln/Program.cs#L51">https://github.com/ArsenShnurkov/mono-packaging-tools/blob/master/mpt-sln/Program.cs#L51</a>
+<br />
+<br />
+cd "${S}"
+<br />
+mpt-sln --sln-file "${METAFILETOBUILD}" --remove-proj "NLog.UnitTests.mono"
+
+</body>
+</html>
