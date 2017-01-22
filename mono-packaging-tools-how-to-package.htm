@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как сделать пакет для ветки отличной от master</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как сделать пакет для ветки отличной от master</h1>
+</td><td style="vertical-align:top;">
+<a href="mono-packaging-tools.htm">mono-packaging-tools</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+вписать правильный EGIT_COMMIT достаточно, имя ветки (git branch name) указывать не нужно.
+<br />
+<br />
+NAME="mono-packaging-tools"
+<br />
+REPOSITORY_URL="https://github.com/ArsenShnurkov/${NAME}"
+<br />
+EGIT_COMMIT="c57bc97fcfaf911ffee51205b6ba83eeda8b2dd0"
+<br />
+SRC_URI="${REPOSITORY_URL}/archive/${EGIT_COMMIT}.tar.gz -> ${PN}-${PV}.tar.gz"
+<br />
+S="${WORKDIR}/${NAME}-${EGIT_COMMIT}"
+<br />
+<br />
+Версия указывается в имени .ebuild-файла
+
+<h2>Два коммита</h2>
+Вообще хорошо бы делать два коммита
+<br />
+1) копирование файла .ebuild в котором только переименование
+<br />
+2) внесение изменений
+<br />
+тогда будут видны изменения (а не просто добавлен новый другой файл, как в разделе ниже)
+
+<h2>Команды</h2>
+cd /var/calculate/remote/distfiles/egit-src/mono-packaging-tools.git/
+<br />
+git status
+<br />
+git add *
+<br />
+git commit -m "signing removal command added"
+<br />
+git push
+<br />
+git log -1 | grep commit
+<br />
+18cd15a7b009b2260eb999e6e16cabad553586ad
+<br />
+cd /var/lib/layman/shnurise/dev-util/mono-packaging-tools
+<br />
+sed 's/EGIT_COMMIT="[0-9a-fA-F]*"/EGIT_COMMIT="18cd15a7b009b2260eb999e6e16cabad553586ad"/' \
+<br />
+mono-packaging-tools-1.4.1.5.ebuild > mono-packaging-tools-1.4.1.6.ebuild
+<br />
+ebuild mono-packaging-tools-1.4.1.6.ebuild digest
+<br />
+emerge -v =mono-packaging-tools-1.4.1.6
+<br />
+cd /var/lib/layman/shnurise
+<br />
+git status
+<br />
+git add *
+<br />
+git commit -m "dev-util/mono-packaging-tools version bump (1.4.1.6)"
+<br />
+git push
+<br />
+сделано.
+
+</body>
+</html>

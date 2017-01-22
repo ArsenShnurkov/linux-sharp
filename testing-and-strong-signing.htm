@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>тестирование и strong-signing</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>тестирование и strong-signing</h1>
+</td><td style="vertical-align:top;">
+<a href="mono-packaging-tools.htm">mono-packaging-tools</a>,
+<a href="index.htm">Разработка на C# под linux</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+В чём была проблема с опакечиванием m-p-t ? Неправильно указал PublicKey в InternalsVisisbleTo
+<br />
+<br />
+я пытаюсь подписать сборку mpt-core,
+<br />
+у этой сборки есть атрибут "InternalsVisibleTo"
+<br />
+этот атрибут надо модифицировать таким образом, чтобы там появился публичный ключ,
+<br />
+которым я подписываю другую сборку.
+<br />
+<br />
+Просто убрать из .sln тесты и этот атрибут - это не очень удачный выход?
+<br />
+sed "d"
+<br />
+а если делать это в скрипте роллинга?
+<br />
+выход не очень удачный, потому что перестаёт работать функциональность тестирования.
+<br />
+<br />
+Нужно вообще почитать про InternalsVisibleTo
+<br />
+(как туда вписать публичный ключ?)
+<br />
+<br />
+Нужно почитать про публичные ключи (как из извлечь из контейнера? sn -? что-то? )
+<br />
+<br />
+Если я подписываю сборку, являющаюся результатом .csproj, то
+<br />
+как в тексте программы обнаружить наличие InternalsVisibleTo?
+<br />
+<br />
+Надо ли это делать заранее или только в момент сборки?
+<br />
+Очевидно, что если что-то менять, то лучше это сделать в src_prepare
+<br />
+<br />
+Менять автоматизированно было бы здорово, но только не для этого конкретного пакета,
+<br />
+потому что он не должен зависеть от самого себя.
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/30943342/how-to-use-internalsvisibleto-attribute-with-strongly-named-assembly">http://stackoverflow.com/questions/30943342/how-to-use-internalsvisibleto-attribute-with-strongly-named-assembly</a>
+<br />
+<br />
+[assembly: InternalsVisibleTo("Namespace.Assembly.Example.Name, PublicKey=ThePublicKey")]
+<br />
+<br />
+sn -t youSnk.snk would show the public key.
+<br />
+<br />
+sn -pc mono test
+<br />
+извлечь публичный ключ из контейнера в файл test
+<br />
+<br />
+sn -t test
+<br />
+распечатать публичный ключ (7e1be4a70ac8a00d)
+<br />
+rm test
+<br />
+удалить временный файл
+<br />
+<br />
+/var/calculate/remote/distfiles/egit-src/mono-packaging-tools.git/mpt-core/../AssemblyInfo.cs(12,12): Error CS1726: Friend assembly reference `tests,PublickKey=00240000048000009400000006020000002400005253413100040000010001009f2fe978359654 (CS1726) (mpt-core)
+<br />
+<br />
+00240000048000009400000006020000002400005253413100040000010001009f2fe9783596542068aeeaa37ad37285be244f38d38b58fe9b3218e0baf12d8765b6008e304b9523dd2a838713b99b46bbfa9afb7bbe922acdf6747586e2efe24282faa518603350413f44afafb23825b212393a0a89cf1f5a5438ba8b5c3bdab0455edf0df8f3a662448763c00d06a852acefa177282774fdec7cff1fcaebc9
+
+</body>
+</html>

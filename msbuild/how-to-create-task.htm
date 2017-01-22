@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как создать таск в MSBuild?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как создать таск в MSBuild?</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# под linux</a>,
+<br />
+</td></tr></table>
+
+<span style="font-family:verdana;">Создать Class Library проект, к примеру MyMSBuildTasks;</span></li><li><span style="font-family:verdana;">Добавить Assembly Reference на Microsoft.Build.Framework;</span></li><li><span style="font-family:verdana;">Создать public class MyTask, который наследует и реализует интерфейс Microsoft.Build.Framework.ITask;</span></li><li><span style="font-family:verdana;">Реализовать метод public override bool Execute(), вернуть true в случае успеха;</span></li><li style="font-family: verdana;">Подключить его в проект MSBuild следующим образом: &lt;UsingTask TaskName="MyMSBuildTasks.MyTask" AssemblyFile="...\MyMSBuildTasks.dll"/&gt;  <usingtask taskname="MyMSBuildTasks.MyTask" assemblyfile="путь_к_файлу\MyMSBuildTasks.dll"></usingtask></li><li style="font-family: verdana;">Пользоваться: <mytask></mytask><mytask>&lt;</mytask>MyTask <mytask>MyParameter="Something here"</mytask>&gt;<mytask>...</mytask><mytask>&lt;/</mytask>MyTask&gt;</li></ul><span style="font-family:verdana;">
+Для того, чтобы передать в Task параметр, необходимо создать public property:
+public String MyParameter {
+get { ... }
+set { ... }
+}
+
+</span><span style="font-family:verdana;"><mytask>&lt;</mytask></span><span style="font-family:verdana;">MyTask </span><span style="font-family:verdana;"><mytask><span style="font-family:verdana;">MyParameter="Something here"</span></mytask></span><span style="font-family:verdana;">&gt;</span><span style="font-family:verdana;"><mytask><span style="font-family:verdana;">...</span></mytask></span><span style="font-family:verdana;"><mytask>&lt;</mytask></span><span style="font-family:verdana;">/MyTask</span><span style="font-family:verdana;">&gt;</span><span style="font-family:verdana;"><mytask></mytask>
+
+Для указания, что параметр является обязательным, - </span><span style="font-family:verdana;">можно пометить атрибутом [Required]</span><span style="font-family:verdana;">:
+</span><span style="font-family:verdana;">[Required]</span>
+<span style="font-family:verdana;">public String MyParameter {
+get { ... }
+set { ... }
+}
+</span><span style="font-family:verdana;">
+Результат работы Task-а можно "отдать" в виде Output-переменных, пометив нужные свойства атрибутом [Output]:
+</span><span style="font-family:verdana;">[Output]
+public String MyOutParameter {
+get { ... }
+set { ... }
+}
+</span><div style="text-align: left;"><span style="font-family:verdana;"><mytask myparameter="Something here"></mytask></span>
+<span style="font-family:verdana;"><mytask>&lt;</mytask></span><span style="font-family:verdana;">MyTask </span><span style="font-family:verdana;"><mytask><span style="font-family:verdana;">MyParameter="Something here"</span></mytask></span><span style="font-family:verdana;">&gt;</span><span style="font-family:verdana;"><mytask></mytask></span><span style="font-family:verdana;"><mytask></mytask></span><span style="font-family:verdana;"></span>
+<span style="font-family:verdana;"><mytask>    &lt;</mytask></span><span style="font-family:verdana;"><mytask>Output </mytask></span><span style="font-family:verdana;">TaskParameter</span><span style="font-family:verdana;"><mytask>="</mytask></span><span style="font-family:verdana;"><output taskparameter="">MyOutParameter"             ItemName="MyItem"/</output></span><span style="font-family:verdana;">&gt;
+</span><span style="font-family:verdana;"><mytask>&lt;/</mytask></span><span style="font-family:verdana;">MyTask</span><span style="font-family:verdana;">&gt;</span>
+<span style="font-family:verdana;"><output taskparameter=""></output>
+<message text=""><span style="font-family:verdana;">&lt;Message Text="MyTask returned $(MyItem) to me!</span><span style="font-family:verdana;">"/&gt;
+
+<span style="font-family:verdana;">Для упрощения жизни с MSBuild существует сборка </span></span><span id="nsrTitle" style="font-family:verdana;">Microsoft.Build.Utilities, в которой существуют простейшие реализации классов </span><a style="font-family: verdana;" href="http://www2.blogger.com/T_Microsoft_Build_Utilities_Task.htm"></a><span style="font-family:verdana;">Task, TaskItem и пр.</span>
+<br />
+<br />
+Вопрос: А что если Property нужно иметь не скалярного типа, а массив - что тогда делать? Пример - надо вписать несколько атрибутов InternalsVisibleTo в исходный код.
+<br />
+можно, конечно, перечислить их через разделитель в строке, а потом выполнить String.Split, но как-то это некрасиво выглядит
+
+
+<a href="https://msdn.microsoft.com/en-us/library/7z253716.aspx">MSBuild Task Reference (MSDN)</a>
+<br />
+Tasks provide the code that runs during the build process.
+<br />
+<br />
+Создал комент про ненужность ILMerge:
+<br />
+<a href="https://github.com/deveel/deveeldb/issues/73#issuecomment-268085201">https://github.com/deveel/deveeldb/issues/73#issuecomment-268085201</a>
+<br />
+<br />
+Примеры, откуда я могу скопировать код:
+<br />
+ResolveAssemblyReference Task
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/9ad3f294.aspx">https://msdn.microsoft.com/en-us/library/9ad3f294.aspx</a>
+<br />
+Assemblies	Optional ITaskItem[] parameter.
+<br />
+<br />
+WriteLinesToFile Task
+<br />
+Writes the specified items to the specified text file.
+
+
+</body>
+</html>
