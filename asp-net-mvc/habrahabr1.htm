@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Лекции по ASP .NET MVC</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Лекции по ASP .NET MVC</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>,
+<br />
+&nbsp;
+</td></tr></table>
+
+Посмотрим на лекции по адресу
+<dl>
+<dt><a href="https://habrahabr.ru/post/175999/">Урок 0</a><dt>
+<dd>
+это просто оглавление
+</dd>
+<dt>
+<a href="https://habrahabr.ru/post/176001/">Урок 1</a>
+</dt>
+<dd>
+Здесь мы узнаём про то, что в составе Visual Studio есть визарды
+<br />
+но не узнаём что и зачем они делают.
+<br />
+<font style="color:red">Какой именно код генерируется при каждом из этих двух действий (создание контроллера и создание вида)?</font>
+<br />
+<font style="color:red">Есть ли аналогичные визарды в составе monodevelop?</font>
+<br />
+Да! нужно встать на диретории View или на её поддиректории и там в контекстном меню будет пункт для генерирования View
+<br />
+(надо бы скриншоты наделать, да описать как это реализовано в коде Monodevelop)
+<br />
+Узнаём, что у NLog есть какая-то консоль
+<br />
+(но почему бы вообще всё про NLog не вывести в отдельный топик?)
+</dd>
+<dt>
+<a href="https://habrahabr.ru/post/176021/">Урок 4, routing</a>
+</dt>
+<dd>
+Здесь интересно про AreaRegistration (полезно знать, что они вообще есть,и полезно иметь описание сценария (админка и остальной сайт))
+<br />
+Однако описание того, как происходит поиск маршрутов лучше поискать в какой-нибудь другой статье.
+</dd>
+<dt><a href="https://habrahabr.ru/post/176043/">Урок 6, авторизация</a></dt>
+<dd>
+Тут не используются стандартные классы. Хотя в комментариях подсказывают, что можно было бы.
+</dd>
+<dt><a href="https://habrahabr.ru/post/176097/">Урок D. Scaffolding</a></dt>
+<dd>
+Что такое scaffolding - непонятно. Похоже, что это генерирование кода C# по спецификации...
+</dd>
+
+</dl>
+
+<h2>Compile time type checking</h2>
+<font style="color:red">Есть в VisualStudio, как с этим в mono?</font>
+
+<h2>Как создать View</h2>
+<a href="https://www.asp.net/mvc/overview/getting-started/introduction/adding-a-view">https://www.asp.net/mvc/overview/getting-started/introduction/adding-a-view</a>
+<br />
+<br />
+Razor-based view templates have a .cshtml file extension
+<br />
+<font style="color:red">(кем это расширение учитывается? где настраивается?) Например в конфиге Apache прописывается соответствие этого расширения mime-типу?</font>
+<br />
+<br />
+Метод контроллера возвращает объект типа View.
+<br />
+Нееет, это вызывается метод класса с именем View, который возвращает какой-то объект неясно какого типа (но наследник от ActionResult).
+<br />
+ViewResult derives from ActionResult, instance of the ViewResult class is returned
+<br />
+A common action result is obtained by calling the View method
+
+<pre>public ActionResult Index() 
+{ 
+    return View(); 
+}</pre>
+<br />
+<font style="color:red">Почему именно этого типа? Из какого неймспейса этот тип?</font>
+<br />
+<br />
+uses a view template to generate an HTML response to the browser
+
+<pre>public abstract class ActionResult {
+	...
+	ExecuteResult
+	...
+}</pre>
+<font style="color:red">Почему ActionResult - это абстрактный класс, а не интерфейс?</font>
+<br />
+<br />
+<font style="color:red">Как метод View (класса контроллера?) определяет какой .cshtml-файл использовать в качестве шаблона для парсинга и подстановок?</font>
+<br />
+Because you didn't explicitly specify the name of the view template file to use, ASP.NET MVC defaulted to using the Index.cshtml view file in the \Views\HelloWorld folder.
+<br />
+имя файла с шаблоном/текстом - это имя <strong>метода</strong> контроллера. расширение где-то внутри зашито (<font style="color:red">как его поменять? например на .csxhtml</font>)
+<br />
+директория Views/HelloWorld - не очень понятно, почему такая (потому что название <strong>класса</strong> - HelloWorldController)
+<br />
+<font style="color:red">Где именно внутри View  и когда считывается template?</font>
+<br />
+<font style="color:red">как происходит генерация response?</font>
+
+
+<h2>Чем типизированные View отличаются от нетипизированных?</h2>
+<a href="https://blogs.msdn.microsoft.com/rickandy/2011/01/28/dynamic-v-strongly-typed-views/">https://blogs.msdn.microsoft.com/rickandy/2011/01/28/dynamic-v-strongly-typed-views/</a>
+<br />
+There are three ways to pass information from a controller to a view in ASP.NET MVC 3:</p>
+<ol>
+<li>As a strongly typed model object. </li>
+<li>As a dynamic type (using @model dynamic) </li>
+<li>Using the ViewBag </li>
+</ol>
+<br />
+Those are significant advantages and why ASP.NET MVC applications typically use strongly typed views. Strongly-typed view gives you:</p>
+<ul>
+<li>Automatic scaffolding </li>
+<li>Intellisense </li>
+<li><a href="http://devermind.com/linq/aspnet-mvc-tip-turn-on-compile-time-view-checking/">Compile time type checking</a> (follow link to enable this) </li>
+</ul>
+<br />
+
+чтобы связать представление с передаваемым параметром, надо добавить в представление директиву @model с указанием типа передаваемых данных.
+<br />
+@model middleterraincoatllist.SearchResult
+<br />
+@model IEnumerable&lt;BookStore.Models.Book&gt;
+<br />
+<font style="color:red">Что значит "связать"?</font>
+<br />
+<br />
+чтобы не писать полностью имя типа модели, мы можем импортировать пространство имен:
+<br />
+@using BookStore.Models
+<br />
+<br />
+передавать данные не через объект ViewBag, а напрямую в представление через параметр метода View.
+<br />
+<br />
+<a href="http://metanit.com/sharp/mvc/4.2.php">http://metanit.com/sharp/mvc/4.2.php</a>
+<br />
+<br />
+<a href="https://habrahabr.ru/post/116298/">https://habrahabr.ru/post/116298/</a>
+<br />
+правила, если вы хотите разрабатывать в MVC:<br>
+<a name="habracut"></a><br>
+<ul>
+<li>Каждому View свой персональный класс ViewModel.</li>
+<li>Только View диктует, какие будут свойства у ViewModel. Остальное – проблемы контроллера.</li>
+<li>ViewModel – это простой DTO, без логики.</li>
+<li>View использует только те данные, которые приходят из ViewModel, ничего больше. Не трогайте <code>Request.IsAuthenticated</code> в ваших View, для этого есть модель.</li>
+</ul>
+
+
+
+
+<h2>Почему возвращают ActionResult</h2>
+А, например, не строку (string)
+<br />
+in more complicated action methods, you may need to return different types of results for different scenarios.
+<br />
+<font style="color:red">какие могут быть (разные?) сценарии?</font>
+<br />
+the registration action method from the default MVC template, redirects the users if registration is successful, but displays the error messages if registration fails.
+<br />
+<font style="color:red">тут возникает вопрос - а как работает редирект. Он что, возвращает специальный ActionResult?</font>
+
+<br />
+<br />
+Какие бывают виды результатов:
+<br />
+<br />
+The following table shows the built-in action result types and the action helper methods that return them.
+<table responsive="true" summary="table">
+<tbody><tr responsive="true"><th scope="col"><p>Action Result</p></th><th scope="col"><p>Helper Method</p></th><th scope="col"><p>Description</p></th></tr>
+<tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.viewresult.aspx">ViewResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.view.aspx#M:System.Web.Mvc.Controller.View">View</a></p></td><td data-th="Description"><p>Renders a view as a Web page.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.partialviewresult.aspx">PartialViewResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.partialview.aspx#M:System.Web.Mvc.Controller.PartialView">PartialView</a></p></td><td data-th="Description"><p>Renders a partial view, which defines a section of a view that can be rendered inside another view.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.redirectresult.aspx">RedirectResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.redirect.aspx#M:System.Web.Mvc.Controller.Redirect(System.String)">Redirect</a></p></td><td data-th="Description"><p>Redirects to another action method by using its URL.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.redirecttorouteresult.aspx">RedirectToRouteResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.redirecttoaction.aspx#M:System.Web.Mvc.Controller.RedirectToAction(System.String)">RedirectToAction</a> or <a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.redirecttoroute.aspx#M:System.Web.Mvc.Controller.RedirectToRoute(System.Object)">RedirectToRoute</a></p></td><td data-th="Description"><p>Redirects to another action method.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.contentresult.aspx">ContentResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.content.aspx#M:System.Web.Mvc.Controller.Content(System.String)">Content</a></p></td><td data-th="Description"><p>Returns a user-defined content type.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.jsonresult.aspx">JsonResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.json.aspx#M:System.Web.Mvc.Controller.Json(System.Object)">Json</a></p></td><td data-th="Description"><p>Returns a serialized JSON object.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.javascriptresult.aspx">JavaScriptResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.javascript.aspx#M:System.Web.Mvc.Controller.JavaScript(System.String)">JavaScript</a></p></td><td data-th="Description"><p>Returns a script that can be executed on the client.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.httpstatuscoderesult.aspx">HttpStatusCodeResult</a></p></td><td data-th="Helper Method"><p>(None)</p></td><td data-th="Description"><p>Returns a specific HTTP response code and description.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.httpunauthorizedresult.aspx">HttpUnauthorizedResult</a></p></td><td data-th="Helper Method"><p>(None)</p></td><td data-th="Description"><p>Returns the result of an unauthorized HTTP request.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.httpnotfoundresult.aspx">HttpNotFoundResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.httpnotfound.aspx#M:System.Web.Mvc.Controller.HttpNotFound">HttpNotFound</a></p></td><td data-th="Description"><p>Indicates the requested resource was not found.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.fileresult.aspx">FileResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.Byte[],System.String)">File</a></p></td><td data-th="Description"><p>Returns binary output to write to the response.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.filecontentresult.aspx">FileContentResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.Byte[],System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(Byte[],&nbsp;String)</span></a> or <a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.Byte[],System.String,System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(Byte[],&nbsp;String,&nbsp;String)</span></a></p></td><td data-th="Description"><p>Sends the contents of a binary file to the response.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.filepathresult.aspx">FilePathResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.String,System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(String,&nbsp;String)</span></a> or <a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.String,System.String,System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(String,&nbsp;String,&nbsp;String)</span></a></p></td><td data-th="Description"><p>Sends the contents of a file to the response.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.filestreamresult.aspx">FileStreamResult</a></p></td><td data-th="Helper Method"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.IO.Stream,System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(Stream,&nbsp;String)</span></a> or <a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.controller.file.aspx#M:System.Web.Mvc.Controller.File(System.IO.Stream,System.String,System.String)">Controller<span xmlns="">.</span>File<span xmlns="">(Stream,&nbsp;String,&nbsp;String)</span></a></p></td><td data-th="Description"><p>Sends binary content to the response through a stream.</p></td></tr><tr><td data-th="Action Result"><p><a href="https://msdn.microsoft.com/en-us/library/system.web.mvc.emptyresult.aspx">EmptyResult</a></p></td><td data-th="Helper Method"><p>(None)</p></td><td data-th="Description"><p>Represents a return value that is used if the action method must return a <strong>null</strong> result (void).</p></td></tr>
+</tbody></table>
+
+
+
+<h2>Заполнение параметров Action-методов</h2>
+Когда в Action-метод передаётся объект класса RegisterViewModel model
+<br />
+как этот объект заполняется?
+
+<br />
+<br />
+The ASP.NET MVC model binding system automatically maps the named parameters (name and numTimes) from the query string in the address bar to parameters in your method.
+
+
+
+
+
+<h2>Как работает вставка Layout</h2>
+<pre>@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}</pre>
+
+то, что метод контроллера передаёт движку рендеринга, по всей видимости является "моделью" (имеет свойства, к которым можно обращаться).
+<br />
+тут, по всей видимости, используется свойство Layout. Не так ли?
+<br />
+Ниет! ViewResult - Это одно, а объект model, который передаётся внутрь - это другое.
+<br />
+<br />
+Там - в базовом классе контроллера, ещё есть метод
+<pre>protected internal virtual ViewResult View(
+	string viewName,
+	string masterName,
+	object model
+)</pre>
+<font style="color:red">Как masterName используется? Куда попадает?</font>
+<br />
+<br />
+<pre>@{
+    ViewBag.Title = "Index";
+}</pre>
+<font style="color:red">откуда тут слово ViewBag, что имеется в виду?</font>
+<br />
+ViewBag object contains data that will be passed to the view automatically.
+<br />
+<br />
+~/Views/Shared/_Layout.cshtml
+<br />
+@RenderBody() line. RenderBody is a placeholder where all the view-specific pages you create show up, "wrapped" in the layout page.
+
+<br />
+<br />
+Layout (мастер страницы) – это тоже View и они тоже хотят свои модели.
+<br />
+Cоздайте в приложении класс SharedLayoutViewModel с нужными вашему _Layout.cshtml свойствами, и наследуйте от него ваши модели для остальных View.
+<br />
+Пользуйтесь Result-фильтрами чтобы наполнять эту модель в одном месте для всех методов ваших контроллеров.
+<br />
+Или переопределите OnResultExecuting в базовом классе ваших контроллеров, и делайте это там.
+
+
+
+
+<h2>Синтаксис Razor</h2>
+Razor minimizes the number of characters and keystrokes required when writing a view template
+<br />
+<font style="color:red">минимизирует по сравнению с чем, с каким другим синтаксисом?</font>
+<br />
+Надо ли это включать в начало курса обучения, или обсуждение этого вопроса можно отложить на внеклассные занятия?
+
+
+
+
+<h2>Модели</h2>
+считайте ViewModel — это как контракт между контроллером и View.
+<br />
+ViewModel — это самый что ни на есть строгий контракт между контроллером и View, совершенно предсказуемый и тестируемый.
+<br />
+<br />
+Вполне жизнеспособным выглядит вариант такой структуры:
+<br />
+<img src="677695b4.png" alt="677695b4.png" />
+<br />
+это отличается от варианта генерируемого monodevelop, в котором ViewModels называются просто Models и нет поддиреторий для каждого View
+<br />
+<br />
+все модели находятся в одном пространстве имён (NameSpaceProvider=False для их директорий)
+<br />
+Можно убрать ViewModel и оставить Model (но ViewModel явно говорит, что эта модель именно для View, а где-то могут быть другие модели)
+<br />
+<br />
+создание Html.InputFor(m=>m.Field), где сам label, разные звёздочки (обязательное поле) и инпут строится целиком по метаданным модели — это вполне практичный подход.
+<br />
+формы желательно стандартизировать, и создавать EditorTemplates, а для особых исключений, в виде аннотаций к ViewModel подписывать нужные UIHint-ы, 
+<br />
+<a href="http://www.lostechies.com/blogs/jimmy_bogard/archive/2009/04/24/how-we-do-mvc.aspx">http://www.lostechies.com/blogs/jimmy_bogard/archive/2009/04/24/how-we-do-mvc.aspx</a>
+
+
+
+
+
+<h2>Домен (Domain model)</h2>
+Вы должно быть подумали, что я предлагаю добавлять в домен такие вещи как, например, IsUserLocationVisible, которые служат исключительно для того, чтобы определить показывать местоположение юзера на сайте или нет. Если добавить это поле в домен, то конечно же домен начинает зависить от View. И это будет костылем. Вы бы, я так полагаю, добавили это поле во ViewModel.
+<br />
+<br />
+Я же предлагаю следующее, формализовать то бизнес-правило, на основании которого определяется показывать юзера на сайте или нет и внести его в домен. Допустим нам нужно показывать местоположение юзера, только если он дружелюбный, тогда в домене это будет поле IsFriendly с некой логикой внутри. Которое никаким образом не связано с UI. И на основании уже этого поля определять во View показывать его или нет.
+<br />
+<br />
+В итоге, я хочу сказать, что вместо того чтобы добавлять поле IsUserLocationVisible во ViewModel лучше добавить в домен IsFriendly. 
+
+
+
+
+<h2>Атрибуты</h2>
+[HttpPost]
+<br />
+[AllowAnonymous]
+<br />
+[ValidateAntiForgeryToken]
+<br />
+<font style="color:red">зачем нужен и как применяется каждый из них?</font>
+
+
+
+
+
+<h2>Как работает редирект</h2>
+return RedirectToAction("Index", "Home");
+
+
+<h2>Как накапливаются сообщения об ошибках</h2>
+AddErrors(result);
+
+
+<h2>Своевременно ли вообще изучение MVC</h2>
+Или учить его в 2017 это всё равно, что учить MFC ?
+<br />
+2012-06-17, <a href="https://weblogs.asp.net/sbwalker/microsoft-declares-the-future-of-asp-net-is-web-api">https://weblogs.asp.net/sbwalker/microsoft-declares-the-future-of-asp-net-is-web-api</a>
+<br />
+<img src="Windows-Live-Writer-3bbb05c21d6d_97B7-WebAPI_thumb.png" alt="Windows-Live-Writer-3bbb05c21d6d_97B7-WebAPI_thumb.png" />
+<br />
+WebApi is focused on full implementation of HTTP spec
+<br />
+Web API is designed to embrace native HTTP standards without copious layers of abstraction, the “Future of ASP.NET” (3-4 years into the future, all ASP.NET web applications will be developed using the Web API approach. i.e. <strong>2015+</strong>)
+<br />
+designed to be the ultimate replacement for both the REST aspects of WCF and ASP.NET MVC Web Services.
+<br />
+Web API promotes client-side page compositing with a heavy focus on web services (whereas, MVC is a server-side page compositing framework)
+<br />
+web API is simply a rest-ful URL (i.e.: mysite.com/api/products) that can be accessed through a variety of methods (GET,POST,PUT,DELETE) and return a variety of responses.
+<br />
+The responses are typically JSON, XML, or some other type of data format which can be read programmatically (i.e.: not by humans).
+<br />
+<a href="http://www.sql.ru/forum/989503-1/mvc-myortv-da-zdravstvuet-webforms">http://www.sql.ru/forum/989503-1/mvc-myortv-da-zdravstvuet-webforms</a>
+
+
+
+<h2>Литература</h2>
+хороша книжка Стивена Сандерсона “Pro ASP.NET MVC 2 Framework”. Благодаря ей удалось избежать многих ошибок
+
+
+<h2>IsAuthenticated</h2>
+как бороться с использованием IsAuthenticated во вьюшках, кроме банального пробрасывания этого поля и такого же использования как и то, с чем боремся. 
+<br />
+<br />
+в таких случаях пользуюсь RenderAction — в соответствующем контроллере есть логика, которая проверяет IsAuth (значение берется из входного параметра с использованием соответствующего Binder-а),
+а затем контроллер выдает один из двух контролов. И ничего, что они простые, зато следуют SRP (single responsibility principle). Простота во вью еще важнее, чем в исполняемом коде.
+<br />
+<br />
+с точки зрения View, там где вы используете IsAuthtenticated, скорее всего должно быть свойства вроде [bool]Model.ShowUserControls и другие
+<br />
+<br />
+Однажды, вы захотите использовать этот же шаблон к примеру генерирующий ту же страницу в режиме для администратора: View this page from USER1 perspective.
+<br />
+<br />
+Это только 1 конкретный пример почему данные должны быть явными, а шаблоны глупыми.
+<br />
+<br />
+Именно контроллер должен позаботиться о том, чтобы View была предоставленна необходимая (не больше) для него модель собранная из данных, контекста и т.п.
+<br />
+<br />
+пример — надо показать залогиненому пользователю один текст, незалогиненому другой.
+Верстка — разная ( т.е. передать текст из контроллера не получится, передавать с версткой — глупости).
+Пилить 2 контрола на каждую простую вьюшку — ну тоже странновато.
+Максимум что стоит делать для изолированности — пробрасывать значение через модель.
+<br />
+<br />
+View не должно зависеть от Request, как кстати, и контроллер.
+<br />
+<br />
+Вы можете включить свойство IsUserAuthenticated в исходящую View-модель (для этого зачастую приходится создавать layer-supertype, то есть базовую ViewModelBase), 
+или же использовать для этого ViewBag (который весьма разумно использовать для таких «побочных» вещей, 
+но не рекомендуется для передачи основных данных — для этого есть View-модель). 
+
+<h2>Валидация</h2>
+рано или поздно правила валидации выходят за рамки сущностей модели, 
+иногда противоречит им, и вы начинаете размазывать валидацию по проекту, часто дублировать её, делать исключения то там то там.
+<br />
+<br />
+вы проверяете _форму_, а не объект, поэтому валидация формы — это проверка состояния формы, а не связанных сущностей, как вырожденный случай.
+<br />
+<br />
+<span style="color:lightgray">самый удачный пример реализации валидации — на мой взгляд реализовано в Python FormEncode. 
+валидатор — это объект со своей гибкой структурой, произвольной вложенность, и заодно ModelBinder (в понятиях MVC)</span>
+<br />
+Насчет гибкости валидатора — в .NET есть тот же FluentValidation (прекрасная вещь), но DefaultModelBinder «из коробки» юзает DataAnnotations. 
+<br />
+<br />
+Насчет ASP.NET MVC — мне очень НЕ нравится, что там на архитектурном уровне смешали валидацию и Model-binding, 
+и то, что DefaultModelBinder всегда проводит валидацию, даже когда это не нужно.
+Но это пол-беды — ведь есть еще domain-level-валидация (построенная, например, на FluentValidation),
+и приходится серьезно поднапрячься, чтобы поддерживать ModelState в нормальном состоянии
+(чтобы не выводить лишних ошибок, и чтобы при этом были выведены все ошибки формы за раз).
+<br />
+На мой взгляд, это можно было сделать порядком проще, и чтобы не пришлось заморачиваться с ModelValidatorProvider'ами.
+Нужно было сделать DataAnnotations менее навязчивыми, что ли.
+
+<h2>AutoMapper</h2>
+Самая засада — mapping из доменной модели во ViewModel, и обратно. Но и эта проблема решается с помощью AutoMapper'а.
+<br />
+<a href="http://automapper.codeplex.com/">http://automapper.codeplex.com/</a>
+<br />
+<br />
+EmitMapper, который в несколько раз быстрее 
+
+
+<h2>ViewBag</h2>
+<a href="https://weblogs.asp.net/scottgu/announcing-asp-net-mvc-3-release-candidate-2">https://weblogs.asp.net/scottgu/announcing-asp-net-mvc-3-release-candidate-2</a>
+<br />
+ViewBag is new to MVC 3 and has the advantage that it can be used in combination with a strongly typed model, giving you the advantages for both.
+<br />
+<br />
+dynamic — это loose-контракт, и никак не альтернатива и не «хотя бы» по сравнению со строгой типизацией. Но использовать можно, просто для особых сценариев.
+<br />
+Я одно время сам был сторонником исключительно строгих контрактов.
+Однако, в контексте того же ASP.NET MVC оказалось очень предпочтительно использовать ViewBag для передачи дополнительных данных во View (что-то вроде AOP).
+С одной стороны — loose-contract, а с другой — он не имеет отношения к основному View, не засоряет его ViewModel, и не мешает всей strong-type-овости всех основных View.
+<br />
+Для основных View, все же, на практике оказалась более предпочтительной модель со строгой типизацией View.
+Количество ViewModel-ей перестает волновать, когда они созданы по определенному соглашению, лежат в нужном месте и хорошо структурированы. 
+<br />
+<br />
+когда даже над одной страницей работают больше 2х человек ( даже 2 — уже неудобно) — нестрогая типизация ViewModel приводит к головной боли — 
+лазить и смотреть как же твой коллега назвал то, куда он данные Х сложил. А еще есть опечатки при верстке (верстальщик же не должен быть программистом, 
+он сделал все правильно, это у вас не работает ) и рефакторинг такого — тот еще ад.
+<br />
+dynamic - ExpandoObject
+<br />
+Никак не проверяется. С dynamic-типами работает DLR (используя позднее связывание). все проверяется в runtime (связывание происходит совершенно точно в DLR, с использованием DynamicMetaObject). 
+
+
+<h2>Разные формы регистрации</h2>
+примером может быть, регистрация пользователя и администратора, если этот процесс несколько отличается валидацией и набором полей. 
+
+
+<h2>А как же локализация и ресурсы?</h2>
+
+<h2>Структура проекта</h2>
+как уважаемая компания относится к тому, чтобы папки организовывать не по принципу разделения классов на роли (контроллеры сюда, модели туда), а по фичам?
+<br />
+для этого в Orchard CMS есть отдельные .dll-ки (модули)
+
+
+<h2>Scaffolding (заготовки)</h2>
+<a href="http://andrey.moveax.ru/post/mvc3-in-depth-basics-06-scaffolding">http://andrey.moveax.ru/post/mvc3-in-depth-basics-06-scaffolding</a>
+<br />
+<a href="https://www.codeproject.com/Articles/1011748/Scaffolding-in-ASP-NET-MVC">https://www.codeproject.com/Articles/1011748/Scaffolding-in-ASP-NET-MVC</a>
+<br />
+<a href="http://www.dotnettricks.com/learn/mvc/understanding-aspnet-mvc-scaffolding">http://www.dotnettricks.com/learn/mvc/understanding-aspnet-mvc-scaffolding</a>
+<br />
+Scaffolding engine for <strong>ASP.NET MVC</strong> models helps web developers in relieving him from the tedious &amp; mundane task of writing CRUD Operations codes. That is, connecting to a database table and perform often doing task such as <strong>Create</strong>, <strong>Retrieve</strong>, <strong>Update</strong> and <strong>Delete</strong> records.
+<br />
+Scaffolding engine uses Microsoft’s T4 templates to generate basic controllers and views for the models. Scaffolding blends with Entity framework and creates us the instance for the mapped entity model and writes down CRUD Operations code for us.
+That’s really charming and time saving that enhances developer’s productivity.
+
+<h2>AreaRegistration</h2>
+<a href="https://habrahabr.ru/post/74061/">https://habrahabr.ru/post/74061/</a>
+<br />
+Появилась начиная с MVC2
+<br />
+Метод RegisterAllAreas обнаруживает в домене приложения все типы, производные от AreaRegistration, и вызывает их методы RegisterArea.
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/system.web.mvc.arearegistration.registerallareas(v=vs.118).aspx">public static void RegisterAllAreas()</a>
+</body>
+</html>

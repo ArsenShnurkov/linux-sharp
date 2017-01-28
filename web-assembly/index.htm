@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>WebAssembly</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>WebAssembly</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+как вызывать DOM неясно (в смысле, пока нужен выход обратно в javascript)
+<br />
+<br />
+
+по-умолчанию технология webassembly пока не включена
+<br />
+<br />
+
+А можно и просто .js-библиотеки использовать (SignalR или как там их?)
+<br />
+<a href="https://github.com/SignalR/SignalR">https://github.com/SignalR/SignalR</a>
+<br />
+<br />
+
+Пока можно компилировать C# в asm.js
+<br />
+Существуют трансляторы из C# в JS, так что вы можете попробовать уже сейчас, без WebAssembly.
+Но ваш скрипт будет тащить за собой реализацию BCL под JS — 
+в лучшем случае, слинкуются только прямо или косвенно используемые части
+(которых все равно будет очень много), а худшем — вся стандартная библиотека целиком.
+
+
+</body>
+</html>
