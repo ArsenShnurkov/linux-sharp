@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>ASP .NET MVC, раутинг</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>ASP .NET MVC, раутинг</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>,
+<br />
+&nbsp;
+</td></tr></table>
+
+Why do we need Routing anyways?
+<br />
+Because the web server knows nothing about your code. It knows how to map URLs to files, but not to controllers.
+<br />
+solution is having a tool that can deeply understand your code. In one word, Reflection.
+<br />
+<br />
+Why Routing?<a href="#why-routing" class="heading-link"><i class="glyphicon glyphicon-link"></i></a></h2><h3 id="seo-friendly">SEO friendly<a href="#seo-friendly" class="heading-link"><i class="glyphicon glyphicon-link"></i></a></h3>RESTfully configured routing facilitates the Search Engine Optimization (SEO) of your content. A site’s URL is one of the top criteria that impacts site ranking. By converting www.yourwebsite.com/articles/show/123 to www.yourwebsite.com/how-to-peel-potatoes you encourage search engines to rank it higher for keyphrases related to “how to peel potatoes.”<br />Also, when you have a URL that is more descriptive, it is easier for users to correctly anticipate the content, leading to increased time on page, which also impacts SEO and your overall page authority.<h3 id="urls-do-not-need-to-map-a-file">URLs do not need to map a file<a href="#urls-do-not-need-to-map-a-file" class="heading-link"><i class="glyphicon glyphicon-link"></i></a></h3>Without routing, an incoming request would be mapped to a physical file. With routing we have full control of the request, allowing us to decide what action and controller we execute when a certain HTTP request comes in.<h3 id="long-urls-and-file-extensions-can-be-eliminated">Long URLs and file extensions can be eliminated<a href="#long-urls-and-file-extensions-can-be-eliminated" class="heading-link"><i class="glyphicon glyphicon-link"></i></a></h3>Routing helps to shorten the URL in instances where many parameters and filters are in play. By eliminating the file extension, we can hide what kind of environment we are working in.
+
+<hr />
+<a href="https://stormpath.com/blog/routing-in-asp-net-core">https://stormpath.com/blog/routing-in-asp-net-core</a>
+<br />
+
+
+2008-08-19, Stephen Walther, <a href="https://www.asp.net/mvc/overview/older-versions-1/controllers-and-routing/asp-net-mvc-routing-overview-cs">ASP.NET MVC Routing Overview</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Здесь просто вкратце описывается, какая была задумка по основному сценарию использования
+<br />
+Но нехватает следующих вещей:
+<br />
+1) что и зачем написано в web-config
+<br />
+2) как разбираются формулы в составе шаблона route (ну, которые с фигурными скобочками {} )
+<br />
+3) как определяется какой controller и какой action будут вызваны, если эти слова не встречаются в шаблоне формулы (например если там чётко путь указан, то какой метод будет вызван?)
+<br />
+<br />
+
+<a href="https://msdn.microsoft.com/en-us/library/cc668201.aspx">https://msdn.microsoft.com/en-us/library/cc668201.aspx</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Здесь много чего написано.
+<br />
+<br />
+
+
+
+ASP.NET MVC framework maps browser requests to controller actions.
+<br />
+<br />
+<a href="https://maxtoroq.github.io/2014/02/why-aspnet-mvc-routing-sucks.html">https://maxtoroq.github.io/2014/02/why-aspnet-mvc-routing-sucks.html</a>
+<br />
+<br />
+
+Once you start using custom routes the convention over configuration principle is dead.
+<br />
+<br />
+
+There are visual tools like Route Debugger and Glimpse.
+<br />
+<a href="http://haacked.com/archive/2008/03/13/url-routing-debugger.aspx/">http://haacked.com/archive/2008/03/13/url-routing-debugger.aspx/</a>
+<br />
+<a href="http://getglimpse.com/">http://getglimpse.com/</a>
+
+
+<h2>Convention Routing (vs Attribute Routing)</h2>
+MVC 1
+<br />
+Routing is the ability to have URLs represent abstract actions rather than concrete, physical files. 
+<br />
+<br />
+
+
+<h2>AreaRegistration</h2>
+<a href="https://habrahabr.ru/post/74061/">https://habrahabr.ru/post/74061/</a>
+<br />
+Появилась начиная с MVC2
+<br />
+Метод RegisterAllAreas обнаруживает в домене приложения все типы, производные от AreaRegistration, и вызывает их методы RegisterArea.
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/system.web.mvc.arearegistration.registerallareas(v=vs.118).aspx">public static void RegisterAllAreas()</a>
+<br />
+<br />
+{area}/{controller}/{action}/{id}
+<br />
+MVC 2 introduced a feature called Areas. This is not only about having an additional level in your resource hierarchy, it also attempts to provide a better organization of your codebase.
+<br />
+Although there are documented ways to split areas into their own projects, it’s not the default behavior.
+<br />
+<br />
+в MVC 5 писать можно в атрибуте:
+<br />
+[RouteArea(“BackOffice”, AreaPrefix = “back-office”)]
+
+<br />
+<br />
+Areas doesn’t really help you design a deep resource hierarchy, or organize your codebase in a clean way. In my view, code is and should be organized using namespaces and projects, not some artificial concept that doesn’t really help. In respect to routing, areas is just the default route with an additional segment. Areas only help you in two ways:
+
+<ul>
+  <li>URL generation is relative to the current area</li>
+  <li>Views are located in the area specific folder</li>
+</ul>
+
+
+
+<h2>Dynamic Data applications.</h2>
+MVC3
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/cc488545.aspx">https://msdn.microsoft.com/en-us/library/cc488545.aspx</a>
+<br />
+<br />
+
+<h2>Attribute Routing</h2>
+MVC 5
+<br />
+<br />
+<pre>[RoutePrefix("Users")]
+public class HomeController : Controller  
+{
+    [Route("~/")] //Specifies that this is the default action for the entire application. Route: /
+    [Route("")] //Specifies that this is the default action for this route prefix. Route: /Users
+    public ActionResult Index() { ... }
+} </pre>
+<br />
+Until now, there has been a routing table that you can define either in the Global.asax or in the RouteConfig.cs and all incoming requests would look it up to decide the rendering of a target view.
+<br />
+<a href="http://www.davidhayden.me/blog/asp-net-mvc-5-attribute-routing">http://www.davidhayden.me/blog/asp-net-mvc-5-attribute-routing</a>
+<br />
+<a href="http://www.c-sharpcorner.com/UploadFile/bhushangawale/attribute-based-routing-in-Asp-Net-mvc-5/">http://www.c-sharpcorner.com/UploadFile/bhushangawale/attribute-based-routing-in-Asp-Net-mvc-5/</a>
+<br />
+<br />
+to turn on attribute based routing in ASP.NET MVC 5 when you register your routes in RouteConfig. It is a simple one line statement.
+<br />
+<pre>public static void RegisterRoutes(RouteCollection routes) {
+    routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+tes.MapMvcAttributeRoutes(); //Enables Attribute Based Routing  
+  
+    routes.MapRoute(  
+        name: "Default",  
+        url: "{controller}/{action}/{id}",  
+        defaults: new { controller = "Product", action = "List", id = UrlParameter.Optional }  
+    );  
+}</pre>
+The joy here is that it is easy to see the route to a controller action by looking at the RoutePrefix and Route Attributes on the controller and action. You don't have to find it somewhere else.
+<br />
+When the route definitions are co-located with the actions, within the same source file rather than being declared on an external configuration class, it can make it easier to reason about the mapping between URIs and actions.
+<br />
+This makes it really convenient for troubleshooting routes.
+<br />
+<br />
+This works with ASP.NET Web API 2.
+<br />
+<br />
+there was nothing really wrong with the previous approach of routing and in fact you can still use it in MVC 5 or use this new routing method in conjunction with the old one.<br><br>Here are a few advantages of attribute based routing:
+<ul> 
+<li>Helps developer in the debugging / troubleshooting mode by providing information about routes.</li>
+<li>Reduces the chances for errors, if a route is modified incorrectly in RouteConfig.cs then it may affect the entire application's routing.</li>
+<li>May decouple controller and action names from route entirely.</li>
+<li>Easy to map two routes pointing to the same action. </li>
+</ul>
+Use a tilde (~) on the method attribute to override the route prefix if needed
+
+<br />
+<br />
+<a href="https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/">https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/</a>
+
+The following table lists the constraints that are supported.
+&nbsp;
+<table cellspacing="0" cellpadding="4" border="1">
+<thead>
+<tr>
+<th>Constraint</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>Matches uppercase or lowercase Latin alphabet characters (a-z, A-Z)</td>
+<td>{x:alpha}</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Matches a Boolean value.</td>
+<td>{x:bool}</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>Matches a <strong>DateTime</strong> value.</td>
+<td>{x:datetime}</td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>Matches a decimal value.</td>
+<td>{x:decimal}</td>
+</tr>
+<tr>
+<td>double</td>
+<td>Matches a 64-bit floating-point value.</td>
+<td>{x:double}</td>
+</tr>
+<tr>
+<td>float</td>
+<td>Matches a 32-bit floating-point value.</td>
+<td>{x:float}</td>
+</tr>
+<tr>
+<td>guid</td>
+<td>Matches a GUID value.</td>
+<td>{x:guid}</td>
+</tr>
+<tr>
+<td>int</td>
+<td>Matches a 32-bit integer value.</td>
+<td>{x:int}</td>
+</tr>
+<tr>
+<td>length</td>
+<td>Matches a string with the specified length or within a specified range of lengths.</td>
+<td>{x:length(6)} <br>{x:length(1,20)}</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Matches a 64-bit integer value.</td>
+<td>{x:long}</td>
+</tr>
+<tr>
+<td>max</td>
+<td>Matches an integer with a maximum value.</td>
+<td>{x:max(10)}</td>
+</tr>
+<tr>
+<td>maxlength</td>
+<td>Matches a string with a maximum length.</td>
+<td>{x:maxlength(10)}</td>
+</tr>
+<tr>
+<td>min</td>
+<td>Matches an integer with a minimum value.</td>
+<td>{x:min(10)}</td>
+</tr>
+<tr>
+<td>minlength</td>
+<td>Matches a string with a minimum length.</td>
+<td>{x:minlength(10)}</td>
+</tr>
+<tr>
+<td>range</td>
+<td>Matches an integer within a range of values.</td>
+<td>{x:range(10,50)}</td>
+</tr>
+<tr>
+<td>regex</td>
+<td>Matches a regular expression.</td>
+<td>{x:regex(^\d{3}-\d{3}-\d{4}$)}</td>
+</tr>
+</tbody>
+</table>
+Notice that some of the constraints, such as “min”, take arguments in parentheses.
+<br />
+You can apply multiple constraints to a parameter, separated by a colon
+
+<h2>Значения по умолчанию в маршруте</h2>
+
+Такая возможность появилась в ASP.NET MVC 5
+<ol>
+  <li>Возможность задавать прямо в нем значения по-умолчанию для переменных частей маршрута: <code class="highlighter-rouge"><span class="p">{</span><span class="err">controller=Home</span><span class="p">}</span><span class="err">/</span><span class="p">{</span><span class="err">action=Index</span><span class="p">}</span></code>.</li>
+  <li>Задавать не обязательность переменной части сегмента с помощью символа <code class="highlighter-rouge">?</code>: <code class="highlighter-rouge"><span class="p">{</span><span class="err">controller=Home</span><span class="p">}</span><span class="err">/</span><span class="p">{</span><span class="err">action=Index</span><span class="p">}</span><span class="err">/</span><span class="p">{</span><span class="err">id?</span><span class="p">}</span></code>.</li>
+</ol>
+<br />
+<br />
+<a href="https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/#default-route">https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/#default-route</a>
+
+<hr>
+given the following code:
+
+<div class="language-csharp highlighter-rouge"><pre class="highlight"><code><span class="na">[RoutePrefix("reviews")]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ReviewsController</span> <span class="p">:</span> <span class="n">Controller</span> <span class="p">{</span>
+
+   <span class="c1">// eg.: /reviews/5
+</span>   <span class="p">[</span><span class="nf">Route</span><span class="p">(</span><span class="s">"{reviewId:int}"</span><span class="p">)]</span>
+   <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Show</span><span class="p">(</span><span class="kt">int</span> <span class="n">reviewId</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+
+   <span class="c1">// eg.: /reviews/5/edit
+</span>   <span class="p">[</span><span class="nf">Route</span><span class="p">(</span><span class="s">"{reviewId:int}/{action}"</span><span class="p">)]</span>
+   <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Edit</span><span class="p">(</span><span class="kt">int</span> <span class="n">reviewId</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<del>Why do I need to specify “reviews” in the route prefix, if I could just take that information from the controller name? Same with parameter name and constraint.</del> <ins><strong>Update:</strong> Can use {controller} instead, but cannot avoid repeating the parameter name and type.</ins>
+
+<hr />
+<a href="https://weblogs.asp.net/leftslipper/optimizing-your-route-collection-for-url-generation-in-asp-net-mvc-and-more">https://weblogs.asp.net/leftslipper/optimizing-your-route-collection-for-url-generation-in-asp-net-mvc-and-more</a>
+<br />
+<br />
+<a href="http://maxtoroq.github.io/2013/02/aspnet-mvc-workflow-per-controller.html">http://maxtoroq.github.io/2013/02/aspnet-mvc-workflow-per-controller.html</a>
+<br />
+Separating classes by category (Controllers, ViewModels, Filters etc.) is nonsense.If you want to write code for the Home section of your website (/)
+then create a folder named Home, and put there the HomeController, IndexViewModel, AboutViewModel, etc. and all related classes used by Home actions.
+<br />
+Why separate things that are related (HomeController, IndexViewModel) and keep things together that have no relation at all (HomeController, AccountController) ?
+<br />
+Categorization of information is useful if there’s value in looking at all information of a certain category at once.
+<br />
+I think a controller should implement a single workflow, and that workflow should have its own namespace.
+<br />
+Let’s take <a href="https://github.com/maxtoroq/MvcAccount/tree/v0.8/src/MvcAccount">MvcAccount</a> for example. There’s a Reset Password function comprised of several actions:
+
+<ol>
+  <li><code class="highlighter-rouge">GET /Account/ResetPassword</code></li>
+  <li><code class="highlighter-rouge">POST /Account/ResetPassword</code></li>
+  <li><code class="highlighter-rouge">GET /Account/PasswordResetVerificationSent</code></li>
+  <li><code class="highlighter-rouge">GET /Account/RP</code> (by clicking on e-mail link)</li>
+  <li><code class="highlighter-rouge">POST /Account/RP</code></li>
+  <li><code class="highlighter-rouge">GET /Account/PasswordReset</code></li>
+</ol>
+
+To successfully reset a password you have go through this sequence of actions from start to finish. This is the Reset Password workflow, and should be represented in code by its own controller.
+<br />
+<br />
+<a href="http://www.make-awesome.com/2012/07/perfectionist-routing-in-asp-net-mvc/">http://www.make-awesome.com/2012/07/perfectionist-routing-in-asp-net-mvc/</a>
+
+<h2>Subdomain routing</h2>
+<a href="http://matrichard.com/post/asp.net-mvc-5-routing-with-subdomain">http://matrichard.com/post/asp.net-mvc-5-routing-with-subdomain</a>
+
+<h2>Web API</h2>
+<a href="http://odetocode.com/blogs/scott/archive/2013/08/12/attribute-routes-and-hierarchical-routing.aspx">http://odetocode.com/blogs/scott/archive/2013/08/12/attribute-routes-and-hierarchical-routing.aspx</a>
+
+<h2>Все маршруты в одном месте</h2>
+<a href="http://odetocode.com/blogs/scott/archive/2013/08/12/attribute-routes-and-hierarchical-routing.aspx">http://odetocode.com/blogs/scott/archive/2013/08/12/attribute-routes-and-hierarchical-routing.aspx</a>
+
+<br />
+Routing in web API and mvc was crap because its order dependent. Because a single route is magic for all calls. This isn't the case with AR. 
+<br />
+<br />
+Как в linux традиционно решают такие вопросы?
+<br />
+Делают директорию, в которую размещают текстовые фрагменты конфигурационных файлов, каждый из которых содержит отдельный элемент. Симлинки возможны, группировка по сценариям использования.
+<br />
+Ну можно вместо директории использовать XML-файл (описание маршрута -> сборка, тип, метод)
+
+<h2>IDependencyResolver</h2>
+Improved Dependency Injection with      new IDependencyResolver.
+
+
+<h2>XML-based routing</h2>
+2010-01-17, Phil Haack, <a href="http://haacked.com/archive/2010/01/17/editable-routes.aspx/">Editable Routes</a>
+<br />
+2011-02-13, Phil Haack, <a href="http://haacked.com/archive/2011/01/30/introducing-routemagic.aspx/">Introducing RouteMagic</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/haacked/routemagic">https://github.com/haacked/routemagic</a>
+<br />
+<br />
+
+
+2012-10-14, Vijaya Anand, <a href="http://prideparrot.com/blog/archive/2012/10/building_xml_based_routing_system_using_xrouter">Building XML based routing system using XRouter</a>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/bbqchickenrobot/XRouter">https://github.com/bbqchickenrobot/XRouter</a>
+<br />
+<br />
+
+Я по этому поводу думаю, что можно было бы сделать директорию, в которую складывать такие XML-файлы, при старте их считывать, а при обновлении перечитывать.
+<br />
+<br />
+2015-11-13, Rick Strahl, <a href="https://Serving URLs with File Extensions in an ASP.NET MVC Application/">Serving URLs with File Extensions in an ASP.NET MVC Application</a>
+
+
+<h2>Site maps</h2>
+<a href="http://stackoverflow.com/questions/2006529/mvc-how-to-route-sitemap-xml-to-an-actionresult">http://stackoverflow.com/questions/2006529/mvc-how-to-route-sitemap-xml-to-an-actionresult</a>
+<br />
+<br />
+XML config can be transformed into site map (if it will support such feature)
+<br />
+<a href="http://rehansaeed.com/dynamically-generating-sitemap-xml-for-asp-net-mvc/">http://rehansaeed.com/dynamically-generating-sitemap-xml-for-asp-net-mvc/</a>
+<br />
+<a href="http://joelabrahamsson.com/xml-sitemap-with-aspnet-mvc/">http://joelabrahamsson.com/xml-sitemap-with-aspnet-mvc/</a>
+
+<h2>Globalization/Localization</h2>
+Why URI parts are not passed into methods as parameters?
+
+
+<h2>Routing by file extension</h2>
+<a href="https://weblog.west-wind.com/posts/2015/nov/13/serving-urls-with-file-extensions-in-an-aspnet-mvc-application">https://weblog.west-wind.com/posts/2015/nov/13/serving-urls-with-file-extensions-in-an-aspnet-mvc-application</a>
+
+<h2>Typical problems</h2>
+<a href="http://rdingwall.com/2008/08/09/three-common-aspnet-mvc-url-routing-issues/">http://rdingwall.com/2008/08/09/three-common-aspnet-mvc-url-routing-issues/</a>
+<br />
+<br />
+Нужна какая-то утилита, которая бы проверяла корректность маршрутов и их соответствие коду.
+
+</body>
+</html>
