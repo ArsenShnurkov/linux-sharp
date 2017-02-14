@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>xunit</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>xunit</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Он использует проекты типа .xproj, а это плохо, потому что я не умею их анализировать
+<br />
+<br />
+говорят, что для того, чтобы с этим бороться есть команда
+<br />
+dotnet migrate -h
+<br />
+которая теоретически должна преобразовывать JSON-проекты в .csproj проекты
+<br />
+<br />
+Где говорят? <a href="https://github.com/dotnet/cli/blob/rel/1.0.0/Documentation/ProjectJsonToCSProj.md">https://github.com/dotnet/cli/blob/rel/1.0.0/Documentation/ProjectJsonToCSProj.md</a>
+<br />
+<br />
+Анализ зависимостей xunit:
+<pre>
+Processing directory: /var/calculate/remote/distfiles/egit-src/xunit.git
+    Processing solution: /var/calculate/remote/distfiles/egit-src/xunit.git/xunit.vs2015.sln
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Source
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Tests
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Meta
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Targets
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Meta
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Source
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Tests
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Source
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Tests
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/v1
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Tests
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/NuGet
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Meta
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Git
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Meta
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.core/xunit.core.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.assert/xunit.assert.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.execution/xunit.execution.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.console/xunit.console.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.runner.utility/xunit.runner.utility.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.runner.reporters/xunit.runner.reporters.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.runner.tdnet/xunit.runner.tdnet.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/xunit.runner.msbuild/xunit.runner.msbuild.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.assert/test.xunit.assert.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.utility/test.utility.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Tests
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.execution/test.xunit.execution.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit1/test.xunit1.csproj
+            Reference: Moq
+            Reference: System
+            Reference: System.Core
+            Reference: System.Web
+            Reference: System.Xml.Linq
+            Reference: System.Data.DataSetExtensions
+            Reference: Microsoft.CSharp
+            Reference: System.Data
+            Reference: System.Xml
+            Reference: xunit
+            Reference: xunit.extensions
+            Reference: xunit.runner.utility
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/v1
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.console/test.xunit.console.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/Build
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Meta
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.runner.msbuild/test.xunit.runner.msbuild.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.runner.reporters/test.xunit.runner.reporters.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.runner.tdnet/test.xunit.runner.tdnet.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Runners
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/test/test.xunit.runner.utility/test.xunit.runner.utility.xproj
+            ProjectReference: /var/calculate/remote/distfiles/egit-src/xunit.git/Core
+    Processing solution: /var/calculate/remote/distfiles/egit-src/xunit.git/src/abstractions/xunit.abstractions.sln
+        Processing project: /var/calculate/remote/distfiles/egit-src/xunit.git/src/abstractions/xunit.abstractions/xunit.abstractions.xproj
+Summary:
+ Moq
+ xunit
+ xunit.extensions
+ xunit.runner.utility
+[~] Microsoft.CSharp
+[~] System
+[~] System.Core
+[~] System.Data
+[~] System.Data.DataSetExtensions
+[~] System.Web
+[~] System.Xml
+[~] System.Xml.Linq
+</pre>
+
+</body>
+</html>

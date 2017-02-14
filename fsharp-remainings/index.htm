@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>F# в проектах на C#</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>F# в проектах на C#</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+<h2>paket.bootstrapper.exe</h2>
+<pre>&lt;Project&gt;
+  &lt;Target Name=&quot;BeforeBuild&quot; DependsOnTargets=&quot;PaketInstall&quot;&gt;
+  &lt;/Target&gt;
+  &lt;Target Name=&quot;BootstrapPaket&quot; Condition=&quot;!Exists('$(SolutionDir).paket/paket.bootstrapper.exe)')&quot;&gt;
+    &lt;Exec Command=&quot;$(SolutionDir).paket/paket.bootstrapper.exe&quot; /&gt;
+  &lt;/Target&gt;
+  &lt;Target Name=&quot;PaketInstall&quot; DependsOnTargets=&quot;BootstrapPaket&quot; Condition=&quot;!Exists('$(SolutionDir)paket-files')&quot;&gt;
+    &lt;Exec Command=&quot;$(SolutionDir).paket/paket install&quot; /&gt;
+  &lt;/Target&gt;
+&lt;/Project&gt;</pre>
+
+<h2>Maybe.cs, ErrorHandling.cs, EnumerableExtensions.cs</h2>
+Добавляются три исходника в список компилируемых файлов:
+<pre>&lt;Project&gt;
+  &lt;ItemGroup&gt;
+    &lt;Compile Include=&quot;..\..\paket-files\gsscoder\railwaysharp\src\RailwaySharp\ErrorHandling.cs&quot;&gt;
+      &lt;Paket&gt;True&lt;/Paket&gt;
+      &lt;Link&gt;Infrastructure/ErrorHandling.cs&lt;/Link&gt;
+    &lt;/Compile&gt;
+    &lt;Compile Include=&quot;..\..\paket-files\gsscoder\CSharpx\src\CSharpx\EnumerableExtensions.cs&quot;&gt;
+      &lt;Paket&gt;True&lt;/Paket&gt;
+      &lt;Link&gt;Infrastructure/EnumerableExtensions.cs&lt;/Link&gt;
+    &lt;/Compile&gt;
+    &lt;Compile Include=&quot;..\..\paket-files\gsscoder\CSharpx\src\CSharpx\Maybe.cs&quot;&gt;
+      &lt;Paket&gt;True&lt;/Paket&gt;
+      &lt;Link&gt;Infrastructure/Maybe.cs&lt;/Link&gt;
+    &lt;/Compile&gt;
+&lt;/Project&gt;</pre>
+
+<h2>FSharp.Core.dll</h2>
+Зачем-то в референсы добавлена .dll-ка FSharp.Core.dll
+<pre>&lt;Project&gt;
+  &lt;Choose&gt;
+    &lt;When Condition=&quot;$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.5')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\net20\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\net40\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;($(TargetFrameworkIdentifier) == '.NETCore') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile44')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\portable-net45+netcore45\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\portable-net45+monoandroid10+monotouch10+xamarinios10\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;($(TargetFrameworkIdentifier) == 'Silverlight' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile47')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\portable-net45+sl5+netcore45\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;($(TargetFrameworkIdentifier) == 'WindowsPhone' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1')) Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\portable-net45+netcore45+wp8\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+    &lt;When Condition=&quot;($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile259')&quot;&gt;
+      &lt;ItemGroup&gt;
+        &lt;Reference Include=&quot;FSharp.Core&quot;&gt;
+          &lt;HintPath&gt;..\..\packages\FSharp.Core\lib\portable-net45+netcore45+wpa81+wp8\FSharp.Core.dll&lt;/HintPath&gt;
+          &lt;Private&gt;True&lt;/Private&gt;
+          &lt;Paket&gt;True&lt;/Paket&gt;
+        &lt;/Reference&gt;
+      &lt;/ItemGroup&gt;
+    &lt;/When&gt;
+  &lt;/Choose&gt;
+&lt;/Project&gt;</pre>
+  
+</body>
+</html>
