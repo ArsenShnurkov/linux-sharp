@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Как собрать несколько .il-файлов при помощи msbuild?</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Как собрать несколько .il-файлов при помощи msbuild?</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>
+<br />
+&nbsp;
+</td></tr></table>
+
+Что мы знаем про ilasm.exe ?
+<br />
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/windows/desktop/496e4ekx(v=vs.71).aspx">https://msdn.microsoft.com/ru-ru/library/windows/desktop/496e4ekx(v=vs.71).aspx</a>
+<br />
+<br />
+расширение для файлов с ассемблерным кодом
+.il
+<br />
+<br />
+/dll
+<br />
+создавать библиотеку
+<br />
+/output:file.dll
+<hr />
+Если есть файл на ассемблере с расширением .il, то как его скомпилировать в сборку при помощи msbuild.
+<br />
+То есть я вижу, что надо вызвать ilasm.exe source.il /dll /outfile:result.dll,
+<br />
+но не вижу каким MSBuildTask-ом это делать
+<br />
+The MSBuildContrib project has an ILASM task which allows you to compile IL files at build time.
+<br />
+<a href="https://github.com/scottdorman/MSBuildContrib">https://github.com/scottdorman/MSBuildContrib</a>
+<br />
+  но нет, нет такого таска там
+<br />
+<br />
+<a href="https://github.com/loresoft/msbuildtasks">https://github.com/loresoft/msbuildtasks</a>
+<br />
+  и тут тоже нет
+<br />
+<br />
+<a href="http://stackoverflow.com/questions/4068425/are-there-any-examples-of-compiling-cil-code-from-within-a-visual-studio-project">http://stackoverflow.com/questions/4068425/are-there-any-examples-of-compiling-cil-code-from-within-a-visual-studio-project</a>
+<br />
+<br />
+<a href="http://svn.jetbrains.org/omeaopen/trunk/Omea/Tools/MSBuild/Src/JetBrains.Build.Ilasm/Ilasm.cs">http://svn.jetbrains.org/omeaopen/trunk/Omea/Tools/MSBuild/Src/JetBrains.Build.Ilasm/Ilasm.cs</a>
+<br />
+An MSBuild task that compiles the IL projects.
+<br />
+<br />
+<a href="https://msdn.microsoft.com/en-us/library/microsoft.build.utilities.tooltask.aspx">https://msdn.microsoft.com/en-us/library/microsoft.build.utilities.tooltask.aspx</a>
+<br />
+When overridden in a derived form, provides functionality for a task that wraps a command line tool.
+<br />
+<br />
+пример таска для msbuild, наследуясь от ToolTask
+<br />
+<a href="https://msdn.microsoft.com/ru-ru/library/microsoft.build.utilities.commandlinebuilder.appendfilenameifnotnull.aspx">https://msdn.microsoft.com/ru-ru/library/microsoft.build.utilities.commandlinebuilder.appendfilenameifnotnull.aspx</a>
+
+
+<hr />
+Вот в NAnt такая штука есть:
+<br />
+<a href="http://nant.sourceforge.net/release/0.91/help/tasks/ilasm.html">http://nant.sourceforge.net/release/0.91/help/tasks/ilasm.html</a>
+<br />
+<br />
+1) Нужно разобраться, как компилируются файлы исходников .cs при помощи csc в msbuild.
+<br />
+ну, там есть элементы Compile, которые как-то передаются в CSC
+<br />
+<br />
+Существует ли .ilproj ?
+<br />
+Возможно!
+<br />
+<a href="https://forums.xamarin.com/discussion/13889/il-console-project-error-msb4057-the-target-build-does-not-exist-in-the-project">https://forums.xamarin.com/discussion/13889/il-console-project-error-msb4057-the-target-build-does-not-exist-in-the-project</a>
+<br />
+ещё есть ILMerge GUI:
+<br />
+<a href="https://ilmergegui.codeplex.com/">https://ilmergegui.codeplex.com/</a>
+<br />
+<br />
+<a href="http://rsdn.org/forum/dotnet/6699218.all">http://rsdn.org/forum/dotnet/6699218.all</a>
+
+</body>
+</html>

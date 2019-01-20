@@ -16,10 +16,98 @@
 
 Garden Points Parser Generator
 <br />
+Вообще есть два совершенно замечательных файла gppg.pdf и gplex.pdf, там всё написано
+
+<h2>Как подключить в msbuild</h2>
+Нет ли для этого тасков специальных в проектах <a href="https://github.com/loresoft/msbuildtasks">https://github.com/loresoft/msbuildtasks</a> или <a href="https://github.com/mikefourie/MSBuildExtensionPack">https://github.com/mikefourie/MSBuildExtensionPack</a> ?
+<br />
+нет
+<br />
+<br />
+руками:
+<br />
 <a href="http://ecianciotta-en.abriom.com/2013/05/languages-and-translators-with-visual.html">http://ecianciotta-en.abriom.com/2013/05/languages-and-translators-with-visual.html</a>
 <br />
+<pre><span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Target</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Name</span><span style="color: blue;">=</span>"<span style="color: blue;">BeforeBuild</span>"<span style="color: blue;">&nbsp;</span><span style="color: red;">DependsOnTargets</span><span style="color: blue;">=</span>"<span style="color: blue;">BuildGen</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Target</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;!-- </span><span style="color: green;">Build generated file target&nbsp;</span><span style="color: blue;">--&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Target</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Name</span><span style="color: blue;">=</span>"<span style="color: blue;">BuildGen</span>"<span style="color: blue;">&nbsp;</span><span style="color: red;">DependsOnTargets</span><span style="color: blue;">=</span>"<span style="color: blue;">GenerateMyLanguageParser</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Target</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;!-- </span><span style="color: green;">Parser&nbsp;items&nbsp;</span><span style="color: blue;">--&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">PropertyGroup</span><span style="color: blue;">&gt;
+</span><span style="color: blue;">    &lt;</span><span style="color: #a31515;">ToolsDir</span><span style="color: blue;">&gt;</span>$(SolutionDir)packages\YaccLexTools.0.1.2\tools\<span style="color: blue;">&lt;/</span><span style="color: #a31515;">ToolsDir</span><span style="color: blue;">&gt;
+</span><span style="color: blue;">    &lt;</span><span style="color: #a31515;">GplexTool</span><span style="color: blue;">&gt;</span>"$(ToolsDir)gplex.exe"<span style="color: blue;">&lt;/</span><span style="color: #a31515;">GplexTool</span><span style="color: blue;">&gt;
+</span><span style="color: blue;">    &lt;</span><span style="color: #a31515;">GppgTool</span><span style="color: blue;">&gt;</span>"$(ToolsDir)gppg.exe"<span style="color: blue;">&lt;/</span><span style="color: #a31515;">GppgTool</span><span style="color: blue;">&gt;
+</span><span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">MyLanguageParser</span><span style="color: blue;">&gt;</span>$(ProjectDir)MyLanguage<span style="color: blue;">&lt;/</span><span style="color: #a31515;">MyLanguageParser</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">PropertyGroup</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">ItemGroup</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">None</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.parser</span>"<span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Parser.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.parser<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Scanner.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.parser<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">None</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Language.grammar.y</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.parser<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">None</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Parser.Generated.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">AutoGen</span><span style="color: blue;">&gt;</span>True<span style="color: blue;">&lt;/</span><span style="color: #a31515;">AutoGen</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DesignTime</span><span style="color: blue;">&gt;</span>True<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DesignTime</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.Language.grammar.y<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">None</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Language.analyzer.lex</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.parser<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">None</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Include</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguage.Scanner.Generated.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">AutoGen</span><span style="color: blue;">&gt;</span>True<span style="color: blue;">&lt;/</span><span style="color: #a31515;">AutoGen</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DesignTime</span><span style="color: blue;">&gt;</span>True<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DesignTime</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>MyLanguage.Language.analyzer.lex<span style="color: blue;">&lt;/</span><span style="color: #a31515;">DependentUpon</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Compile</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">ItemGroup</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">ItemGroup</span><span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;!--</span><span style="color: green;">&nbsp;&nbsp;Generate&nbsp;the&nbsp;parsers&nbsp;</span><span style="color: blue;">--&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Target</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Name</span><span style="color: blue;">=</span>"<span style="color: blue;">GenerateMyLanguageParser</span>"
+<span style="color: blue;">&nbsp;</span><span style="color: red;">         Inputs</span><span style="color: blue;">=</span>"<span style="color: blue;">$(MyLanguageParser).Language.analyzer.lex;$(MyLanguageParser).Language.grammar.y</span>"<span style="color: blue;">&nbsp;</span>
+<span style="color: red;">          Outputs</span><span style="color: blue;">=</span>"<span style="color: blue;">$(MyLanguageParser).Scanner.Generated.cs;$(MyLanguageParser).Parser.Generated.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Message</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Text</span><span style="color: blue;">=</span>"<span style="color: blue;">Generating&nbsp;scanner&nbsp;for&nbsp;$(MyLanguageParser)&nbsp;...</span>"<span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Exec</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Command</span><span style="color: blue;">=</span>"<span style="color: blue;">$(GplexTool)&nbsp;</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">/out:$(MyLanguageParser).Scanner.Generated.cs</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">&nbsp;</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">$(MyLanguageParser).Language.analyzer.lex&amp;quot;</span>"<span style="color: blue;">&nbsp;</span>
+<span style="color: red;">          WorkingDirectory</span><span style="color: blue;">=</span>"<span style="color: blue;">$(ProjectDir)</span>"<span style="color: blue;">&nbsp;</span>
+<span style="color: red;">          Outputs</span><span style="color: blue;">=</span>"<span style="color: blue;">$(GenDir)Scanner.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Output</span><span style="color: blue;">&nbsp;</span><span style="color: red;">TaskParameter</span><span style="color: blue;">=</span>"<span style="color: blue;">Outputs</span>"<span style="color: blue;">&nbsp;</span><span style="color: red;">ItemName</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguageScanner</span>"<span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Exec</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Message</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Text</span><span style="color: blue;">=</span>"<span style="color: blue;">Generating&nbsp;parser&nbsp;for&nbsp;$(MyLanguageParser)&nbsp;...</span>"<span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Exec</span><span style="color: blue;">&nbsp;</span><span style="color: red;">Command</span><span style="color: blue;">=</span>"<span style="color: blue;">$(GppgTool)&nbsp;/no-lines&nbsp;/gplex&nbsp;</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">$(MyLanguageParser).Language.grammar.y</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">&nbsp;</span><span style="color: blue;">&gt;</span><span style="color: blue;">&nbsp;</span><span style="color: blue;">&amp;quot;</span><span style="color: blue;">$(MyLanguageParser).Parser.Generated.cs</span><span style="color: blue;">&amp;quot;</span>"<span style="color: blue;">&nbsp;</span>
+<span style="color: red;">          WorkingDirectory</span><span style="color: blue;">=</span>"<span style="color: blue;">$(ProjectDir)</span>"<span style="color: blue;">&nbsp;</span>
+<span style="color: red;">          Outputs</span><span style="color: blue;">=</span>"<span style="color: blue;">$(MyLanguageParser).Parser.Generated.cs</span>"<span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;</span><span style="color: #a31515;">Output</span><span style="color: blue;">&nbsp;</span><span style="color: red;">TaskParameter</span><span style="color: blue;">=</span>"<span style="color: blue;">Outputs</span>"<span style="color: blue;">&nbsp;</span><span style="color: red;">ItemName</span><span style="color: blue;">=</span>"<span style="color: blue;">MyLanguageParser</span>"<span style="color: blue;">&nbsp;/&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Exec</span><span style="color: blue;">&gt;</span>
+<span style="color: blue;">&nbsp;&nbsp;&lt;/</span><span style="color: #a31515;">Target</span><span style="color: blue;">&gt;</span>
+</pre>
+Item metadata - это исключительно пользовательские свойства? Или эти слова - AutoGen, DesignTime, DependentUpon на что-то влияют?
 <br />
-Вообщеесть два совершенно замечательных файла gppg.pdf и gplex.pdf, там всё написано
+<a href="https://msdn.microsoft.com/en-us/library/ms164284.aspx">https://msdn.microsoft.com/en-us/library/ms164284.aspx</a>
+<br />
+<a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/common-msbuild-project-items">https://docs.microsoft.com/en-us/visualstudio/msbuild/common-msbuild-project-items</a>
+<br />
+All project types in Visual Studio have several items in common. These items are defined in the file microsoft.build.commontypes.xsd. (github - <a href="https://github.com/loresoft/msbuildtasks/blob/master/Source/MSBuild.Community.Tasks/Microsoft.Build.Commontypes.xsd">Microsoft.Build.Commontypes.xsd</a>)
+<br />
+DependentUpon - Optional string. Specifies the file this file depends on to compile correctly.
+<br />
+AutoGen - Optional boolean. Indicates whether the file was generated for the project by the Visual Studio integrated development environment (IDE).
+<br />
+Generator  - Required string. The name of any file generator that runs on this item.
+
+<h2>Авторы</h2>
+<a href="http://www.scitech.qut.edu.au/">http://www.scitech.qut.edu.au/</a>
+<br />
+QUT , Australian university, in collaboration with Microsoft.
+<br />
+
+<h2>Общие слова</h2>
+GPPG generates a parser in C# language from a formal description of the grammar written in YACC 
+<br />
+GPLEX generates a syntax analyzer (scanner) from the description of the language syntax in LEX
 
 </body>
 </html>

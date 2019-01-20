@@ -1,0 +1,383 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8" />
+<title>Опакечивание gsscoder/commandline</title>
+</head>
+<body>
+
+<table><tr><td style="vertical-align:top;">
+<h1>Опакечивание gsscoder/commandline</h1>
+</td><td style="vertical-align:top;">
+<a href="../index.htm">Разработка на C# для Gentoo</a>
+<br />
+<a href="../fsharp-remainings/index.htm">F# в проектах на C#</a>
+</td></tr></table>
+
+1) Для начала, попробуем найти те три файла (которые устанавливаются при помощи paket ?)
+<br />
+<a href="https://github.com/gsscoder/CSharpx/blob/master/src/CSharpx/EnumerableExtensions.cs">EnumerableExtensions.cs</a>,
+<a href="https://github.com/gsscoder/CSharpx/blob/master/src/CSharpx/Maybe.cs">Maybe.cs</a>,
+<a href="https://github.com/gsscoder/railwaysharp/blob/master/src/RailwaySharp/ErrorHandling.cs">ErrorHandling.cs</a>
+<br />
+<br />
+2) неясно, для чего подключается FSharp.Core.dll
+<br />
+FSharpOption&lt;&gt;
+<br />
+<a href="https://fsharpforfunandprofit.com/posts/the-option-type/">https://fsharpforfunandprofit.com/posts/the-option-type/</a>
+<br />
+Это такой обобщённый Nullable&lt;T&gt;
+<br />
+<a href="https://github.com/fsharp/fsharp/blob/89cec79dd516c2eac8d112454a21b31d6f3aa273/src/fsharp/FSharp.Core/prim-types.fs#L3428">https://github.com/fsharp/fsharp/blob/89cec79dd516c2eac8d112454a21b31d6f3aa273/src/fsharp/FSharp.Core/prim-types.fs#L3428</a>
+<br />
+<a href="https://www.codeproject.com/Articles/743859/Fsharp-Option-types">https://www.codeproject.com/Articles/743859/Fsharp-Option-types</a>
+<br />
+<table>
+      <tr>
+        <td id="L3416" class="blob-num js-line-number" data-line-number="3416"></td>
+        <td id="LC3416" class="blob-code blob-code-inner js-file-line">    <span class="pl-c">//-------------------------------------------------------------------------</span></td>
+      </tr>
+      <tr>
+        <td id="L3417" class="blob-num js-line-number" data-line-number="3417"></td>
+        <td id="LC3417" class="blob-code blob-code-inner js-file-line">    <span class="pl-c">// Options</span></td>
+      </tr>
+      <tr>
+        <td id="L3418" class="blob-num js-line-number" data-line-number="3418"></td>
+        <td id="LC3418" class="blob-code blob-code-inner js-file-line">    <span class="pl-c">//-------------------------------------------------------------------------</span></td>
+      </tr>
+      <tr>
+        <td id="L3419" class="blob-num js-line-number" data-line-number="3419"></td>
+        <td id="LC3419" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3420" class="blob-num js-line-number" data-line-number="3420"></td>
+        <td id="LC3420" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;DefaultAugmentation(<span class="pl-c1">false</span>)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3421" class="blob-num js-line-number" data-line-number="3421"></td>
+        <td id="LC3421" class="blob-code blob-code-inner js-file-line">#<span class="pl-k">if</span> <span class="pl-k">!</span>FX<span class="pl-k">_</span>NO<span class="pl-k">_</span>DEBUG<span class="pl-k">_</span>DISPLAYS</td>
+      </tr>
+      <tr>
+        <td id="L3422" class="blob-num js-line-number" data-line-number="3422"></td>
+        <td id="LC3422" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;DebuggerDisplay(<span class="pl-s"><span class="pl-pds">"</span>Some({Value})<span class="pl-pds">"</span></span>)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3423" class="blob-num js-line-number" data-line-number="3423"></td>
+        <td id="LC3423" class="blob-code blob-code-inner js-file-line">#endif</td>
+      </tr>
+      <tr>
+        <td id="L3424" class="blob-num js-line-number" data-line-number="3424"></td>
+        <td id="LC3424" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;CompilationRepresentation(CompilationRepresentationFlags.UseNullAsTrueValue)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3425" class="blob-num js-line-number" data-line-number="3425"></td>
+        <td id="LC3425" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;CodeAnalysis.SuppressMessage(<span class="pl-s"><span class="pl-pds">"</span>Microsoft.Naming<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>CA1716:IdentifiersShouldNotMatchKeywords<span class="pl-pds">"</span></span>, MessageId<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>Option<span class="pl-pds">"</span></span>)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3426" class="blob-num js-line-number" data-line-number="3426"></td>
+        <td id="LC3426" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;StructuralEquality<span class="pl-k">;</span> StructuralComparison&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3427" class="blob-num js-line-number" data-line-number="3427"></td>
+        <td id="LC3427" class="blob-code blob-code-inner js-file-line">    <span class="pl-c1">[&lt;CompiledName(<span class="pl-s"><span class="pl-pds">"</span>FSharpOption`1<span class="pl-pds">"</span></span>)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3428" class="blob-num js-line-number" data-line-number="3428"></td>
+        <td id="LC3428" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">type</span> <span class="pl-en">Option&lt;'T&gt; </span><span class="pl-k">=</span> </td>
+      </tr>
+      <tr>
+        <td id="L3429" class="blob-num js-line-number" data-line-number="3429"></td>
+        <td id="LC3429" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">|</span> None <span class="pl-k">:</span>       'T option</td>
+      </tr>
+      <tr>
+        <td id="L3430" class="blob-num js-line-number" data-line-number="3430"></td>
+        <td id="LC3430" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">|</span> Some <span class="pl-k">:</span> Value<span class="pl-k">:</span>'T <span class="pl-k">-&gt;</span> 'T option </td>
+      </tr>
+      <tr>
+        <td id="L3431" class="blob-num js-line-number" data-line-number="3431"></td>
+        <td id="LC3431" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3432" class="blob-num js-line-number" data-line-number="3432"></td>
+        <td id="LC3432" class="blob-code blob-code-inner js-file-line">        <span class="pl-c1">[&lt;CompilationRepresentation(CompilationRepresentationFlags.Instance)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3433" class="blob-num js-line-number" data-line-number="3433"></td>
+        <td id="LC3433" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">member</span> <span class="pl-smi">x.Value</span> <span class="pl-k">=</span> <span class="pl-k">match</span> x <span class="pl-k">with</span> Some x <span class="pl-k">-&gt;</span> x <span class="pl-k">|</span> None <span class="pl-k">-&gt;</span> raise (<span class="pl-k">new</span> System.InvalidOperationException(<span class="pl-s"><span class="pl-pds">"</span>Option.Value<span class="pl-pds">"</span></span>))</td>
+      </tr>
+      <tr>
+        <td id="L3434" class="blob-num js-line-number" data-line-number="3434"></td>
+        <td id="LC3434" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3435" class="blob-num js-line-number" data-line-number="3435"></td>
+        <td id="LC3435" class="blob-code blob-code-inner js-file-line">#<span class="pl-k">if</span> <span class="pl-k">!</span>FX<span class="pl-k">_</span>NO<span class="pl-k">_</span>DEBUG<span class="pl-k">_</span>DISPLAYS</td>
+      </tr>
+      <tr>
+        <td id="L3436" class="blob-num js-line-number" data-line-number="3436"></td>
+        <td id="LC3436" class="blob-code blob-code-inner js-file-line">        <span class="pl-c1">[&lt;DebuggerBrowsable(DebuggerBrowsableState.Never)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3437" class="blob-num js-line-number" data-line-number="3437"></td>
+        <td id="LC3437" class="blob-code blob-code-inner js-file-line">#endif</td>
+      </tr>
+      <tr>
+        <td id="L3438" class="blob-num js-line-number" data-line-number="3438"></td>
+        <td id="LC3438" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">member</span> <span class="pl-smi">x.IsNone</span> <span class="pl-k">=</span> <span class="pl-k">match</span> x <span class="pl-k">with</span> None <span class="pl-k">-&gt;</span> <span class="pl-c1">true</span> <span class="pl-k">|</span> <span class="pl-k">_</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">false</span></td>
+      </tr>
+      <tr>
+        <td id="L3439" class="blob-num js-line-number" data-line-number="3439"></td>
+        <td id="LC3439" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3440" class="blob-num js-line-number" data-line-number="3440"></td>
+        <td id="LC3440" class="blob-code blob-code-inner js-file-line">#<span class="pl-k">if</span> <span class="pl-k">!</span>FX<span class="pl-k">_</span>NO<span class="pl-k">_</span>DEBUG<span class="pl-k">_</span>DISPLAYS</td>
+      </tr>
+      <tr>
+        <td id="L3441" class="blob-num js-line-number" data-line-number="3441"></td>
+        <td id="LC3441" class="blob-code blob-code-inner js-file-line">        <span class="pl-c1">[&lt;DebuggerBrowsable(DebuggerBrowsableState.Never)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3442" class="blob-num js-line-number" data-line-number="3442"></td>
+        <td id="LC3442" class="blob-code blob-code-inner js-file-line">#endif</td>
+      </tr>
+      <tr>
+        <td id="L3443" class="blob-num js-line-number" data-line-number="3443"></td>
+        <td id="LC3443" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">member</span> <span class="pl-smi">x.IsSome</span> <span class="pl-k">=</span> <span class="pl-k">match</span> x <span class="pl-k">with</span> Some <span class="pl-k">_</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">true</span> <span class="pl-k">|</span> <span class="pl-k">_</span> <span class="pl-k">-&gt;</span> <span class="pl-c1">false</span></td>
+      </tr>
+      <tr>
+        <td id="L3444" class="blob-num js-line-number" data-line-number="3444"></td>
+        <td id="LC3444" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3445" class="blob-num js-line-number" data-line-number="3445"></td>
+        <td id="LC3445" class="blob-code blob-code-inner js-file-line">#<span class="pl-k">if</span> <span class="pl-k">!</span>FX<span class="pl-k">_</span>NO<span class="pl-k">_</span>DEBUG<span class="pl-k">_</span>DISPLAYS</td>
+      </tr>
+      <tr>
+        <td id="L3446" class="blob-num js-line-number" data-line-number="3446"></td>
+        <td id="LC3446" class="blob-code blob-code-inner js-file-line">        <span class="pl-c1">[&lt;DebuggerBrowsable(DebuggerBrowsableState.Never)&gt;]</span></td>
+      </tr>
+      <tr>
+        <td id="L3447" class="blob-num js-line-number" data-line-number="3447"></td>
+        <td id="LC3447" class="blob-code blob-code-inner js-file-line">#endif</td>
+      </tr>
+      <tr>
+        <td id="L3448" class="blob-num js-line-number" data-line-number="3448"></td>
+        <td id="LC3448" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">static member</span> <span class="pl-smi">None</span> : <span class="pl-v">'T</span> <span class="pl-v">option</span> <span class="pl-k">=</span> None</td>
+      </tr>
+      <tr>
+        <td id="L3449" class="blob-num js-line-number" data-line-number="3449"></td>
+        <td id="LC3449" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3450" class="blob-num js-line-number" data-line-number="3450"></td>
+        <td id="LC3450" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">static member</span> <span class="pl-smi">Some</span>(<span class="pl-v">x</span>) : <span class="pl-v">'T</span> <span class="pl-v">option</span> <span class="pl-k">=</span> Some(x)</td>
+      </tr>
+      <tr>
+        <td id="L3451" class="blob-num js-line-number" data-line-number="3451"></td>
+        <td id="LC3451" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3452" class="blob-num js-line-number" data-line-number="3452"></td>
+        <td id="LC3452" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">static member</span> <span class="pl-smi">op_Implicit</span>(<span class="pl-v">x</span>) : <span class="pl-v">'T</span> <span class="pl-v">option</span> <span class="pl-k">=</span> Some(x)</td>
+      </tr>
+      <tr>
+        <td id="L3453" class="blob-num js-line-number" data-line-number="3453"></td>
+        <td id="LC3453" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3454" class="blob-num js-line-number" data-line-number="3454"></td>
+        <td id="LC3454" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">override</span> <span class="pl-smi">x.ToString</span><span class="pl-c1">()</span> <span class="pl-k">=</span> </td>
+      </tr>
+      <tr>
+        <td id="L3455" class="blob-num js-line-number" data-line-number="3455"></td>
+        <td id="LC3455" class="blob-code blob-code-inner js-file-line">           <span class="pl-c">// x is non-null, hence Some</span></td>
+      </tr>
+      <tr>
+        <td id="L3456" class="blob-num js-line-number" data-line-number="3456"></td>
+        <td id="LC3456" class="blob-code blob-code-inner js-file-line">           <span class="pl-s"><span class="pl-pds">"</span>Some(<span class="pl-pds">"</span></span><span class="pl-k">^</span>anyToStringShowingNull x.Value<span class="pl-k">^</span><span class="pl-s"><span class="pl-pds">"</span>)<span class="pl-pds">"</span></span></td>
+      </tr>
+      <tr>
+        <td id="L3457" class="blob-num js-line-number" data-line-number="3457"></td>
+        <td id="LC3457" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="L3458" class="blob-num js-line-number" data-line-number="3458"></td>
+        <td id="LC3458" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">and</span> 'T option <span class="pl-k">=</span> Option<span class="pl-k">&lt;</span>'T<span class="pl-k">&gt;</span> </td>
+      </tr>
+      <tr>
+        <td id="L3459" class="blob-num js-line-number" data-line-number="3459"></td>
+        <td id="LC3459" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+</table>
+<br />
+<br />
+У меня возникла проблема с написанием свойств IsSome и IsNone. Эти свойства как бы статические, однако принимают на вход объект.
+<br />
+<br />
+Вот код, который использует:
+<br />
+<pre>public static bool IsSome(object value)
+{
+    return (bool)typeof(FSharpOption&lt;&gt;)
+        .MakeGenericType(GetUnderlyingType(value.GetType()))
+        .StaticMethod(
+            &quot;get_IsSome&quot;, value);
+}</pre>
+<br />
+Как если бы это были расширяющие-методы (extension methods).
+<br />
+однако, если я делаю
+<br />
+public static bool get_IsSome (this FSharpOption<T> o) { return o != null; }
+<br />
+получаю
+<br />
+FSharpOption.cs(22,22): Error CS1106: `Microsoft.FSharp.Core.FSharpOption<T>.get_IsSome(this Microsoft.FSharp.Core.FSharpOption<T>)': Extension methods must be defined in a non-generic static class (CS1106) (CommandLine)
+<br />
+<br />
+<pre>public class Sample
+{
+    public void Example(string typeName)
+    {
+        Type myType = FindType(typeName);
+
+        // What goes here to call GenericMethod&lt;T&gt;()?
+        GenericMethod&lt;myType&gt;(); // This doesn't work
+
+        // What changes to call StaticMethod&lt;T&gt;()?
+        Sample.StaticMethod&lt;myType&gt;(); // This also doesn't work
+    }
+
+    public void GenericMethod&lt;T&gt;()
+    {
+        // ...
+    }
+
+    public static void StaticMethod&lt;T&gt;()
+    {
+        //...
+    }
+}</pre>
+
+
+<pre><xmp>
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace Microsoft.FSharp.Core
+{
+	[StructLayout(LayoutKind.Auto, CharSet = CharSet.Auto)]
+	public sealed class FSharpOption<T> : IEquatable<FSharpOption<T>>, IStructuralEquatable, IComparable<FSharpOption<T>>, IComparable, IStructuralComparable
+	{
+		T thisValue;
+		public T Value
+		{
+			get
+			{
+				return thisValue;
+			}
+		}
+
+		public static FSharpOption<T> Some(T value)
+		{
+			return new FSharpOption<T>(value);
+		}
+
+		public static FSharpOption<T> None
+		{
+			get
+			{
+				return null;
+			}
+		}
+
+		public FSharpOption(T value)
+		{
+			thisValue = value;
+		}
+
+		public bool IsNone
+		{
+			get
+			{
+				return this == null;
+			}
+		}
+
+		public bool IsSome<T>
+		{
+			get
+			{
+				return this != null;
+			}
+		}
+
+		public static int GetTag(FSharpOption<T> fSharpOption)
+		{
+			return (fSharpOption == null) ? 0 : 1;
+		}
+
+		public /*sealed override*/ int CompareTo(object obj, IComparer comp)
+		{
+			throw new NotImplementedException();
+		}
+
+		public /*sealed override*/ int CompareTo(object obj)
+		{
+			return this.CompareTo((FSharpOption<T>)obj);
+		}
+
+		public /*sealed override*/ int CompareTo(FSharpOption<T> obj)
+		{
+			throw new NotImplementedException();
+		}
+
+		public /*sealed override*/ bool Equals(FSharpOption<T> obj)
+		{
+			throw new NotImplementedException();
+		}
+
+		public /*sealed override*/ bool Equals(object obj, IEqualityComparer comp)
+		{
+			throw new NotImplementedException();
+		}
+
+		public sealed override bool Equals(object obj)
+		{
+			throw new NotImplementedException();
+		}
+
+		public /*sealed override*/ int GetHashCode(IEqualityComparer comp)
+		{
+			throw new NotImplementedException();
+		}
+
+		public sealed override int GetHashCode()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override string ToString()
+		{
+			throw new NotImplementedException();
+		}
+	}
+}
+</xmp></pre>
+</body>
+</html>
